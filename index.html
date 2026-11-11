@@ -180,6 +180,13 @@
           <span class="tracking-wide text-slate-100">Kitoblar bazasi</span>
           <span id="navBadgeBooks" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-600">0</span>
         </button>
+        <button type="button" data-tab="journal" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+          </svg>
+          <span class="tracking-wide text-slate-100">"Yillar va yo'llar" jurnali</span>
+          <span id="navBadgeJournal" class="px-2 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">Har yili 4 son</span>
+        </button>
         <button type="button" data-tab="digital" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
           <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -542,7 +549,69 @@
       </div>
     </section>
 
-    <!-- ================= TAB 6: DIGITAL LIBRARY (ELEKTRON PDF VA AUDIO KITOBLAR) ================= -->
+        <!-- ================= TAB: "YILLAR VA YO'LLAR" JURNALI BO'LIMI ================= -->
+    <section id="tab-journal" class="tab-panel hidden space-y-5 animate-fade-in">
+      <!-- Journal Hero Banner -->
+      <div class="bg-gradient-to-r from-[#0b253c] via-[#103759] to-[#00668c] rounded-2xl p-5 sm:p-6 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 border border-cyan-500/20">
+        <div class="space-y-1.5 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+            <span>📑 Rasmiy sohaviy nashr</span>
+            <span>&bull;</span>
+            <span>Yillik davriylik: 4 ta son</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black tracking-tight text-white">"Yangi O'zbekistonda yillar va yo'llar" jurnali</h2>
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            O'zbekiston Respublikasi Avtomobil yo'llari qo'mitasining rasmiy ilmiy-ommabop, tahliliy jurnali. 
+            Yil davomida 4 ta son (1, 2, 3 va 4-choraklar) bo'yicha nashr etiladi. Yangi sonlarni PDF va audio formatda yuklab borish hamda mutolaa qilish mumkin.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button type="button" id="btnOpenAddJournalModal" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            + Yangi sonni yuklash (PDF & Audio)
+          </button>
+        </div>
+      </div>
+
+      <!-- Journal Filter Bar: Years & Quarters -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-1.5" id="journalYearFilterGroup">
+          <span class="text-xs font-semibold text-slate-500 mr-1">Yillar:</span>
+          <button type="button" data-journal-year="all" class="journal-year-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00668c] text-white transition">
+            Barcha yillar
+          </button>
+          <button type="button" data-journal-year="2026" class="journal-year-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            2026-yil
+          </button>
+          <button type="button" data-journal-year="2025" class="journal-year-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            2025-yil
+          </button>
+          <button type="button" data-journal-year="2024" class="journal-year-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            2024-yil
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <select id="journalQuarterFilterSelect" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+            <option value="all">Barcha 4 ta son</option>
+            <option value="1">1-son (1-chorak: Yan-Mar)</option>
+            <option value="2">2-son (2-chorak: Apr-Iyun)</option>
+            <option value="3">3-son (3-chorak: Iyul-Sen)</option>
+            <option value="4">4-son (4-chorak: Okt-Dek)</option>
+          </select>
+          <input id="journalSearchInput" type="text" placeholder="Jurnal maqolalaridan qidirish..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c] w-48 sm:w-60" />
+        </div>
+      </div>
+
+      <!-- Journal Issues Grid -->
+      <div id="journalIssuesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+<!-- ================= TAB 6: DIGITAL LIBRARY (ELEKTRON PDF VA AUDIO KITOBLAR) ================= -->
     <section id="tab-digital" class="tab-panel hidden space-y-5 animate-fade-in">
       <div class="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-5 sm:p-6 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="space-y-1">
@@ -672,7 +741,82 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 2: ADD / EDIT BOOK (KITOB QO'SHISH) ================= -->
+    <!-- ================= MODAL 8: ADD / UPLOAD JOURNAL ISSUE ================= -->
+  <div id="modalJournalIssue" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-in text-slate-900">
+      <div class="px-5 py-4 bg-[#0b253c] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-cyan-400 text-slate-950 font-black flex items-center justify-center text-xs">J</span>
+          <h3 id="modalJournalFormTitle" class="text-base font-bold">"Yillar va yo'llar" jurnali yangi sonini yuklash</h3>
+        </div>
+        <button type="button" data-close-modal="modalJournalIssue" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formJournalIssue" class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
+        <input type="hidden" id="journalIssueEditId" value="" />
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nashr yili *</label>
+            <input id="journalYearInput" type="number" min="2000" max="2035" value="2026" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Jurnal soni (Davriylik) *</label>
+            <select id="journalQuarterInput" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+              <option value="1">1-son (1-chorak: Yanvar - Mart)</option>
+              <option value="2">2-son (2-chorak: Aprel - Iyun)</option>
+              <option value="3" selected>3-son (3-chorak: Iyul - Sentyabr)</option>
+              <option value="4">4-son (4-chorak: Oktyabr - Dekabr)</option>
+              <option value="0">Maxsus son (Maxsus nashr)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Bosh mavzu / Sarlavha *</label>
+          <input id="journalTitleInput" type="text" required placeholder="Masalan: Qamchiq dovoni va sement-beton qoplamalar" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nashr sanasi va oyi</label>
+          <input id="journalDateInput" type="text" placeholder="Masalan: 2026-yil, Sentyabr" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Elektron PDF fayl yuklash (.pdf)</label>
+            <input id="journalPdfFileInput" type="file" accept=".pdf,application/pdf" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-800 hover:file:bg-cyan-100" />
+            <p id="journalPdfStatusText" class="text-[11px] text-slate-400 mt-1">PDF biriktirilmagan</p>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Audio sharh / Ma'ruza yuklash (.mp3)</label>
+            <input id="journalAudioFileInput" type="file" accept="audio/*" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-800 hover:file:bg-amber-100" />
+            <p id="journalAudioStatusText" class="text-[11px] text-slate-400 mt-1">Google o'zbekcha diktor faol</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Jurnalning asosiy matni, maqolalar annotatsiyasi va mundarijasi</label>
+          <textarea id="journalContentInput" rows="4" placeholder="Jurnal bosh maqolasi, dolzarb mavzulari va mualliflar maqolalari matnini kiriting — tizim buni elektron o'qish va Google diktori orqali audio o'qishga moslaydi..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalJournalIssue" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm font-semibold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm">
+            Jurnal sonini saqlash
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- ================= MODAL 2: ADD / EDIT BOOK (KITOB QO'SHISH) ================= -->
   <div id="modalBookForm" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
       <div class="px-5 py-4 bg-emerald-600 text-white flex items-center justify-between">
@@ -1082,7 +1226,7 @@
 
   <script>
     (function() {
-      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v5_jurnal';
+      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v6_journal_tab';
 
       // Helper for date offsets relative to today
       function getOffsetDateStr(daysOffset) {
@@ -1115,21 +1259,107 @@
           loanFilter: 'all',
           overdueFilter: 'all_alerts',
           digitalFilter: 'all',
-          books: [
+          journalYearFilter: 'all',
+          journalQuarterFilter: 'all',
+          journals: [
             {
-              id: 'ay_jurnal',
-              code: 'AY-JURNAL-01',
-              title: "Yangi O'zbekistonda yillar va yo'llar",
-              author: "O'zbekiston Respublikasi Avtomobil yo'llari qo'mitasi tahririyati",
-              category: "Sohaviy nashrlar va jurnallar",
-              shelf: "J-1 javon (Davriy nashrlar zali)",
-              totalCopies: 20,
-              hasEbook: true,
-              hasAudio: true,
-              pdfName: "yangi_ozbekistonda_yillar_va_yollar.pdf",
-              audioName: "Google O'zbekcha Diktor (Jurnal sharhi)",
-              ebookText: "BOSH MAQOLA: YANGI O'ZBEKISTONNING ZAMONAVIY VA RAVON YO'LLARI.\n\nYo'l — obodlik, taraqqiyot va yuksak madaniyat ko'zgusidir. 'Yangi O'zbekistonda yillar va yo'llar' ilmiy-ommabop va tahliliy jurnali mamlakatimiz avtomobil yo'llari tarmog'ining bosqichma-bosqich rivojlanish tarixi, zamonaviy xalqaro tranzit magistrallari, dovon yo'llari va ulug'vor ko'priklarning barpo etilishiga bag'ishlanadi.\n\n1-BOB. XALQARO MAGISTRALLAR VA TRANZIT POTENSIAL.\nQamchiq dovoni magistrali, 'Toshkent-O'sh', 'Toshkent-Samarqand-Buxoro' hamda xalqaro M-39 va A-380 yo'llarining rekonstruksiya qilinishi O'zbekistonning mintaqaviy logistika markazi sifatidagi mavqeini mustahkamladi.\n\n2-BOB. YO'LSOZ MUHANDISLAR VA INNOVATSIYALAR.\nSohada sement-beton qoplamali avtomobil yo'llarini qurish, ilg'or xorijiy laboratoriya sinovlarini tatbiq etish hamda yo'lsozlik kasbining mashaqqatli va sharafli mehnati ushbu nashrda keng yoritilgan."
+              id: 'j2026_3',
+              year: '2026',
+              quarter: 3,
+              issueNumber: '3-son (Iyul - Sentyabr)',
+              title: "Yangi O'zbekiston magistrallari: Sement-beton qoplamalar va yangi texnologiyalar",
+              datePublished: '2026-yil, Sentyabr',
+              pdfName: 'yillar_va_yollar_2026_3-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (3-son)",
+              summary: "Qamchiq dovoni, xalqaro tranzit koridorlari, sement-beton qoplamali avtomobil yo'llari qurilishi va yo'lsoz muhandislar faoliyati.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2026-YIL 3-SON (3-CHORAK).\n\nBOSH MAQOLA: ZAMONAVIY TRANZIT MAGISTRALLARI.\nUshbu sonda mamlakatimiz avtomobil yo'llari tizimida amalga oshirilgan yirik islohotlar, xususan sement-beton qoplamali avtomobil yo'llarini qurish tajribasi, Qamchiq va Taxtaqoracha dovonlarida harakat xavfsizligini ta'minlash chora-tadbirlari atroflicha tahlil qilinadi.\n\n1-BOB. XALQARO M-39 VA A-380 MAGISTRALLARINING MINTAQAVIY AHAMIYATI.\nTranzit salohiyatini oshirish bo'yicha ko'rilayotgan chora-tadbirlar, yangi ko'prik va yo'lo'tkazgichlarning texnik ko'rsatkichlari keltirilgan.\n\n2-BOB. YO'LSOZLIKDA INNOVATSIYALAR.\nYo'l qoplamalarida yangi polimer modifikatorlar va kompozit materiallarni qo'llash natijalari."
             },
+            {
+              id: 'j2026_2',
+              year: '2026',
+              quarter: 2,
+              issueNumber: '2-son (Aprel - Iyun)',
+              title: "Yo'l harakati xavfsizligi va intellektual transport telematikasi",
+              datePublished: '2026-yil, Iyun',
+              pdfName: 'yillar_va_yollar_2026_2-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (2-son)",
+              summary: "Avtomobil yo'llarida intellektual transport tizimlari (ITS), adaptiv svetoforlar boshqaruvi va avtomatlashtirilgan o'lchov vositalari.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2026-YIL 2-SON (2-CHORAK).\n\nBOSH MAQOLA: AVTOMOBIL YO'LLARIDA INTELLEKTUAL TRANSPORT TIZIMLARI.\nRespublika bo'ylab raqamli monitoring tizimlari va yo'l telematikasini joriy etish orqali xavfli nuqtalarda yo'l-transport hodisalarini kamaytirish tajribasi yoritilgan."
+            },
+            {
+              id: 'j2026_1',
+              year: '2026',
+              quarter: 1,
+              issueNumber: '1-son (Yanvar - Mart)',
+              title: "Yo'l xo'jaligida 2026-yilgi davlat dasturi va xalqaro investitsiyalar",
+              datePublished: '2026-yil, Mart',
+              pdfName: 'yillar_va_yollar_2026_1-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (1-son)",
+              summary: "2026-yilda quriladigan va rekonstruksiya qilinadigan yo'l ob'ektlari dasturi, yangi loyihalar va ko'priksozlik rejalari.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2026-YIL 1-SON (1-CHORAK).\n\nYil boshida tasdiqlangan yo'l xo'jaligi davlat investitsiya dasturlari, yangi xalqaro magistral loyihalari va ko'priksozlik rejalari sharhi."
+            },
+            {
+              id: 'j2025_4',
+              year: '2025',
+              quarter: 4,
+              issueNumber: '4-son (Oktyabr - Dekabr)',
+              title: "2025-yil sarhisobi: Barpo etilgan yo'llar va ko'priklar hisoboti",
+              datePublished: '2025-yil, Dekabr',
+              pdfName: 'yillar_va_yollar_2025_4-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (4-son)",
+              summary: "2025-yil davomida foydalanishga topshirilgan 1200 km umumiy foydalanishdagi avtomobil yo'llari va 45 ta yirik ko'prik monitoringi.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2025-YIL 4-SON (4-CHORAK).\n\n2025-yil yakunlari: xalqaro koridorlar va ichki xo'jalik yo'llarini ta'mirlash bo'yicha yillik hisobot va mutaxassislar fikrlari."
+            },
+            {
+              id: 'j2025_3',
+              year: '2025',
+              quarter: 3,
+              issueNumber: '3-son (Iyul - Sentyabr)',
+              title: "Mintaqaviy va mahalliy ahamiyatdagi yo'llarni obodonlashtirish amaliyoti",
+              datePublished: '2025-yil, Sentyabr',
+              pdfName: 'yillar_va_yollar_2025_3-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (3-son)",
+              summary: "Qishloq va ovul aholi punktlarini bog'lovchi yo'llarni shag'al va asfalt bilan qoplash bo'yicha amalga oshirilgan loyihalar.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2025-YIL 3-SON (3-CHORAK).\n\nMahalliy va qishloq yo'llarini obod qilish, yo'l bo'yi infratuzilmasi va xizmat ko'rsatish shoxobchalarini rivojlantirish masalalari."
+            },
+            {
+              id: 'j2025_2',
+              year: '2025',
+              quarter: 2,
+              issueNumber: '2-son (Aprel - Iyun)',
+              title: "Shag'alli-mastikali asfaltbeton (SMA) va yangi bitum modifikatorlari",
+              datePublished: '2025-yil, Iyun',
+              pdfName: 'yillar_va_yollar_2025_2-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (2-son)",
+              summary: "Issiq iqlim sharoitida yo'l to'shamalarining g'ildirak iziga bardoshliligini oshiruvchi ilg'or texnologiyalar.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2025-YIL 2-SON (2-CHORAK).\n\nYo'l laboratoriyalarida olib borilgan ilmiy tadqiqotlar va SMA qoplamalarining O'zbekiston iqlimiga moslashuvi tahlili."
+            },
+            {
+              id: 'j2025_1',
+              year: '2025',
+              quarter: 1,
+              issueNumber: '1-son (Yanvar - Mart)',
+              title: "Shahar yo'l infratuzilmasi va chorrahalarni modernizatsiya qilish",
+              datePublished: '2025-yil, Mart',
+              pdfName: 'yillar_va_yollar_2025_1-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (1-son)",
+              summary: "Shahar magistrallari, estakadalar va ko'p sathli transport chorrahalari orqali tirbandliklarni bartaraf etish yechimlari.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2025-YIL 1-SON (1-CHORAK).\n\nYirik shaharlar yo'l tarmog'i, transport oqimini modellashtirish va jamoat transporti yo'laklarini ajratish tajribasi."
+            },
+            {
+              id: 'j2024_4',
+              year: '2024',
+              quarter: 4,
+              issueNumber: '4-son (Oktyabr - Dekabr)',
+              title: "Ko'priksozlik taraqqiyoti: Murakkab estakadalar va daryo ko'priklari",
+              datePublished: '2024-yil, Dekabr',
+              pdfName: 'yillar_va_yollar_2024_4-son.pdf (Elektron nashr)',
+              audioName: "Google O'zbekcha Diktor (4-son)",
+              summary: "Amudaryo va Sirdaryo ustidan o'tuvchi yangi ko'priklar qurilishi hamda seysmik mustahkamlikni ta'minlash.",
+              content: "YANGI O'ZBEKISTONDA YILLAR VA YO'LLAR JURNALI — 2024-YIL 4-SON (4-CHORAK).\n\nO'zbekistonda ko'prik va sun'iy inshootlar qurilishining tarixiy yutuqlari hamda daryo ko'priklari loyihalanishi."
+            }
+          ],
+          books: [
             {
               id: 'ay1',
               code: 'AY-101',
@@ -2423,7 +2653,131 @@
         playGoogleChunkAtIndex(0);
       }
 
-      function renderAll() {
+            function renderJournalSection() {
+        const grid = document.getElementById('journalIssuesGrid');
+        if (!grid) return;
+
+        const globalQ = (document.getElementById('globalSearchInput')?.value || '').trim().toLowerCase();
+        const localQ = (document.getElementById('journalSearchInput')?.value || '').trim().toLowerCase();
+        const q = localQ || globalQ;
+
+        const yearFilter = state.journalYearFilter || 'all';
+        const quarterFilter = state.journalQuarterFilter || 'all';
+
+        const list = state.journals || [];
+        const filtered = list.filter(item => {
+          if (yearFilter !== 'all' && String(item.year) !== String(yearFilter)) return false;
+          if (quarterFilter !== 'all' && String(item.quarter) !== String(quarterFilter)) return false;
+          if (!q) return true;
+          const hay = `${item.year} ${item.issueNumber} ${item.title} ${item.summary || ''} ${item.content || ''}`.toLowerCase();
+          return hay.includes(q);
+        });
+
+        const badge = document.getElementById('navBadgeJournal');
+        if (badge) badge.textContent = `${list.length} ta son`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500">
+              Ushbu filtr bo'yicha jurnal sonlari topilmadi. "+ Yangi sonni yuklash" tugmasi orqali yangi sonni kiritishingiz mumkin.
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(item => {
+          const hasCustomPdf = Boolean(mediaBlobStore['journal_' + item.id + '_pdf']);
+          const hasCustomAudio = Boolean(mediaBlobStore['journal_' + item.id + '_audio']);
+          const qName = item.quarter ? `${item.quarter}-chorak` : "Maxsus son";
+
+          return `
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-cyan-500/50 hover:shadow-md transition">
+              <div class="space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#0b253c] text-cyan-300 font-mono tracking-wide">
+                      ${escapeHtml(item.year)}-yil &bull; ${escapeHtml(item.issueNumber)}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-50 text-[#00668c] border border-cyan-200">
+                      ${qName}
+                    </span>
+                  </div>
+                  <span class="text-[11px] font-medium text-slate-400 whitespace-nowrap">
+                    ${escapeHtml(item.datePublished || item.year)}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(item.title)}</h3>
+                  <p class="text-xs text-slate-600 mt-1.5 line-clamp-3 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    ${escapeHtml(item.summary || (item.content ? item.content.slice(0, 140) + '...' : "Avtomobil yo'llari sohaviy nashri"))}
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-500">
+                  <span class="inline-flex items-center gap-1 ${hasCustomPdf ? 'text-emerald-700 font-semibold' : 'text-slate-600'}">
+                    📄 ${escapeHtml(item.pdfName || 'Elektron PDF')}
+                  </span>
+                  <span>&bull;</span>
+                  <span class="inline-flex items-center gap-1 text-cyan-700 font-semibold">
+                    🎙️ Google Diktor
+                  </span>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-slate-100 space-y-2">
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" data-action="read-journal" data-journal-id="${escapeHtml(item.id)}" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-[#00668c] text-white hover:bg-[#005270] transition shadow-xs">
+                    📖 Mutolaa (PDF)
+                  </button>
+                  <button type="button" data-action="listen-journal" data-journal-id="${escapeHtml(item.id)}" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition shadow-xs">
+                    🎧 Audio tinglash
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-1 text-xs">
+                  <button type="button" data-action="edit-journal" data-journal-id="${escapeHtml(item.id)}" class="text-slate-500 hover:text-slate-800 font-medium transition">
+                    ✏️ Tahrirlash
+                  </button>
+                  <button type="button" data-action="delete-journal" data-journal-id="${escapeHtml(item.id)}" class="text-rose-500 hover:text-rose-700 font-medium transition">
+                    🗑️ O'chirish
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function openJournalModal(issueToEdit) {
+        document.getElementById('journalPdfFileInput').value = '';
+        document.getElementById('journalAudioFileInput').value = '';
+
+        if (issueToEdit) {
+          document.getElementById('modalJournalFormTitle').textContent = `Jurnal sonini tahrirlash (${issueToEdit.year}, ${issueToEdit.issueNumber})`;
+          document.getElementById('journalIssueEditId').value = issueToEdit.id;
+          document.getElementById('journalYearInput').value = issueToEdit.year;
+          document.getElementById('journalQuarterInput').value = issueToEdit.quarter || '1';
+          document.getElementById('journalTitleInput').value = issueToEdit.title;
+          document.getElementById('journalDateInput').value = issueToEdit.datePublished || '';
+          document.getElementById('journalContentInput').value = issueToEdit.content || '';
+          document.getElementById('journalPdfStatusText').textContent = issueToEdit.pdfName || 'PDF biriktirilmagan';
+          document.getElementById('journalAudioStatusText').textContent = issueToEdit.audioName || "Google o'zbekcha diktor faol";
+        } else {
+          document.getElementById('modalJournalFormTitle').textContent = `"Yillar va yo'llar" jurnali yangi sonini yuklash`;
+          document.getElementById('journalIssueEditId').value = '';
+          document.getElementById('journalYearInput').value = '2026';
+          document.getElementById('journalQuarterInput').value = '4';
+          document.getElementById('journalTitleInput').value = '';
+          document.getElementById('journalDateInput').value = '2026-yil, Dekabr';
+          document.getElementById('journalContentInput').value = '';
+          document.getElementById('journalPdfStatusText').textContent = 'PDF biriktirilmagan';
+          document.getElementById('journalAudioStatusText').textContent = "Google o'zbekcha diktor faol";
+        }
+        openModal('modalJournalIssue');
+      }
+
+function renderAll() {
         renderKPIs();
         renderDashboard();
         renderCirculation();
@@ -2431,6 +2785,7 @@
         renderBooksCatalog();
         renderReaders();
         renderDigitalLibrary();
+        renderJournalSection();
       }
 
       // Modal Helpers
@@ -2874,6 +3229,86 @@
           } else if (action === 'issue-to-reader') {
             const readerId = actionBtn.getAttribute('data-reader-id');
             openIssueModal(null, readerId);
+                    } else if (action === 'read-journal') {
+            const jId = actionBtn.getAttribute('data-journal-id');
+            const item = (state.journals || []).find(x => x.id === jId);
+            if (item) {
+              // Open inside the reader modal
+              currentReaderBookId = 'journal_' + item.id;
+              document.getElementById('readerModalBookTitle').textContent = `${item.year}-yil, ${item.issueNumber}: "${item.title}"`;
+              document.getElementById('readerModalBookMeta').textContent = `Yangi O'zbekistonda yillar va yo'llar jurnali • ${item.datePublished || item.year}`;
+              
+              const pdfUrl = mediaBlobStore['journal_' + item.id + '_pdf'];
+              const badge = document.getElementById('readerPdfBadgeStatus');
+              badge.textContent = pdfUrl ? `Biriktirilgan PDF: ${item.pdfName}` : (item.pdfName || 'Elektron mutolaa matni');
+
+              const textContent = item.content || `${item.title}\n\n${item.summary || ''}`;
+              const paragraphs = textContent.split(/\n+/).map(p => `<p class="mb-3">${escapeHtml(p)}</p>`).join('');
+              document.getElementById('readerTextView').innerHTML = `
+                <div class="border-b border-slate-200/80 pb-3 mb-4">
+                  <span class="text-xs uppercase tracking-wider font-bold text-[#00668c]">"Yillar va yo'llar" jurnali</span>
+                  <h2 class="text-xl font-bold mt-0.5 text-slate-900">${escapeHtml(item.title)}</h2>
+                  <p class="text-sm text-slate-500">${escapeHtml(item.year)}-yil, ${escapeHtml(item.issueNumber)} &bull; ${escapeHtml(item.datePublished || '')}</p>
+                </div>
+                ${paragraphs}
+              `;
+
+              if (pdfUrl) {
+                setReaderViewMode('pdf');
+              } else {
+                setReaderViewMode('text');
+              }
+              openModal('modalEbookReader');
+            }
+          } else if (action === 'listen-journal') {
+            const jId = actionBtn.getAttribute('data-journal-id');
+            const item = (state.journals || []).find(x => x.id === jId);
+            if (item) {
+              currentAudioBookId = 'journal_' + item.id;
+              const bar = document.getElementById('floatingAudioPlayer');
+              bar.classList.remove('hidden');
+
+              document.getElementById('audioPlayerBookTitle').textContent = `${item.issueNumber}: ${item.title}`;
+              document.getElementById('audioPlayerBookAuthor').textContent = `"Yillar va yo'llar" jurnali (${item.year})`;
+
+              const audioUrl = mediaBlobStore['journal_' + item.id + '_audio'];
+              const html5Audio = document.getElementById('html5AudioElement');
+              const ttsGroup = document.getElementById('ttsControlsGroup');
+              const modeBadge = document.getElementById('audioPlayerModeBadge');
+
+              stopAllAudio();
+
+              if (audioUrl) {
+                modeBadge.textContent = item.audioName || 'MP3 Audio Fayl';
+                ttsGroup.classList.add('hidden');
+                html5Audio.classList.remove('hidden');
+                html5Audio.src = audioUrl;
+                html5Audio.play().catch(() => {});
+                showToast(`"${item.title}" audio fayli ijro etilmoqda`, 'info');
+              } else {
+                modeBadge.textContent = "🎙️ Google O'zbekcha Diktor";
+                html5Audio.pause();
+                html5Audio.classList.add('hidden');
+                ttsGroup.classList.remove('hidden');
+
+                const fullText = `Yangi O'zbekistonda yillar va yo'llar jurnali, ${item.year}-yil, ${item.issueNumber}. Bosh mavzu: ${item.title}. ` + (item.content || item.summary || '');
+                googleAudioQueue = splitTextToUzbekSentences(fullText);
+                googleAudioIndex = 0;
+                isGoogleSpeaking = true;
+                playGoogleChunkAtIndex(0);
+                showToast(`"${item.issueNumber}" — Google O'zbekcha diktor o'qimoqda`, 'success');
+              }
+            }
+          } else if (action === 'edit-journal') {
+            const jId = actionBtn.getAttribute('data-journal-id');
+            const item = (state.journals || []).find(x => x.id === jId);
+            if (item) openJournalModal(item);
+          } else if (action === 'delete-journal') {
+            const jId = actionBtn.getAttribute('data-journal-id');
+            state.journals = (state.journals || []).filter(x => x.id !== jId);
+            saveState();
+            renderAll();
+            showToast("Jurnal soni o'chirildi.", 'info');
           } else if (action === 'read-ebook') {
             const bookId = actionBtn.getAttribute('data-book-id');
             openEbookReader(bookId);
@@ -3101,7 +3536,87 @@
         });
       }
 
-      window.addEventListener('DOMContentLoaded', () => {
+              // "Yillar va yo'llar" Jurnali Events
+        document.getElementById('btnOpenAddJournalModal').addEventListener('click', () => openJournalModal(null));
+        document.getElementById('journalSearchInput').addEventListener('input', renderJournalSection);
+        document.getElementById('journalQuarterFilterSelect').addEventListener('change', (e) => {
+          state.journalQuarterFilter = e.target.value;
+          renderJournalSection();
+        });
+
+        document.querySelectorAll('.journal-year-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.journalYearFilter = btn.getAttribute('data-journal-year');
+            document.querySelectorAll('.journal-year-btn').forEach(b => {
+              const active = b.getAttribute('data-journal-year') === state.journalYearFilter;
+              b.className = active
+                ? 'journal-year-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00668c] text-white transition'
+                : 'journal-year-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+            });
+            renderJournalSection();
+          });
+        });
+
+        // Form Journal Issue Submit
+        document.getElementById('formJournalIssue').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('journalIssueEditId').value;
+          const year = document.getElementById('journalYearInput').value.trim() || '2026';
+          const quarter = parseInt(document.getElementById('journalQuarterInput').value, 10);
+          const qNames = { 1: '1-son (1-chorak)', 2: '2-son (2-chorak)', 3: '3-son (3-chorak)', 4: '4-son (4-chorak)', 0: 'Maxsus son' };
+          const issueNumber = qNames[quarter] || `${quarter}-son`;
+          const title = document.getElementById('journalTitleInput').value.trim();
+          const datePublished = document.getElementById('journalDateInput').value.trim() || `${year}-yil`;
+          const content = document.getElementById('journalContentInput').value.trim();
+          const pdfFile = document.getElementById('journalPdfFileInput').files[0];
+          const audioFile = document.getElementById('journalAudioFileInput').files[0];
+
+          if (editId) {
+            const existing = (state.journals || []).find(x => x.id === editId);
+            if (existing) {
+              existing.year = year;
+              existing.quarter = quarter;
+              existing.issueNumber = issueNumber;
+              existing.title = title;
+              existing.datePublished = datePublished;
+              if (content) existing.content = content;
+              if (pdfFile) {
+                mediaBlobStore['journal_' + existing.id + '_pdf'] = URL.createObjectURL(pdfFile);
+                existing.pdfName = pdfFile.name;
+              }
+              if (audioFile) {
+                mediaBlobStore['journal_' + existing.id + '_audio'] = URL.createObjectURL(audioFile);
+                existing.audioName = audioFile.name;
+              }
+              showToast(`"Yillar va yo'llar" (${year}, ${issueNumber}) yangilandi!`, 'success');
+            }
+          } else {
+            const newId = 'j' + Date.now();
+            if (pdfFile) mediaBlobStore['journal_' + newId + '_pdf'] = URL.createObjectURL(pdfFile);
+            if (audioFile) mediaBlobStore['journal_' + newId + '_audio'] = URL.createObjectURL(audioFile);
+            
+            if (!state.journals) state.journals = [];
+            state.journals.unshift({
+              id: newId,
+              year,
+              quarter,
+              issueNumber,
+              title,
+              datePublished,
+              pdfName: pdfFile ? pdfFile.name : 'Elektron PDF',
+              audioName: audioFile ? audioFile.name : "Google o'zbekcha diktor",
+              summary: content ? content.slice(0, 160) + '...' : `Yangi O'zbekistonda yillar va yo'llar sohaviy jurnali, ${year}-yil, ${issueNumber}.`,
+              content: content || `${title}\n\nYangi O'zbekistonda yillar va yo'llar sohaviy jurnali.`
+            });
+            showToast(`"Yillar va yo'llar" (${year}, ${issueNumber}) yangi soni yuklandi!`, 'success');
+          }
+
+          saveState();
+          closeModal('modalJournalIssue');
+          renderAll();
+        });
+
+window.addEventListener('DOMContentLoaded', () => {
         loadState();
         initEvents();
         switchTab(state.activeTab || 'dashboard');
