@@ -129,30 +129,48 @@
           </div>
         </div>
 
-        <!-- Quick Actions + Google AI TTS + Language/Sign-In Switcher -->
+        <!-- Quick Actions + Role Switcher (Admin / Kitobxon) + Google AI TTS + Lang -->
         <div class="flex flex-wrap items-center gap-2">
-          <button id="btnOpenGeminiTtsModal" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition shadow-sm">
-            🎙️ Google AI Ovoz (Gemini TTS)
+          <!-- Role Indicator / Admin Login Button -->
+          <div id="roleControlsGroup" class="flex items-center gap-1.5">
+            <!-- When in Reader Mode: Show Admin Login button -->
+            <button type="button" id="btnOpenAdminLoginModal" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 transition shadow-sm">
+              <span>🔐 Kutubxonachi (Admin)</span>
+            </button>
+
+            <!-- When in Admin Mode: Show Admin Badge + Logout button -->
+            <div id="adminActiveBadge" class="hidden items-center gap-1 bg-emerald-500/20 border border-emerald-400/40 rounded-lg px-2.5 py-1 text-xs">
+              <span class="font-extrabold text-emerald-300 flex items-center gap-1">🛡️ Admin</span>
+              <button type="button" id="btnAdminLogout" title="Kitobxon rejimiga qaytish" class="ml-1 text-[11px] font-semibold text-rose-300 hover:text-white underline">
+                Chiqish
+              </button>
+            </div>
+          </div>
+
+          <button id="btnOpenGeminiTtsModal" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition shadow-sm">
+            🎙️ Google AI Ovoz
           </button>
-          <button id="btnQuickIssue" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm">
+
+          <!-- Admin-Only Quick Actions (Kitobxonlarga ko'rinmaydi) -->
+          <button id="btnQuickIssue" type="button" class="admin-only hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
             </svg>
             Kitob berish
           </button>
-          <button id="btnQuickAddBook" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm">
+          <button id="btnQuickAddBook" type="button" class="admin-only hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             Kitob qo'shish
           </button>
-          <button id="btnQuickAddReader" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition">
+          <button id="btnQuickAddReader" type="button" class="admin-only hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition">
             <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
             Kitobxon+
           </button>
-          <button id="btnExportCSV" type="button" title="Jurnalni Excel (CSV) formatida yuklab olish" class="inline-flex items-center gap-1 px-2.5 py-2 rounded-lg text-xs font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition">
+          <button id="btnExportCSV" type="button" title="Jurnalni Excel (CSV) formatida yuklab olish" class="admin-only hidden inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition">
             <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
@@ -170,20 +188,30 @@
 
       <!-- Navigation Bar with Wrap-Friendly Pill Buttons (Hech qachon kesilmaydi va yashirinmaydi) -->
       <nav class="flex flex-wrap items-center gap-1.5 sm:gap-2 py-2.5" aria-label="Asosiy menyu">
-        <button type="button" data-tab="dashboard" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 shadow-sm transition">
+        <!-- Kitobxon Shaxsiy Kabineti Tab (Kitobxonga ko'rinadi) -->
+        <button type="button" data-tab="mycabinet" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 shadow-sm transition">
           <svg class="w-4 h-4 text-slate-950 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span class="tracking-wide">Mening kabinetim</span>
+          <span id="navBadgeMyCabinet" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-950 text-cyan-300 font-black">0 ta kitob</span>
+        </button>
+
+        <!-- Admin Bo'limlari (Faqat Kutubxonachi / Adminga ko'rinadi) -->
+        <button type="button" data-tab="dashboard" class="nav-tab-btn admin-only hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
           </svg>
-          <span class="tracking-wide">Bosh sahifa</span>
+          <span class="tracking-wide">Boshqaruv (KPI)</span>
         </button>
-        <button type="button" data-tab="circulation" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+        <button type="button" data-tab="circulation" class="nav-tab-btn admin-only hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
           <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
           </svg>
-          <span class="tracking-wide">Oldi-berdi</span>
+          <span class="tracking-wide">Oldi-berdi jurnali</span>
           <span id="navBadgeActiveLoans" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">0</span>
         </button>
-        <button type="button" data-tab="overdue" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+        <button type="button" data-tab="overdue" class="nav-tab-btn admin-only hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
           <svg class="w-4 h-4 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -211,7 +239,7 @@
           <span class="tracking-wide">Elektron &amp; Audio</span>
           <span id="navBadgeDigital" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">PDF/MP3</span>
         </button>
-        <button type="button" data-tab="readers" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+        <button type="button" data-tab="readers" class="nav-tab-btn admin-only hidden flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
           <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -240,14 +268,107 @@
       </div>
       <div class="flex items-center gap-2 text-xs text-slate-500 justify-between sm:justify-end">
         <span id="searchStatusText" class="hidden text-indigo-600 font-medium"></span>
-        <button id="btnResetDemoData" type="button" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 transition whitespace-nowrap">
+        <button id="btnResetDemoData" type="button" class="admin-only hidden px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 transition whitespace-nowrap">
           Namuna ma'lumotlarni tiklash
         </button>
       </div>
     </div>
 
     <!-- ================= TAB 1: DASHBOARD ================= -->
-    <section id="tab-dashboard" class="tab-panel space-y-6 animate-fade-in">
+        <!-- ================= TAB: KITOBXON SHAXSIY KABINETI (MENING KITOBLARIM) ================= -->
+    <section id="tab-mycabinet" class="tab-panel space-y-6 animate-fade-in">
+      <!-- Welcome Reader Card -->
+      <div class="bg-gradient-to-r from-[#00668c] via-[#103759] to-[#0b253c] rounded-2xl p-5 sm:p-6 text-white shadow-md border border-cyan-500/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-cyan-400 text-slate-950">
+            <span>👤 Kitobxon kabineti</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white" id="myCabinetReaderHeading">Javohir Akmalov — Shaxsiy hisob</h2>
+          <p class="text-xs sm:text-sm text-cyan-100" id="myCabinetReaderSub">
+            Guruh: Yo'l muhandisligi (4-kurs) &bull; Guvohnoma: K-001 &bull; Tel: +998 90 345 12 89
+          </p>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/20 text-xs space-y-1">
+          <label class="block text-[11px] font-semibold text-cyan-200 uppercase">Kitobxon hisobini almashtirish:</label>
+          <select id="myCabinetReaderSelect" class="w-full px-3 py-1.5 bg-slate-900 border border-cyan-400/40 rounded-lg text-xs font-bold text-white focus:outline-none">
+            <!-- Populated by JS with readers -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Reader KPI Summary -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase">Qo'limdagi kitoblar</p>
+            <p class="text-2xl font-black text-amber-600 mt-1" id="myCabinetActiveCount">0 ta</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Topshirish muddati belgilangan</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-lg">
+            📖
+          </div>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase">Kechikkan / Diqqat</p>
+            <p class="text-2xl font-black text-rose-600 mt-1" id="myCabinetOverdueCount">0 ta</p>
+            <p class="text-[11px] text-rose-500 mt-0.5" id="myCabinetOverdueSub">Muddati o'tmagan</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-lg">
+            ⚠️
+          </div>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase">O'qilgan / Qaytarilgan</p>
+            <p class="text-2xl font-black text-emerald-600 mt-1" id="myCabinetReturnedCount">0 ta</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Muvaffaqiyatli topshirilgan</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg">
+            ✅
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Borrowed Books List -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              Hozirda qo'lingizda bo'lgan kitoblar
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Topshirish muddatiga amal qiling yoki elektron o'qish/eshitishdan foydalaning</p>
+          </div>
+          <button type="button" data-goto-tab="books" class="text-xs font-bold text-[#00668c] hover:underline">
+            Katalogdan yangi kitob qidirish &rarr;
+          </button>
+        </div>
+
+        <div id="myCabinetActiveBooksGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- History of Returned Books -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            Mutolaa tarixi (Avval o'qilgan va qaytarilgan kitoblar)
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Siz kutubxonadan olib o'qigan va topshirgan darsliklar ro'yxati</p>
+        </div>
+        <div id="myCabinetHistoryList" class="divide-y divide-slate-100 text-sm">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+<section id="tab-dashboard" class="tab-panel space-y-6 animate-fade-in">
       <!-- KPI Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
@@ -676,7 +797,41 @@
 
   </main>
 
-  <!-- ================= MODAL 1: ISSUE BOOK (KITOB BERISH) ================= -->
+    <!-- ================= MODAL 9: KUTUBXONACHI (ADMIN) TIZIMIGA KIRISH ================= -->
+  <div id="modalAdminLogin" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-in text-slate-900">
+      <div class="px-5 py-4 bg-[#0b253c] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs">🔐</span>
+          <h3 class="text-base font-bold">Kutubxonachi (Admin) kirishi</h3>
+        </div>
+        <button type="button" data-close-modal="modalAdminLogin" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formAdminLogin" class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Maxfiy PIN-kod yoki Parol *</label>
+          <input id="adminPinInput" type="password" required value="1234" placeholder="PIN-kodni kiriting" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 text-center font-mono tracking-widest text-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+          <p class="text-[11px] text-slate-500 mt-1 text-center">Boshlang'ich standart PIN-kod: <strong>1234</strong></p>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalAdminLogin" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="w-full py-2 px-4 rounded-lg text-xs sm:text-sm font-bold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm transition">
+            Tizimga kirish (Admin)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- ================= MODAL 1: ISSUE BOOK (KITOB BERISH) ================= -->
   <div id="modalIssueBook" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
       <div class="px-5 py-4 bg-indigo-600 text-white flex items-center justify-between">
@@ -1070,10 +1225,29 @@
         <!-- PDF View (100% ekran bo'ylab kengayadi) -->
         <div id="readerPdfView" class="w-full h-full flex-1 flex flex-col p-0 m-0 overflow-hidden">
           <iframe id="readerPdfIframe" class="w-full h-full flex-1 border-0 bg-slate-200" title="PDF Fullscreen Viewer"></iframe>
-          <div id="readerNoPdfPlaceholder" class="hidden my-auto text-center p-8 space-y-3 bg-white max-w-lg mx-auto rounded-2xl border border-slate-200 shadow-md">
-            <div class="w-12 h-12 rounded-full bg-cyan-100 text-[#00668c] flex items-center justify-center mx-auto text-xl">📄</div>
-            <p class="text-sm font-bold text-slate-800">Ushbu kitob uchun to'liq elektron matn rejimi faol.</p>
-            <p class="text-xs text-slate-500">Yuqoridagi <strong>"📖 Elektron matn"</strong> tugmasini bosib asarni o'qishingiz yoki <strong>"🎧 Audio tinglash"</strong> orqali Google diktori bilan eshitishingiz mumkin.</p>
+          <div id="readerNoPdfPlaceholder" class="hidden my-auto text-center p-8 sm:p-10 space-y-4 bg-white max-w-xl mx-auto rounded-2xl border border-slate-200 shadow-xl animate-fade-in">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-[#00668c] flex items-center justify-center mx-auto text-2xl shadow-sm">
+              📄
+            </div>
+            <div>
+              <h4 class="text-base font-extrabold text-slate-900">Ushbu nashr uchun PDF fayl hali biriktirilmagan</h4>
+              <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
+                Asl PDF faylni hoziroq kompyuteringizdan yuklashingiz yoki yuqoridagi <strong>"Elektron matn"</strong> rejimida to'liq maqolalarni o'qishingiz mumkin.
+              </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
+              <label class="cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold bg-[#00668c] hover:bg-[#005270] text-white shadow-md transition text-xs sm:text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <span>📁 PDF faylni biriktirish (Faylni tanlash)</span>
+                <input id="placeholderPdfUploadInput" type="file" accept=".pdf,application/pdf" class="hidden" />
+              </label>
+              <button type="button" id="btnSwitchToTextModeFromPlaceholder" class="px-4 py-2.5 rounded-xl font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm transition">
+                📖 Elektron matnni o'qish
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1247,7 +1421,7 @@
 
   <script>
     (function() {
-      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v10_i18n_active';
+      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v12_roles_cabinet';
 
       // Helper for date offsets relative to today
       function getOffsetDateStr(daysOffset) {
@@ -2227,14 +2401,14 @@ function diffDaysFromToday(dueDateStr) {
 
               <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
                 <div class="flex items-center gap-1">
-                  <button type="button" data-action="edit-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+                  <button type="button" class="admin-card-action hidden" data-action="edit-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
                     Tahrirlash
                   </button>
-                  <button type="button" data-action="delete-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition">
+                  <button type="button" class="admin-card-action hidden" data-action="delete-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition">
                     O'chirish
                   </button>
                 </div>
-                <button type="button" data-action="issue-this-book" data-book-id="${escapeHtml(book.id)}" ${!isAvail ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${isAvail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'} transition">
+                <button type="button" class="admin-card-action hidden" data-action="issue-this-book" data-book-id="${escapeHtml(book.id)}" ${!isAvail ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${isAvail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'} transition">
                   Kitobxonga berish
                 </button>
               </div>
@@ -2287,6 +2461,69 @@ function diffDaysFromToday(dueDateStr) {
 
       // In-memory runtime map for uploaded PDF & Audio Blob URLs (session-safe)
       const mediaBlobStore = {};
+      // ================= INDEXEDDB DOIMIY SAQLASH (PDF & AUDIO FAYLLAR) =================
+      const IDB_NAME = 'AvtoyulKutubxonaPermanentDB';
+      const IDB_VERSION = 1;
+      const IDB_STORE = 'permanentFiles';
+
+      function openAppDB() {
+        return new Promise((resolve) => {
+          if (!window.indexedDB) {
+            resolve(null);
+            return;
+          }
+          const req = window.indexedDB.open(IDB_NAME, IDB_VERSION);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(IDB_STORE)) {
+              db.createObjectStore(IDB_STORE);
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        });
+      }
+
+      async function saveFilePermanently(key, fileBlob) {
+        try {
+          const db = await openAppDB();
+          if (!db || !fileBlob) return;
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          const store = tx.objectStore(IDB_STORE);
+          store.put(fileBlob, key);
+        } catch (e) {
+          console.warn('IndexedDB save error:', e);
+        }
+      }
+
+      async function getFilePermanently(key) {
+        try {
+          const db = await openAppDB();
+          if (!db) return null;
+          return new Promise((resolve) => {
+            const tx = db.transaction(IDB_STORE, 'readonly');
+            const store = tx.objectStore(IDB_STORE);
+            const req = store.get(key);
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => resolve(null);
+          });
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function resolvePdfUrl(key) {
+        if (mediaBlobStore[key]) return mediaBlobStore[key];
+        const blob = await getFilePermanently(key);
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          mediaBlobStore[key] = url;
+          return url;
+        }
+        return null;
+      }
+
+
       let currentReaderBookId = null;
       let currentReaderFontSize = 16;
       let currentReaderDark = false;
@@ -2351,25 +2588,25 @@ function diffDaysFromToday(dueDateStr) {
         }).join('');
       }
 
-      function openEbookReader(bookId) {
+      async function openEbookReader(bookId) {
         const book = getBookById(bookId);
         currentReaderBookId = book.id;
         document.getElementById('readerModalBookTitle').textContent = book.title;
         document.getElementById('readerModalBookMeta').textContent = `${book.author} • ${book.code} • ${book.category}`;
 
-        const pdfUrl = mediaBlobStore[book.id + '_pdf'];
+        const pdfUrl = await resolvePdfUrl(book.id + '_pdf');
         const badge = document.getElementById('readerPdfBadgeStatus');
         badge.textContent = pdfUrl
           ? `Biriktirilgan PDF: ${book.pdfName || 'Fayl yuklangan'}`
-          : (book.pdfName || 'Ichki elektron mutolaa rejimi');
+          : (book.pdfName || 'Elektron mutolaa matni');
 
-        const textContent = book.ebookText || `"${book.title}" (${book.author}) — Avtoyul Kutubxona elektron fondidagi kitob.\n\nUshbu oynada kitobning elektron matnini o'qishingiz yoki yuqoridagi "PDF fayl biriktirish" tugmasini bosib, to'liq PDF kitobni yuklab o'qishingiz mumkin.`;
+        const textContent = book.ebookText || `"${book.title}" (${book.author}) — Avtoyul Kutubxona elektron fondidagi darslik.\n\nUshbu darslikning to'liq elektron matnini mutolaa qilishingiz yoki yuqoridagi audio pleer orqali Google diktori bilan tinglashingiz mumkin.`;
         const paragraphs = textContent.split(/\n+/).map(p => `<p class="mb-3">${escapeHtml(p)}</p>`).join('');
         document.getElementById('readerTextView').innerHTML = `
           <div class="border-b border-slate-200/80 pb-3 mb-4">
-            <span class="text-xs uppercase tracking-wider font-semibold text-indigo-600">${escapeHtml(book.category)}</span>
-            <h2 class="text-xl font-bold mt-0.5">${escapeHtml(book.title)}</h2>
-            <p class="text-sm opacity-75">Muallif: ${escapeHtml(book.author)}</p>
+            <span class="text-xs uppercase tracking-wider font-bold text-[#00668c]">${escapeHtml(book.category)}</span>
+            <h2 class="text-xl font-bold mt-0.5 text-slate-900">${escapeHtml(book.title)}</h2>
+            <p class="text-sm text-slate-500">Muallif: ${escapeHtml(book.author)} &bull; ${escapeHtml(book.code)}</p>
           </div>
           ${paragraphs}
         `;
@@ -2780,10 +3017,10 @@ function diffDaysFromToday(dueDateStr) {
                 </div>
 
                 <div class="flex items-center justify-between gap-2 pt-1 text-xs">
-                  <button type="button" data-action="edit-journal" data-journal-id="${escapeHtml(item.id)}" class="text-slate-500 hover:text-slate-800 font-medium transition">
+                  <button type="button" class="admin-card-action hidden text-slate-500 hover:text-slate-800 font-medium transition" data-action="edit-journal" data-journal-id="${escapeHtml(item.id)}" class="text-slate-500 hover:text-slate-800 font-medium transition">
                     ✏️ Tahrirlash
                   </button>
-                  <button type="button" data-action="delete-journal" data-journal-id="${escapeHtml(item.id)}" class="text-rose-500 hover:text-rose-700 font-medium transition">
+                  <button type="button" class="admin-card-action hidden text-rose-500 hover:text-rose-700 font-medium transition" data-action="delete-journal" data-journal-id="${escapeHtml(item.id)}" class="text-rose-500 hover:text-rose-700 font-medium transition">
                     🗑️ O'chirish
                   </button>
                 </div>
@@ -2821,6 +3058,143 @@ function diffDaysFromToday(dueDateStr) {
         openModal('modalJournalIssue');
       }
 
+      function applyUserRole(role) {
+        state.currentUserRole = role || 'reader';
+        saveState();
+
+        const isAdmin = state.currentUserRole === 'admin';
+        const loginBtn = document.getElementById('btnOpenAdminLoginModal');
+        const logoutBadge = document.getElementById('adminActiveBadge');
+
+        if (isAdmin) {
+          if (loginBtn) loginBtn.classList.add('hidden');
+          if (logoutBadge) {
+            logoutBadge.classList.remove('hidden');
+            logoutBadge.classList.add('flex');
+          }
+          document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+          document.querySelectorAll('.admin-card-action').forEach(el => el.classList.remove('hidden'));
+        } else {
+          if (loginBtn) loginBtn.classList.remove('hidden');
+          if (logoutBadge) {
+            logoutBadge.classList.add('hidden');
+            logoutBadge.classList.remove('flex');
+          }
+          document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+          document.querySelectorAll('.admin-card-action').forEach(el => el.classList.add('hidden'));
+
+          // If currently on an admin-only tab, redirect reader to mycabinet
+          const adminTabs = ['dashboard', 'circulation', 'overdue', 'readers'];
+          if (adminTabs.includes(state.activeTab)) {
+            switchTab('mycabinet');
+          }
+        }
+      }
+
+      function renderMyCabinet() {
+        const readerSelect = document.getElementById('myCabinetReaderSelect');
+        if (!readerSelect) return;
+
+        // Populate reader select
+        const readers = state.readers || [];
+        readerSelect.innerHTML = readers.map(r => `
+          <option value="${escapeHtml(r.id)}" ${r.id === state.currentReaderId ? 'selected' : ''}>
+            ${escapeHtml(r.cardNo)} &bull; ${escapeHtml(r.name)} (${escapeHtml(r.group)})
+          </option>
+        `).join('');
+
+        const currentReader = readers.find(r => r.id === state.currentReaderId) || readers[0];
+        if (!currentReader) return;
+
+        state.currentReaderId = currentReader.id;
+
+        // Header info
+        const heading = document.getElementById('myCabinetReaderHeading');
+        if (heading) heading.textContent = `${currentReader.name} — Shaxsiy hisob`;
+        const sub = document.getElementById('myCabinetReaderSub');
+        if (sub) sub.textContent = `Guruh: ${currentReader.group} • Guvohnoma: ${currentReader.cardNo} • Tel: ${currentReader.phone}`;
+
+        // Loans of this reader
+        const readerLoans = (state.loans || []).filter(l => l.readerId === currentReader.id);
+        const activeLoans = readerLoans.filter(l => l.status === 'active');
+        const overdueLoans = activeLoans.filter(l => isLoanOverdue(l));
+        const returnedLoans = readerLoans.filter(l => l.status === 'returned');
+
+        document.getElementById('myCabinetActiveCount').textContent = `${activeLoans.length} ta`;
+        document.getElementById('myCabinetOverdueCount').textContent = `${overdueLoans.length} ta`;
+        document.getElementById('myCabinetReturnedCount').textContent = `${returnedLoans.length} ta`;
+        document.getElementById('navBadgeMyCabinet').textContent = `${activeLoans.length} ta kitob`;
+
+        const overdueSub = document.getElementById('myCabinetOverdueSub');
+        if (overdueSub) {
+          overdueSub.textContent = overdueLoans.length > 0 ? `${overdueLoans.length} ta kitob kechikdi!` : 'Muddati o`tgan kitob yo`q';
+        }
+
+        // Active books grid
+        const activeGrid = document.getElementById('myCabinetActiveBooksGrid');
+        if (activeLoans.length === 0) {
+          activeGrid.innerHTML = `
+            <div class="col-span-full p-6 text-center text-slate-500 bg-slate-50 rounded-xl border border-slate-200">
+              🎉 Hozirda qo'lingizda kitob yo'q. Kutubxona katalogidan darslik tanlab o'qishingiz mumkin!
+            </div>
+          `;
+        } else {
+          activeGrid.innerHTML = activeLoans.map(loan => {
+            const book = getBookById(loan.bookId);
+            const days = diffDaysFromToday(loan.dueDate);
+            return `
+              <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-cyan-500/40 transition flex flex-col justify-between gap-3">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-mono font-bold bg-[#0b253c] text-cyan-300 px-2 py-0.5 rounded-md">${escapeHtml(book.code)}</span>
+                    ${getLoanDueStatusBadge(loan)}
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-900 mt-1">${escapeHtml(book.title)}</h4>
+                  <p class="text-xs text-slate-500">${escapeHtml(book.author)} &bull; ${escapeHtml(book.shelf)}</p>
+                  <p class="text-xs text-slate-600 pt-1">
+                    Olingan: <strong>${formatDateUz(loan.issueDate)}</strong> &rarr; Topshirish: <strong class="text-indigo-700">${formatDateUz(loan.dueDate)}</strong>
+                  </p>
+                </div>
+                <div class="flex items-center gap-2 pt-2 border-t border-slate-200">
+                  <button type="button" data-action="read-ebook" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#00668c] text-white hover:bg-[#005270] transition">
+                    📖 O'qish (PDF)
+                  </button>
+                  <button type="button" data-action="listen-audio" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition">
+                    🎧 Tinglash
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Returned history list
+        const histContainer = document.getElementById('myCabinetHistoryList');
+        if (returnedLoans.length === 0) {
+          histContainer.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs">Avval o'qilgan kitoblar tarixi hozircha bo'sh</div>`;
+        } else {
+          histContainer.innerHTML = returnedLoans.map(loan => {
+            const book = getBookById(loan.bookId);
+            return `
+              <div class="py-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div class="font-bold text-slate-800 text-xs sm:text-sm">${escapeHtml(book.title)} (${escapeHtml(book.code)})</div>
+                  <div class="text-[11px] text-slate-400">Muallif: ${escapeHtml(book.author)} &bull; Olingan: ${formatDateUz(loan.issueDate)}</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    Qaytarilgan: ${formatDateUz(loan.returnDate)}
+                  </span>
+                  <button type="button" data-action="read-ebook" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700">
+                    Qayta o'qish
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
 function renderAll() {
         renderKPIs();
         renderDashboard();
@@ -2830,6 +3204,7 @@ function renderAll() {
         renderReaders();
         renderDigitalLibrary();
         renderJournalSection();
+        renderMyCabinet();
       }
 
       // Modal Helpers
@@ -3086,6 +3461,7 @@ function renderAll() {
               if (ebookText) existing.ebookText = ebookText;
               if (pdfFile) {
                 mediaBlobStore[existing.id + '_pdf'] = URL.createObjectURL(pdfFile);
+                saveFilePermanently(existing.id + '_pdf', pdfFile);
                 existing.pdfName = pdfFile.name;
                 existing.hasEbook = true;
               }
@@ -3111,7 +3487,10 @@ function renderAll() {
               audioName: audioFile ? audioFile.name : "Ovozli o'qish",
               ebookText: ebookText || `"${title}" (${author}) — Avtoyul Kutubxona elektron fondiga kiritilgan kitob.`
             };
-            if (pdfFile) mediaBlobStore[newBookObj.id + '_pdf'] = URL.createObjectURL(pdfFile);
+            if (pdfFile) {
+              mediaBlobStore[newBookObj.id + '_pdf'] = URL.createObjectURL(pdfFile);
+              saveFilePermanently(newBookObj.id + '_pdf', pdfFile);
+            }
             if (audioFile) mediaBlobStore[newBookObj.id + '_audio'] = URL.createObjectURL(audioFile);
             state.books.unshift(newBookObj);
             showToast(`"${title}" kutubxona va elektron bazaga qo'shildi!`, 'success');
@@ -3277,32 +3656,32 @@ function renderAll() {
             const jId = actionBtn.getAttribute('data-journal-id');
             const item = (state.journals || []).find(x => x.id === jId);
             if (item) {
-              // Open inside the reader modal
               currentReaderBookId = 'journal_' + item.id;
               document.getElementById('readerModalBookTitle').textContent = `${item.year}-yil, ${item.issueNumber}: "${item.title}"`;
               document.getElementById('readerModalBookMeta').textContent = `Yangi O'zbekistonda yillar va yo'llar jurnali • ${item.datePublished || item.year}`;
               
-              const pdfUrl = mediaBlobStore['journal_' + item.id + '_pdf'];
-              const badge = document.getElementById('readerPdfBadgeStatus');
-              badge.textContent = pdfUrl ? `Biriktirilgan PDF: ${item.pdfName}` : (item.pdfName || 'Elektron mutolaa matni');
+              resolvePdfUrl('journal_' + item.id + '_pdf').then(pdfUrl => {
+                const badge = document.getElementById('readerPdfBadgeStatus');
+                badge.textContent = pdfUrl ? `Biriktirilgan PDF: ${item.pdfName}` : (item.pdfName || 'Elektron mutolaa matni');
 
-              const textContent = item.content || `${item.title}\n\n${item.summary || ''}`;
-              const paragraphs = textContent.split(/\n+/).map(p => `<p class="mb-3">${escapeHtml(p)}</p>`).join('');
-              document.getElementById('readerTextView').innerHTML = `
-                <div class="border-b border-slate-200/80 pb-3 mb-4">
-                  <span class="text-xs uppercase tracking-wider font-bold text-[#00668c]">"Yillar va yo'llar" jurnali</span>
-                  <h2 class="text-xl font-bold mt-0.5 text-slate-900">${escapeHtml(item.title)}</h2>
-                  <p class="text-sm text-slate-500">${escapeHtml(item.year)}-yil, ${escapeHtml(item.issueNumber)} &bull; ${escapeHtml(item.datePublished || '')}</p>
-                </div>
-                ${paragraphs}
-              `;
+                const textContent = item.content || `${item.title}\n\n${item.summary || ''}`;
+                const paragraphs = textContent.split(/\n+/).map(p => `<p class="mb-3">${escapeHtml(p)}</p>`).join('');
+                document.getElementById('readerTextView').innerHTML = `
+                  <div class="border-b border-slate-200/80 pb-3 mb-4">
+                    <span class="text-xs uppercase tracking-wider font-bold text-[#00668c]">"Yillar va yo'llar" jurnali</span>
+                    <h2 class="text-xl font-bold mt-0.5 text-slate-900">${escapeHtml(item.title)}</h2>
+                    <p class="text-sm text-slate-500">${escapeHtml(item.year)}-yil, ${escapeHtml(item.issueNumber)} &bull; ${escapeHtml(item.datePublished || '')}</p>
+                  </div>
+                  ${paragraphs}
+                `;
 
-              if (pdfUrl) {
-                setReaderViewMode('pdf');
-              } else {
-                setReaderViewMode('text');
-              }
-              openModal('modalEbookReader');
+                if (pdfUrl) {
+                  setReaderViewMode('pdf');
+                } else {
+                  setReaderViewMode('text');
+                }
+                openModal('modalEbookReader');
+              });
             }
           } else if (action === 'listen-journal') {
             const jId = actionBtn.getAttribute('data-journal-id');
@@ -3613,6 +3992,7 @@ function renderAll() {
               if (content) existing.content = content;
               if (pdfFile) {
                 mediaBlobStore['journal_' + existing.id + '_pdf'] = URL.createObjectURL(pdfFile);
+                saveFilePermanently('journal_' + existing.id + '_pdf', pdfFile);
                 existing.pdfName = pdfFile.name;
               }
               if (audioFile) {
@@ -3623,7 +4003,10 @@ function renderAll() {
             }
           } else {
             const newId = 'j' + Date.now();
-            if (pdfFile) mediaBlobStore['journal_' + newId + '_pdf'] = URL.createObjectURL(pdfFile);
+            if (pdfFile) {
+              mediaBlobStore['journal_' + newId + '_pdf'] = URL.createObjectURL(pdfFile);
+              saveFilePermanently('journal_' + newId + '_pdf', pdfFile);
+            }
             if (audioFile) mediaBlobStore['journal_' + newId + '_audio'] = URL.createObjectURL(audioFile);
             
             if (!state.journals) state.journals = [];
@@ -3647,11 +4030,96 @@ function renderAll() {
           renderAll();
         });
 
-window.addEventListener('DOMContentLoaded', () => {
+        // Placeholder Direct PDF Upload & Switch to text
+        const placeholderUpload = document.getElementById('placeholderPdfUploadInput');
+        if (placeholderUpload) {
+          placeholderUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || !currentReaderBookId) return;
+            const url = URL.createObjectURL(file);
+            mediaBlobStore[currentReaderBookId + '_pdf'] = url;
+            await saveFilePermanently(currentReaderBookId + '_pdf', file);
+
+            // Update metadata if book or journal
+            if (currentReaderBookId.startsWith('journal_')) {
+              const jId = currentReaderBookId.replace('journal_', '');
+              const item = (state.journals || []).find(x => x.id === jId);
+              if (item) {
+                item.pdfName = file.name;
+                saveState();
+              }
+            } else {
+              const book = getBookById(currentReaderBookId);
+              if (book) {
+                book.pdfName = file.name;
+                book.hasEbook = true;
+                saveState();
+              }
+            }
+            document.getElementById('readerPdfBadgeStatus').textContent = `Biriktirilgan PDF: ${file.name}`;
+            setReaderViewMode('pdf');
+            renderAll();
+            showToast(`"${file.name}" PDF fayli muvaffaqiyatli yuklandi va ochildi!`, 'success');
+          });
+        }
+
+        const btnPlaceholderText = document.getElementById('btnSwitchToTextModeFromPlaceholder');
+        if (btnPlaceholderText) {
+          btnPlaceholderText.addEventListener('click', () => {
+            setReaderViewMode('text');
+          });
+        }
+
+                // Role Switcher & Admin Login/Logout Events
+        const btnOpenAdmin = document.getElementById('btnOpenAdminLoginModal');
+        if (btnOpenAdmin) {
+          btnOpenAdmin.addEventListener('click', () => {
+            document.getElementById('adminPinInput').value = '1234';
+            openModal('modalAdminLogin');
+          });
+        }
+
+        const formAdminLogin = document.getElementById('formAdminLogin');
+        if (formAdminLogin) {
+          formAdminLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pin = document.getElementById('adminPinInput').value.trim();
+            if (pin === '1234' || pin.toLowerCase() === 'admin') {
+              applyUserRole('admin');
+              closeModal('modalAdminLogin');
+              showToast("Kutubxonachi (Admin) tizimiga muvaffaqiyatli kirdingiz!", "success");
+              switchTab('dashboard');
+            } else {
+              showToast("Noto'g'ri PIN-kod! (Standart PIN: 1234)", "error");
+            }
+          });
+        }
+
+        const btnLogout = document.getElementById('btnAdminLogout');
+        if (btnLogout) {
+          btnLogout.addEventListener('click', () => {
+            applyUserRole('reader');
+            showToast("Kitobxon rejimiga o'tildi. Admin paneli yopildi.", "info");
+            switchTab('mycabinet');
+          });
+        }
+
+        const cabinetReaderSelect = document.getElementById('myCabinetReaderSelect');
+        if (cabinetReaderSelect) {
+          cabinetReaderSelect.addEventListener('change', (e) => {
+            state.currentReaderId = e.target.value;
+            saveState();
+            renderMyCabinet();
+          });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
         loadState();
         initEvents();
         applyLanguage(state.currentLang || 'uz');
-        switchTab(state.activeTab || 'dashboard');
+        applyUserRole(state.currentUserRole || 'reader');
+        const defaultTab = state.currentUserRole === 'admin' ? (state.activeTab || 'dashboard') : 'mycabinet';
+        switchTab(defaultTab);
       });
     })();
   </script>
