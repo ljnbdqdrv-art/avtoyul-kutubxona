@@ -475,15 +475,16 @@
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-500 mb-1">Bo'lim / Janr</label>
-            <select id="bookCategoryFilter" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="all">Barcha janrlar</option>
-              <option value="O'zbek adabiyoti">O'zbek adabiyoti</option>
-              <option value="Jahon adabiyoti">Jahon adabiyoti</option>
-              <option value="Tarixiy">Tarixiy</option>
-              <option value="Ilmiy va IT">Ilmiy va IT</option>
-              <option value="Bolalar adabiyoti">Bolalar adabiyoti</option>
-              <option value="Avtoyo'l va transport">Avtoyo'l va transport</option>
-              <option value="Darslik va qo'llanma">Darslik va qo'llanma</option>
+            <select id="bookCategoryFilter" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+              <option value="all">Barcha yo'l xo'jaligi yo'nalishlari</option>
+              <option value="Yo'l loyihalash va qurilish">Yo'l loyihalash va qurilish</option>
+              <option value="Yo'l to'shamalari va materiallari">Yo'l to'shamalari va materiallari</option>
+              <option value="Ko'priklar va sun'iy inshootlar">Ko'priklar va sun'iy inshootlar</option>
+              <option value="Yo'l harakati xavfsizligi va telematika">Yo'l harakati xavfsizligi va telematika</option>
+              <option value="Yo'llarni ta'mirlash va saqlash">Yo'llarni ta'mirlash va saqlash</option>
+              <option value="Yo'l-qurilish mashinalari">Yo'l-qurilish mashinalari</option>
+              <option value="Normativlar va ShNQ / QMQ">Normativlar va ShNQ / QMQ</option>
+              <option value="Iqtisodiyot va boshqaruv">Iqtisodiyot va boshqaruv</option>
             </select>
           </div>
           <div>
@@ -694,13 +695,14 @@
           <div>
             <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Bo'lim / Janr *</label>
             <select id="bookCategoryInput" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-              <option value="O'zbek adabiyoti">O'zbek adabiyoti</option>
-              <option value="Jahon adabiyoti">Jahon adabiyoti</option>
-              <option value="Tarixiy">Tarixiy</option>
-              <option value="Ilmiy va IT">Ilmiy va IT</option>
-              <option value="Bolalar adabiyoti">Bolalar adabiyoti</option>
-              <option value="Avtoyo'l va transport">Avtoyo'l va transport</option>
-              <option value="Darslik va qo'llanma">Darslik va qo'llanma</option>
+              <option value="Yo'l loyihalash va qurilish">Yo'l loyihalash va qurilish</option>
+              <option value="Yo'l to'shamalari va materiallari">Yo'l to'shamalari va materiallari</option>
+              <option value="Ko'priklar va sun'iy inshootlar">Ko'priklar va sun'iy inshootlar</option>
+              <option value="Yo'l harakati xavfsizligi va telematika">Yo'l harakati xavfsizligi va telematika</option>
+              <option value="Yo'llarni ta'mirlash va saqlash">Yo'llarni ta'mirlash va saqlash</option>
+              <option value="Yo'l-qurilish mashinalari">Yo'l-qurilish mashinalari</option>
+              <option value="Normativlar va ShNQ / QMQ">Normativlar va ShNQ / QMQ</option>
+              <option value="Iqtisodiyot va boshqaruv">Iqtisodiyot va boshqaruv</option>
             </select>
           </div>
         </div>
@@ -1078,7 +1080,7 @@
 
   <script>
     (function() {
-      const STORAGE_KEY = 'avtoyul_kutubxona_state_v3';
+      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v4';
 
       // Helper for date offsets relative to today
       function getOffsetDateStr(daysOffset) {
@@ -1113,212 +1115,283 @@
           digitalFilter: 'all',
           books: [
             {
-              id: 'b9',
-              code: 'INV-109',
-              title: "Avtomobil yo'llarini loyihalash va qurish",
-              author: "Q. H. Azizov, M. O. O'roqov",
-              category: "Avtoyo'l va transport",
-              shelf: 'D-1 javon',
+              id: 'ay1',
+              code: 'AY-101',
+              title: "Avtomobil yo'llarini loyihalash",
+              author: "I. S. Sodiqov, Q. H. Azizov, A. X. Artikov",
+              category: "Yo'l loyihalash va qurilish",
+              shelf: "A-1 javon (Loyihalash)",
+              totalCopies: 10,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "avtomobil_yollarini_loyihalash.pdf",
+              audioName: "Google O'zbekcha Diktor (1-bob)",
+              ebookText: "1-BOB. AVTOMOBIL YO'LLARINI LOYIHALASH ASOSLARI VA ME'YORLARI.\n\nAvtomobil yo'llarini loyihalashda hududning tabiiy-iqlimiy sharoiti, transport oqimi zichligi, harakat xavfsizligi va istiqboldagi yuklama darajasi hisobga olinadi. Trassa plani, bo'ylama va ko'ndalang profillar yo'l toifasiga ko'ra belgilanadi.\n\n2-BOB. HARAKAT TAZYIQI VA YO'L POYI MUSTAHKAMLIGI.\n\nYo'l poyining barqarorligi yer sathidagi suvlar va qor erishi sharoitlarida tuproqning deformatsiyalanmasligiga asoslanadi. Har bir toifa uchun hisobiy harakat tezligi va ko'rinish masofasi me'yorlanadi."
+            },
+            {
+              id: 'ay2',
+              code: 'AY-102',
+              title: "Ko'priklar va transport tonnellari qurilishi",
+              author: "S. S. Salixanov, A. N. Rizayev",
+              category: "Ko'priklar va sun'iy inshootlar",
+              shelf: "B-1 javon (Sun'iy inshootlar)",
+              totalCopies: 8,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "kopriklar_va_tonnellar_darslik.pdf",
+              audioName: "Audio ma'ruza (Ko'priklar)",
+              ebookText: "KIRISH. KO'PRIK VA TONNELLAR TRANSPORT TIZIMINING ENG MAS'ULIYATLI INSHOOTLARIDIR.\n\nKo'prik oraliq qurilmalari temir-beton, po'lat-temirbeton va zamonaviy kompozit materiallardan barpo etiladi. Tayanchlar gruntning ko'tarish qobiliyatiga asosan qoziqli yoki tabiiy poydevorli qilib hisoblanadi.\n\nSeysmik faol hududlarda ko'priklarni loyihalashda 8-9 balli zilzilaga bardosh beruvchi seysmodempferlar va maxsus elastik tayanch qismlari o'rnatiladi."
+            },
+            {
+              id: 'ay3',
+              code: 'AY-103',
+              title: "Yo'l to'shamalari va qoplamalari texnologiyasi",
+              author: "A. A. Inoyatov, S. P. Po'latov",
+              category: "Yo'l to'shamalari va materiallari",
+              shelf: "A-2 javon (Qoplamalar)",
+              totalCopies: 12,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yol_toshamalari_va_qoplamalar.pdf",
+              audioName: "Audio qo'llanma (Asfalt va beton)",
+              ebookText: "1-BOB. YO'L TO'SHAMALARI TURLARI VA ISHLASH XUSUSIYATLARI.\n\nYo'l to'shamalari egiluvchan (asfalt-beton) va qattiq (sement-beton) turlarga bo'linadi. To'shama transport vositalarining g'ildirak yuklamalarini qabul qilib, uni yer poyiga xavfsiz me'yorda taqsimlashga xizmat qiladi.\n\nIssiq iqlim sharoitida qoplamalarning g'ildirak izi tushishiga (koleya hosil bo'lishiga) qarshiligini oshirish uchun polimer-modifikatsiyalangan bitumlar (PMB) hamda shag'alli-mastikali asfaltbeton (SMA) keng joriy etiladi."
+            },
+            {
+              id: 'ay4',
+              code: 'AY-104',
+              title: "Yo'l harakati xavfsizligini tashkil etish va telematika",
+              author: "Q. H. Azizov, O. Q. Qudratov",
+              category: "Yo'l harakati xavfsizligi va telematika",
+              shelf: "C-1 javon (Harakat xavfsizligi)",
+              totalCopies: 10,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "harakat_xavfsizligi_telematika.pdf",
+              audioName: "Audio qo'llanma (Telematika)",
+              ebookText: "YO'L HARAKATI XAVFSIZLIGI — DAVLAT AHAMIYATIDAGI STRATEGIK VAZIFA.\n\nZamonaviy intellektual transport tizimlari (ITS), adaptiv svetoforlar boshqaruvi, avtomatlashtirilgan o'lchov vositalari va yo'l telematikasi avtomobil yo'llarida yo'l-transport hodisalarini 40 foizgacha kamaytirish imkonini beradi.\n\nXavfli burilishlar va chorrahalarni muhandislik jihatdan to'g'ri jihozlash orqali transport oqimining xavfsiz va uzluksiz harakati ta'minlanadi."
+            },
+            {
+              id: 'ay5',
+              code: 'AY-105',
+              title: "Avtomobil yo'llarini ekspluatatsiya qilish, saqlash va ta'mirlash",
+              author: "M. O. O'roqov, B. G'. G'aniyev",
+              category: "Yo'llarni ta'mirlash va saqlash",
+              shelf: "A-3 javon (Yo'l saqlash)",
+              totalCopies: 9,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yollarni_ekspluatatsiya_va_tamirlash.pdf",
+              audioName: "Audio qo'llanma (Ta'mirlash)",
+              ebookText: "YO'L XO'JALIGIDA MAVSUMIY SAQLASH VA JORIY TA'MIRLASH ISHLARI.\n\nQishki mavsumda yo'llarni qor va yaxmalakdan tozalash, muzlashga qarshi zamonaviy reagentlar qo'llash yo'l harakatini to'xtovsiz saqlaydi.\n\nYoz mavsumida esa yo'l qoplamasidagi yoriqlarni bitumli mastika bilan germetiklash va chuqurchalarni issiq asfaltbeton bilan yamash yo'lning umumiy xizmat muddatini 2 barobar uzaytiradi."
+            },
+            {
+              id: 'ay6',
+              code: 'AY-106',
+              title: "Yo'l-qurilish mashinalari va zamonaviy mexanizatsiyalash",
+              author: "Sh. M. Shoobidov, E. S. Xoliqov",
+              category: "Yo'l-qurilish mashinalari",
+              shelf: "D-1 javon (Texnika va mashinalar)",
+              totalCopies: 7,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yol_qurilish_mashinalari.pdf",
+              audioName: "Audio darslik (Yo'l texnikasi)",
+              ebookText: "YO'L QURILISHIDA ZAMONAVIY MEXANIZATSIYA VA AVTOMATIK TEKISLASH TIZIMLARI.\n\nAvtogreyderlar, asfalt yotqizgichlar (paverlar) va tebranishli g'altaklar (katoklar) yo'l qurilishi samaradorligini belgilovchi asosiy mashinalardir.\n\n3D lazerli va sun'iy yo'ldoshli nivelirlash tizimlari yo'l to'shamasining tekisligini millimetrlik aniqlikda tekislash imkonini beradi."
+            },
+            {
+              id: 'ay7',
+              code: 'AY-107',
+              title: "ShNQ 2.05.02-07: Avtomobil yo'llari shaharsozlik normalari va qoidalari",
+              author: "O'zbekiston Respublikasi Avtomobil yo'llari qo'mitasi",
+              category: "Normativlar va ShNQ / QMQ",
+              shelf: "N-1 javon (Davlat standartlari)",
+              totalCopies: 15,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "shnq_2_05_02_07_avtomobil_yollari.pdf",
+              audioName: "Davlat me'yori (ShNQ)",
+              ebookText: "O'ZBEKISTON RESPUBLIKASI SHAHARSOZLIK NORMALARI VA QOIDALARI (ShNQ 2.05.02-07).\n\nUshbu me'yoriy hujjat umumiy foydalanishdagi barcha toifadagi (I-a, I-b, II, III, IV va V toifali) avtomobil yo'llarini yangidan qurish va rekonstruksiya qilish uchun majburiy hisoblanadi.\n\nYo'lning hisobiy tezligi, harakat polosasi soni va kengligi, ajratuvchi polosalar o'lchami, egrilik radiuslari hamda ko'rinish masofalari standartlashtirilgan."
+            },
+            {
+              id: 'ay8',
+              code: 'AY-108',
+              title: "Yo'l muhandisligida geodeziya va trassalash ishlari",
+              author: "O. M. Mamatqulov, X. T. To'xtayev",
+              category: "Yo'l loyihalash va qurilish",
+              shelf: "A-1 javon (Geodeziya)",
               totalCopies: 6,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "avtoyol_loyihalash_darslik.pdf (Ichki elektron matn)",
-              audioName: "Ovozli ma'ruza (Sintezator)",
-              ebookText: "1-BOB. AVTOMOBIL YO'LLARINING XALQ XO'JALIGIDAGI AHAMIYATI.\n\nAvtomobil yo'llari mamlakat transport tizimining asosiy bo'g'inlaridan biri hisoblanadi. Zamonaviy magistral yo'llarni loyihalashda harakat xavfsizligi, yo'l to'shamalarining mustahkamligi, drenaj tizimi va iqlim sharoitlari hisobga olinadi.\n\n2-BOB. YO'L POYI VA TO'SHAMASI KONSTRUKSIYASI.\n\nYo'l poyi tuproq qatlamlarining zichligi va suv-issiq rejimiga bog'liq holda barpo etiladi. Asfalt-beton va sement-beton qoplamalar transport oqimi yuklamasini teng taqsimlashga xizmat qiladi."
+              pdfName: "yol_geodeziyasi_va_trassalash.pdf",
+              audioName: "Audio qo'llanma (Geodeziya)",
+              ebookText: "AVTOMOBIL YO'LLARIDA MUHANDISLIK-GEODEZIK QIDIRUV ISHLARI.\n\nElektron taxeometrlar, GNSS sun'iy yo'ldosh qabul qiluvchilari va dronlar yordamida yerni aerofotosuratga olish trassani eng optimal yo'nalish bo'yicha o'tkazish, relyefning raqamli modelini tuzish va tuproq hajmlarini aniq hisoblash imkonini beradi."
             },
             {
-              id: 'b10',
-              code: 'INV-110',
-              title: "Yo'l harakati qoidalari va xavfsizlik asoslari",
-              author: "O. Q. Qudratov",
-              category: "Avtoyo'l va transport",
-              shelf: 'D-2 javon',
-              totalCopies: 5,
+              id: 'ay9',
+              code: 'AY-109',
+              title: "Shahar yo'llari, ko'chalari va transport chorrahalari",
+              author: "R. M. Miraxmedov, D. A. Ergashev",
+              category: "Yo'l loyihalash va qurilish",
+              shelf: "A-4 javon (Shahar ko'chalari)",
+              totalCopies: 8,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "yhq_xavfsizlik_qollanma.pdf (Ichki elektron matn)",
-              audioName: "Audio qo'llanma",
-              ebookText: "KIRISH. YO'L HARAKATI XAVFSIZLIGI TIZIMI.\n\nTransport vositalari sonining ortib borishi yo'l harakati ishtirokchilaridan yuqori intizom va muhandislik yechimlarini talab etadi. Chorrahalarni to'g'ri tashkil etish, yo'l belgilari va chiziqlarini standart bo'yicha o'rnatish tirbandlik hamda yo'l-transport hodisalarining oldini oladi."
+              pdfName: "shahar_yollari_va_chorrahalari.pdf",
+              audioName: "Audio ma'ruza (Shahar yo'llari)",
+              ebookText: "SHAHAR MAGISTRAL KO'CHALARI VA KO'P SATHLI TRANSPORT CHORRAHALARI.\n\nAholi punktlarida transport va piyodalar harakatini xavfsiz uyg'unlashtirish, tirbandliklarni oldini olish, xavfsiz yerosti va yerusti o'tish yo'llarini barpo etish shahar yo'l muhandisligining asosiy vazifasidir."
             },
             {
-              id: 'b1',
-              code: 'INV-101',
-              title: "O'tkan kunlar",
-              author: 'Abdulla Qodiriy',
-              category: "O'zbek adabiyoti",
-              shelf: 'A-1 javon',
-              totalCopies: 5,
+              id: 'ay10',
+              code: 'AY-110',
+              title: "Avtomobil yo'llarida suv qochirish va gidravlik inshootlar",
+              author: "Sh. M. Bozorov, G'. M. Omonov",
+              category: "Yo'l to'shamalari va materiallari",
+              shelf: "A-2 javon (Gidravlika)",
+              totalCopies: 7,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "otkan_kunlar_roman.pdf (Ichki elektron matn)",
-              audioName: "Audio roman",
-              ebookText: "I BOB. O'TKAN KUNLARDAN.\n\n1264-inchi hijriy, dalv oyining o'n ettinchi kuni, qishki kunlarning biri, quyosh botqan, tevarakdan shom azoni eshitiladir... Marg'ilonning yangi karvonsaroylaridan birida Otabek va Hasanali suhbati davom etardi. Bu asar o'zbek romanchiligining ilk durdonasi bo'lib, sadoqat, muhabbat va tarixiy davr ruhini aks ettiradi."
+              pdfName: "yollarda_suv_qochirish_inshootlari.pdf",
+              audioName: "Audio darslik (Suv qochirish)",
+              ebookText: "SUV — AVTOMOBIL YO'LLARI POYINING ASOSIY DUSHMANIDIR.\n\nYo'l poyining mustahkamligini ta'minlash uchun yon ariqlar (kyuvetlar), qiyalik novlari, drenaj quvurlari va suv o'tkazuvchi temir-beton quvurlarni hisoblash hamda o'z vaqtida qurish talab etiladi. To'g'ri loyihalangan drenaj yo'lning cho'kishi va buzilishining oldini oladi."
             },
             {
-              id: 'b2',
-              code: 'INV-102',
-              title: 'Yulduzli tunlar',
-              author: 'Pirimqul Qodirov',
-              category: 'Tarixiy',
-              shelf: 'A-2 javon',
-              totalCopies: 4,
+              id: 'ay11',
+              code: 'AY-111',
+              title: "Yo'l xo'jaligi iqtisodiyoti, menejment va loyiha smetalari",
+              author: "N. N. Nurmatov, F. T. Toshmatov",
+              category: "Iqtisodiyot va boshqaruv",
+              shelf: "I-1 javon (Iqtisodiyot va smeta)",
+              totalCopies: 9,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "yulduzli_tunlar.pdf (Ichki elektron matn)",
-              audioName: "Audio asar",
-              ebookText: "Zahiriddin Muhammad Bobur hayoti va faoliyatiga bag'ishlangan tarixiy roman. Andijon, Samarqand va Hirot sarhadlaridan tortib Hindiston zaminigacha bo'lgan murakkab tarixiy jarayonlar hamda 'Boburnoma' yaratilishi hikoya qilinadi."
+              pdfName: "yol_xojaligi_iqtisodiyoti_smeta.pdf",
+              audioName: "Audio darslik (Iqtisodiyot)",
+              ebookText: "YO'L QURILISHI VA REKONSTRUKSIYASIDA INVESTITSIYALAR SAMARADORLIGI.\n\nYo'l xo'jaligi ob'ektlarining smeta qiymatini shakllantirish, resurs usuli bo'yicha sarf-xarajatlarni hisoblash, davlat xaridlari shaffofligi va pudrat shartnomalarini boshqarishning zamonaviy iqtisodiy mexanizmlari yoritilgan."
             },
             {
-              id: 'b3',
-              code: 'INV-103',
-              title: 'Dunyoning ishlari',
-              author: "O'tkir Hoshimov",
-              category: "O'zbek adabiyoti",
-              shelf: 'A-1 javon',
-              totalCopies: 4,
+              id: 'ay12',
+              code: 'AY-112',
+              title: "Ko'priklar diagnostikasi va texnik monitoringi",
+              author: "S. S. Shaumarov, J. O. Akmalov",
+              category: "Ko'priklar va sun'iy inshootlar",
+              shelf: "B-2 javon (Monitoring)",
+              totalCopies: 6,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "dunyoning_ishlari.pdf (Ichki elektron matn)",
-              audioName: "Audio qissa",
-              ebookText: "Gilam paypoq. Har yili qish kirishi bilan xuddi bir narsadan quruq qolayotgandek bezovtalanaman... Onaning farzandga bo'lgan cheksiz mehri, bolalik xotiralari va insoniy mehr-oqibat haqidagi eng ta'sirli hikoyalar to'plami."
+              pdfName: "kopriklar_diagnostikasi_monitoringi.pdf",
+              audioName: "Audio qo'llanma (Diagnostika)",
+              ebookText: "FOYDALANISHDAGI KO'PRIKLAR VA YO'LO'TKAZGICHLARNING TEXNIK HOLATINI BAHOLASH.\n\nKo'priklarni statik va dinamik sinash, datchiklar yordamida oraliq qurilmalarning egilishini o'lchash hamda beton yoriqlarini ultratovush usulida tekshirish ko'priklarning xavfsiz ishlashini kafolatlaydi."
             },
             {
-              id: 'b4',
-              code: 'INV-104',
-              title: 'Kecha va kunduz',
-              author: "Abdulhamid Cho'lpon",
-              category: "O'zbek adabiyoti",
-              shelf: 'A-3 javon',
-              totalCopies: 3,
+              id: 'ay13',
+              code: 'AY-113',
+              title: "Bitum, polimer-asfalt va yo'l laboratoriyasi sinovlari",
+              author: "S. P. Po'latov, Z. R. Rustamov",
+              category: "Yo'l to'shamalari va materiallari",
+              shelf: "L-1 javon (Laboratoriya)",
+              totalCopies: 11,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "kecha_va_kunduz.pdf (Ichki elektron matn)",
-              audioName: "Audio roman",
-              ebookText: "Hamal keldi — amal keldi. Har yilgi odaticha bahor bu yil ham qishning bo'ynini sindirib kirib keldi. Zebi, Razzoq so'fi va Akbarali mingboshi obrazlari orqali XX asr boshidagi Turkiston hayoti tasvirlanadi."
+              pdfName: "bitum_va_yol_laboratoriyasi.pdf",
+              audioName: "Audio qo'llanma (Laboratoriya)",
+              ebookText: "YO'L MATERIALLARINI STANDART SINOV METODLARI VA LABORATORIYA NAZORATI.\n\nBitumning penetratsiyasi, halqa va shar usulida yumshash harorati, yopishqoqligi hamda mineral tosh materiallarining maydalanishga chidamliligi sinovdan o'tkaziladi."
             },
             {
-              id: 'b5',
-              code: 'INV-105',
-              title: 'Sariq devni minib',
-              author: "Xudoyberdi To'xtaboyev",
-              category: 'Bolalar adabiyoti',
-              shelf: 'B-1 javon',
-              totalCopies: 5,
+              id: 'ay14',
+              code: 'AY-114',
+              title: "Yo'l harakatini tashkil etishning texnik vositalari (GOST / O'zDSt)",
+              author: "O. Q. Qudratov, U. R. Raxmanov",
+              category: "Yo'l harakati xavfsizligi va telematika",
+              shelf: "C-2 javon (Yo'l belgilari)",
+              totalCopies: 10,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "sariq_devni_minib.pdf (Ichki elektron matn)",
-              audioName: "Audio ertak-qissa",
-              ebookText: "Hoshimjon Ro'ziyevning sehrli qalpoqcha bilan bog'liq sarguzashtlari. Bilim olmasdan turib sehrli qalpoqcha yordamida turli kasblarni egallamoqchi bo'lgan bolaning quvnoq va ibratli boshdan kechirganlari."
+              pdfName: "yol_harakati_texnik_vositalari.pdf",
+              audioName: "Audio qo'llanma (Belgilar)",
+              ebookText: "YO'L BELGILARI, YOTIQ VA TIK CHIZIQLAR HAMDA TO'SIQLAR STANDARTLARI.\n\nNur qaytaruvchi plyonkali yo'l belgilari, termoplastik bo'yoqlar va metall to'lqinsimon to'siqlar transport vositalarining yo'ldan chiqib ketishining oldini olishda asosiy himoya vositasidir."
             },
             {
-              id: 'b6',
-              code: 'INV-106',
-              title: 'Atom odatlar (Atomic Habits)',
-              author: 'Jeyms Klir',
-              category: 'Ilmiy va IT',
-              shelf: 'C-2 javon',
-              totalCopies: 3,
+              id: 'ay15',
+              code: 'AY-115',
+              title: "Yo'l qurilishi va transportida ekologik xavfsizlik",
+              author: "B. G'. Qodirov, M. X. Miralimov",
+              category: "Iqtisodiyot va boshqaruv",
+              shelf: "E-1 javon (Ekologiya)",
+              totalCopies: 8,
               hasEbook: true,
               hasAudio: true,
-              pdfName: "atom_odatlar.pdf (Ichki elektron matn)",
-              audioName: "Audio xulosa",
-              ebookText: "Har kuni 1 foizga yaxshilanish qoidasi. Katta muvaffaqiyatlar bir martalik keskin o'zgarishlardan emas, balki har kungi kichik va davomiy odatlarning jamlanmasidan hosil bo'ladi."
-            },
-            {
-              id: 'b7',
-              code: 'INV-107',
-              title: 'Alkimyogar',
-              author: 'Paulo Koelo',
-              category: 'Jahon adabiyoti',
-              shelf: 'B-3 javon',
-              totalCopies: 2,
-              hasEbook: true,
-              hasAudio: true,
-              pdfName: "alkimyogar.pdf (Ichki elektron matn)",
-              audioName: "Audio asar",
-              ebookText: "Cho'pon yigit Santyagoning Misr ehromlari tomon qilgan sayohati va o'z taqdiri yo'lini izlash falsafasi haqida jahon adabiyoti durdonasi."
-            },
-            {
-              id: 'b8',
-              code: 'INV-108',
-              title: 'Python dasturlash asoslari',
-              author: 'Anvar Narzullayev',
-              category: "Darslik va qo'llanma",
-              shelf: 'C-1 javon',
-              totalCopies: 4,
-              hasEbook: true,
-              hasAudio: true,
-              pdfName: "python_darslik.pdf (Ichki elektron matn)",
-              audioName: "Audio darslik",
-              ebookText: "Python tilida o'zgaruvchilar, ro'yxatlar, lug'atlar, sikllar va funksiyalar bilan ishlash bo'yicha amaliy qo'llanma. Algoritmlash va dasturlashni o'rganuvchilar uchun dastlabki qadamlar."
+              pdfName: "yo_l_ekologiyasi_va_muhofaza.pdf",
+              audioName: "Audio darslik (Ekologiya)",
+              ebookText: "AVTOMOBIL YO'LLARIDA SHOVQIN TO'SIQLARI VA YASHIL HUDUDLAR BARPO ETISH.\n\nAholi punktlari bo'ylab o'tuvchi trassalarda shovqindan himoyalovchi akustik ekranlar o'rnatish, yo'l yoqalarida daraxtzorlar ekish va chiqindi gazlar tarqalishini cheklash tamoyillari."
             }
           ],
           readers: [
-            { id: 'r1', cardNo: 'K-001', name: 'Azizbek Rahimov', group: '10-A sinf', phone: '+998 90 345 12 89' },
-            { id: 'r2', cardNo: 'K-002', name: 'Madina Islomova', group: '2-kurs Talaba', phone: '+998 93 512 88 40' },
-            { id: 'r3', cardNo: 'K-003', name: 'Sardorbek Tursunov', group: '11-B sinf', phone: '+998 99 801 44 21' },
-            { id: 'r4', cardNo: 'K-004', name: 'Nilufar Qosimova', group: "O'qituvchi (Tarix)", phone: '+998 97 720 19 05' },
-            { id: 'r5', cardNo: 'K-005', name: 'Javohir Abdullayev', group: '9-V sinf', phone: '+998 91 190 65 32' }
+            { id: 'r1', cardNo: 'K-001', name: 'Javohir Akmalov', group: "Yo'l muhandisligi (4-kurs)", phone: '+998 90 345 12 89' },
+            { id: 'r2', cardNo: 'K-002', name: 'Madina Islomova', group: "Ko'priklar va tonnellar (Magistr)", phone: '+998 93 512 88 40' },
+            { id: 'r3', cardNo: 'K-003', name: 'Sardorbek Tursunov', group: "Harakat xavfsizligi (3-kurs)", phone: '+998 99 801 44 21' },
+            { id: 'r4', cardNo: 'K-004', name: 'Prof. Azizov Qobil', group: "Yo'llar kafedrasi professori", phone: '+998 97 720 19 05' },
+            { id: 'r5', cardNo: 'K-005', name: 'Bobur Mirzayev', group: "Yo'l mashinalari (3-kurs)", phone: '+998 91 190 65 32' },
+            { id: 'r6', cardNo: 'K-006', name: 'Shahnoza Karimova', group: "Yo'l iqtisodiyoti (4-kurs)", phone: '+998 90 882 11 45' }
           ],
           loans: [
             {
               id: 'L-1001',
-              bookId: 'b1',
+              bookId: 'ay1',
               readerId: 'r1',
-              issueDate: getOffsetDateStr(-19),
-              dueDate: getOffsetDateStr(-5),
+              issueDate: getOffsetDateStr(-18),
+              dueDate: getOffsetDateStr(-4),
               returnDate: null,
               status: 'active',
               condition: '',
-              notes: 'Uyga o`qish uchun berildi'
+              notes: 'Diplom loyihasi (Trassa profili) uchun berildi'
             },
             {
               id: 'L-1002',
-              bookId: 'b6',
+              bookId: 'ay3',
               readerId: 'r3',
               issueDate: getOffsetDateStr(-16),
               dueDate: getOffsetDateStr(-2),
               returnDate: null,
               status: 'active',
               condition: '',
-              notes: 'Imtihonga tayyorgarlik'
+              notes: 'Asfaltbeton laboratoriya hisob-kitoblari'
             },
             {
               id: 'L-1003',
-              bookId: 'b2',
+              bookId: 'ay2',
               readerId: 'r2',
               issueDate: getOffsetDateStr(-12),
               dueDate: getOffsetDateStr(2),
               returnDate: null,
               status: 'active',
               condition: '',
-              notes: '2 kun ichida qaytarishi kerak'
+              notes: 'Magistrlik dissertatsiyasi (Oraliq qurilmalar)'
             },
             {
               id: 'L-1004',
-              bookId: 'b8',
+              bookId: 'ay7',
               readerId: 'r5',
               issueDate: getOffsetDateStr(-4),
               dueDate: getOffsetDateStr(10),
               returnDate: null,
               status: 'active',
               condition: '',
-              notes: 'Informatika to`garagi uchun'
+              notes: 'ShNQ me`yori bo`yicha amaliy mashg`ulot'
             },
             {
               id: 'L-1005',
-              bookId: 'b7',
+              bookId: 'ay6',
               readerId: 'r4',
               issueDate: getOffsetDateStr(-6),
               dueDate: getOffsetDateStr(8),
               returnDate: null,
               status: 'active',
               condition: '',
-              notes: ''
+              notes: 'Kafedra ilmiy tadqiqot ishlari'
             },
             {
               id: 'L-1000',
-              bookId: 'b3',
+              bookId: 'ay4',
               readerId: 'r2',
               issueDate: getOffsetDateStr(-25),
               dueDate: getOffsetDateStr(-11),
@@ -1329,9 +1402,7 @@
             }
           ]
         };
-      }
-
-      let state = buildInitialState();
+      }let state = buildInitialState();
       let categoryChartInstance = null;
 
       function loadState() {
@@ -1584,7 +1655,7 @@
         const canvas = document.getElementById('categoryChartCanvas');
         if (!canvas || typeof Chart === 'undefined') return;
 
-        const categories = ["Avtoyo'l va transport", "O'zbek adabiyoti", 'Tarixiy', 'Ilmiy va IT', 'Bolalar adabiyoti', 'Jahon adabiyoti', "Darslik va qo'llanma"];
+        const categories = ["Yo'l loyihalash va qurilish", "Yo'l to'shamalari va materiallari", "Ko'priklar va sun'iy inshootlar", "Yo'l harakati xavfsizligi va telematika", "Yo'llarni ta'mirlash va saqlash", "Yo'l-qurilish mashinalari", "Normativlar va ShNQ / QMQ", "Iqtisodiyot va boshqaruv"];
         const totalData = [];
         const borrowedData = [];
 
