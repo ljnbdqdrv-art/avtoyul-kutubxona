@@ -36,6 +36,23 @@
     .animate-fade-in {
       animation: fadeIn 0.2s ease-out forwards;
     }
+    .break-words-safe {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .text-ellipsis-safe {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* Hide scrollbar on nav while preserving smooth touch scrolling */
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
     .uzedu-hero-bg {
       background: radial-gradient(circle at 18% 35%, #15456b 0%, #0b253c 52%, #061523 100%);
       position: relative;
@@ -151,55 +168,55 @@
         </div>
       </div>
 
-      <!-- Navigation Bar with Crystal-Clear High-Contrast Labels and Badges -->
-      <nav class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pt-2 -mb-px" aria-label="Asosiy menyu">
-        <button type="button" data-tab="dashboard" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-bold whitespace-nowrap transition border-cyan-400 text-cyan-300 bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Navigation Bar with Wrap-Friendly Pill Buttons (Hech qachon kesilmaydi va yashirinmaydi) -->
+      <nav class="flex flex-wrap items-center gap-1.5 sm:gap-2 py-2.5" aria-label="Asosiy menyu">
+        <button type="button" data-tab="dashboard" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 shadow-sm transition">
+          <svg class="w-4 h-4 text-slate-950 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
           </svg>
-          <span class="tracking-wide text-cyan-300 font-bold">Bosh sahifa</span>
+          <span class="tracking-wide">Bosh sahifa</span>
         </button>
-        <button type="button" data-tab="circulation" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="button" data-tab="circulation" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
           </svg>
-          <span class="tracking-wide text-slate-100">Oldi-berdi jurnali</span>
-          <span id="navBadgeActiveLoans" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-cyan-300 font-bold border border-cyan-400/40">0</span>
+          <span class="tracking-wide">Oldi-berdi</span>
+          <span id="navBadgeActiveLoans" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">0</span>
         </button>
-        <button type="button" data-tab="overdue" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+        <button type="button" data-tab="overdue" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
           <svg class="w-4 h-4 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span class="tracking-wide text-slate-100">Muddati o'tganlar</span>
-          <span id="navBadgeOverdue" class="px-2 py-0.5 text-xs rounded-full bg-rose-500 text-white font-black shadow-sm">0</span>
+          <span class="tracking-wide">Muddati o'tganlar</span>
+          <span id="navBadgeOverdue" class="px-1.5 py-0.5 text-[11px] rounded-full bg-rose-500 text-white font-black shadow-sm">0</span>
         </button>
-        <button type="button" data-tab="books" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="button" data-tab="books" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
-          <span class="tracking-wide text-slate-100">Kitoblar bazasi</span>
-          <span id="navBadgeBooks" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-600">0</span>
+          <span class="tracking-wide">Kitoblar fondi</span>
+          <span id="navBadgeBooks" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">0</span>
         </button>
-        <button type="button" data-tab="journal" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="button" data-tab="journal" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
           </svg>
-          <span class="tracking-wide text-slate-100">"Yillar va yo'llar" jurnali</span>
-          <span id="navBadgeJournal" class="px-2 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">Har yili 4 son</span>
+          <span class="tracking-wide">"Yillar va yo'llar"</span>
+          <span id="navBadgeJournal" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">4 son/yil</span>
         </button>
-        <button type="button" data-tab="digital" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="button" data-tab="digital" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
           </svg>
-          <span class="tracking-wide text-slate-100">Elektron O'qish &amp; Audio</span>
-          <span id="navBadgeDigital" class="px-2 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">PDF/MP3</span>
+          <span class="tracking-wide">Elektron &amp; Audio</span>
+          <span id="navBadgeDigital" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">PDF/MP3</span>
         </button>
-        <button type="button" data-tab="readers" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
-          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button type="button" data-tab="readers" class="nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition">
+          <svg class="w-4 h-4 text-cyan-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          <span class="tracking-wide text-slate-100">Kitobxonlar</span>
-          <span id="navBadgeReaders" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-600">0</span>
+          <span class="tracking-wide">Kitobxonlar</span>
+          <span id="navBadgeReaders" class="px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30">0</span>
         </button>
       </nav>
     </div>
@@ -996,28 +1013,35 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 6: E-BOOK & PDF READER (KITOB O'QISH OYNASI) ================= -->
-  <div id="modalEbookReader" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4">
-    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-fade-in">
-      <!-- Reader Top Bar -->
-      <div class="px-4 sm:px-6 py-3.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-xs font-bold">PDF</div>
-          <div>
-            <h3 id="readerModalBookTitle" class="text-sm sm:text-base font-bold leading-tight">Kitob nomi</h3>
-            <p id="readerModalBookMeta" class="text-xs text-slate-300">Muallif • Inventar kodi</p>
+  <!-- ================= MODAL 6: E-BOOK & PDF READER (TO'LIQ EKRAN MUTOLAA ZALI) ================= -->
+  <div id="modalEbookReader" class="fixed inset-0 z-50 hidden bg-slate-950 flex flex-col w-screen h-screen p-0 m-0 overflow-hidden animate-fade-in">
+    <div class="bg-white dark:bg-slate-900 w-full h-full flex flex-col rounded-none border-0 overflow-hidden">
+      <!-- Reader Fullscreen Top Bar (Barcha boshqaruv menyulari saqlangan) -->
+      <div class="shrink-0 px-4 sm:px-6 py-2.5 bg-[#0b253c] text-white flex flex-wrap items-center justify-between gap-3 shadow-md z-20 border-b border-cyan-500/20">
+        <!-- Title and Metadata -->
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <div class="w-9 h-9 rounded-xl bg-cyan-500 text-slate-950 flex items-center justify-center text-xs font-black shrink-0 shadow-sm">
+            PDF
+          </div>
+          <div class="min-w-0 flex-1">
+            <h3 id="readerModalBookTitle" class="text-sm sm:text-base font-extrabold text-white truncate leading-tight">Kitob nomi</h3>
+            <p id="readerModalBookMeta" class="text-xs text-cyan-200/90 truncate font-medium">Muallif &bull; Soha &bull; Inventar kodi</p>
           </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <!-- Upload PDF directly inside reader -->
-          <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-            <span>PDF fayl biriktirish</span>
-            <input id="readerInlinePdfInput" type="file" accept=".pdf,application/pdf" class="hidden" />
-          </label>
-          <button type="button" id="btnReaderListenAudio" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 transition">
+
+        <!-- Mode Switcher (O'rtada: Matn yoki Asl PDF) -->
+        <div class="inline-flex items-center bg-slate-900/90 rounded-xl p-1 border border-cyan-400/30 text-xs shrink-0">
+          <button type="button" id="btnShowReaderPdfMode" class="px-3 py-1.5 rounded-lg font-bold bg-cyan-400 text-slate-950 transition shadow-xs">
+            📄 Asl PDF fayl ko'rinishi
+          </button>
+          <button type="button" id="btnShowReaderTextMode" class="px-3 py-1.5 rounded-lg font-medium text-slate-200 hover:text-white transition">
+            📖 Elektron matn
+          </button>
+        </div>
+
+        <!-- Action Controls: Audio, Font, Theme, Close (Admin PDF yuklash olib tashlandi) -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" id="btnReaderListenAudio" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black bg-cyan-400 hover:bg-cyan-300 text-slate-950 transition shadow-sm">
             🎧 Audio tinglash
           </button>
           <div class="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
@@ -1025,40 +1049,37 @@
             <button type="button" id="btnFontIncrease" title="Shriftni kattalashtirish" class="px-2 py-1 text-xs font-bold text-slate-300 hover:text-white">A+</button>
             <button type="button" id="btnToggleReaderTheme" title="Tungi / Kunduzgi rejim" class="px-2 py-1 text-xs text-slate-300 hover:text-white">🌓</button>
           </div>
-          <button type="button" data-close-modal="modalEbookReader" class="text-slate-300 hover:text-white p-1.5">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Chiqish / Yopish tugmasi -->
+          <button type="button" data-close-modal="modalEbookReader" title="Mutolaadan chiqish" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white transition shadow-sm ml-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
+            <span>Yopish</span>
           </button>
         </div>
       </div>
 
-      <!-- Mode Switcher (PDF View vs Elektron Matn View) -->
-      <div class="px-4 sm:px-6 py-2 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div class="flex items-center gap-2">
-          <button type="button" id="btnShowReaderTextMode" class="px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white">
-            📖 Elektron matn (Mutolaa)
-          </button>
-          <button type="button" id="btnShowReaderPdfMode" class="px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300">
-            📄 Asl PDF fayl ko'rinishi
-          </button>
-        </div>
-        <span id="readerPdfBadgeStatus" class="text-slate-500"></span>
+      <!-- Secondary info bar (Fayl holati haqida) -->
+      <div class="shrink-0 px-4 sm:px-6 py-1.5 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+        <span id="readerPdfBadgeStatus" class="font-medium truncate max-w-lg"></span>
+        <span class="hidden sm:inline">To'liq ekran mutolaa rejimi faol</span>
       </div>
 
-      <!-- Reader Body -->
-      <div id="readerBodyContainer" class="flex-1 overflow-y-auto p-5 sm:p-8 bg-amber-50/30 text-slate-800 space-y-4">
-        <!-- Text View -->
-        <div id="readerTextView" class="max-w-2xl mx-auto leading-relaxed text-base space-y-4">
-          <!-- Populated by JS -->
-        </div>
-        <!-- PDF View -->
-        <div id="readerPdfView" class="hidden h-[62vh] w-full flex flex-col items-center justify-center">
-          <iframe id="readerPdfIframe" class="w-full h-full rounded-xl border border-slate-300 bg-white" title="PDF Viewer"></iframe>
-          <div id="readerNoPdfPlaceholder" class="hidden text-center p-8 space-y-3">
-            <p class="text-sm text-slate-600">Ushbu kitobga hali tashqi <strong>.pdf</strong> fayl yuklanmagan.</p>
-            <p class="text-xs text-slate-500">Yuqoridagi <strong>"PDF fayl biriktirish"</strong> tugmasi orqali kompyuter yoki telefoningizdan istalgan PDF kitobni tanlang — u shu oynada ochiladi!</p>
+      <!-- Reader Body Container (To'liq ekranni to'ldiradi) -->
+      <div id="readerBodyContainer" class="flex-1 w-full h-[calc(100vh-95px)] overflow-hidden bg-slate-100 flex flex-col p-0 m-0">
+        <!-- PDF View (100% ekran bo'ylab kengayadi) -->
+        <div id="readerPdfView" class="w-full h-full flex-1 flex flex-col p-0 m-0 overflow-hidden">
+          <iframe id="readerPdfIframe" class="w-full h-full flex-1 border-0 bg-slate-200" title="PDF Fullscreen Viewer"></iframe>
+          <div id="readerNoPdfPlaceholder" class="hidden my-auto text-center p-8 space-y-3 bg-white max-w-lg mx-auto rounded-2xl border border-slate-200 shadow-md">
+            <div class="w-12 h-12 rounded-full bg-cyan-100 text-[#00668c] flex items-center justify-center mx-auto text-xl">📄</div>
+            <p class="text-sm font-bold text-slate-800">Ushbu kitob uchun to'liq elektron matn rejimi faol.</p>
+            <p class="text-xs text-slate-500">Yuqoridagi <strong>"📖 Elektron matn"</strong> tugmasini bosib asarni o'qishingiz yoki <strong>"🎧 Audio tinglash"</strong> orqali Google diktori bilan eshitishingiz mumkin.</p>
           </div>
+        </div>
+
+        <!-- Text View (Kitobxon matn o'qish rejimi) -->
+        <div id="readerTextView" class="hidden flex-1 overflow-y-auto p-6 sm:p-10 max-w-4xl mx-auto w-full leading-relaxed text-base space-y-4 bg-amber-50/20 text-slate-800">
+          <!-- Populated by JS -->
         </div>
       </div>
     </div>
@@ -1226,7 +1247,7 @@
 
   <script>
     (function() {
-      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v6_journal_tab';
+      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v10_i18n_active';
 
       // Helper for date offsets relative to today
       function getOffsetDateStr(daysOffset) {
@@ -1245,7 +1266,21 @@
         return `${parseInt(parts[2], 10)}-${months[mIdx] || parts[1]}, ${parts[0]}`;
       }
 
-      function diffDaysFromToday(dueDateStr) {
+            function shortenFileName(name, maxLen = 26) {
+        if (!name) return '';
+        const clean = String(name).trim();
+        if (clean.length <= maxLen) return clean;
+        const lastDot = clean.lastIndexOf('.');
+        if (lastDot > 0 && lastDot > clean.length - 8) {
+          const ext = clean.slice(lastDot);
+          const base = clean.slice(0, lastDot);
+          const avail = maxLen - ext.length - 3;
+          return base.slice(0, Math.max(8, avail)) + '...' + ext;
+        }
+        return clean.slice(0, maxLen - 3) + '...';
+      }
+
+function diffDaysFromToday(dueDateStr) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const due = new Date(dueDateStr + 'T00:00:00');
@@ -1781,16 +1816,21 @@
 
         document.querySelectorAll('.nav-tab-btn').forEach(btn => {
           const isMatch = btn.getAttribute('data-tab') === tabName;
-          const labelSpan = btn.querySelector('span');
+          const icon = btn.querySelector('svg');
+          const badge = btn.querySelector('[id^="navBadge"]');
           if (isMatch) {
-            btn.className = 'nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-bold whitespace-nowrap transition border-cyan-400 text-cyan-300 bg-white/10 rounded-t-lg';
-            if (labelSpan) {
-              labelSpan.className = 'tracking-wide text-cyan-300 font-bold';
-            }
+            btn.className = 'nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-cyan-400 text-slate-950 shadow-sm transition';
+            if (icon) icon.className = 'w-4 h-4 text-slate-950 shrink-0';
+            if (badge) badge.className = 'px-1.5 py-0.5 text-[11px] rounded-full bg-slate-950 text-cyan-300 font-black';
           } else {
-            btn.className = 'nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg';
-            if (labelSpan) {
-              labelSpan.className = 'tracking-wide text-slate-100';
+            btn.className = 'nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition';
+            if (icon) {
+              icon.className = btn.getAttribute('data-tab') === 'overdue' ? 'w-4 h-4 text-rose-400 shrink-0' : 'w-4 h-4 text-cyan-300 shrink-0';
+            }
+            if (badge) {
+              badge.className = btn.getAttribute('data-tab') === 'overdue'
+                ? 'px-1.5 py-0.5 text-[11px] rounded-full bg-rose-500 text-white font-black shadow-sm'
+                : 'px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30';
             }
           }
         });
@@ -2157,7 +2197,7 @@
           const borrowed = getBookActiveLoanCount(book.id);
           const isAvail = avail > 0;
           return `
-            <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition">
+            <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition overflow-hidden min-w-0 break-words-safe">
               <div>
                 <div class="flex items-start justify-between gap-2">
                   <span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-slate-100 text-slate-700">${escapeHtml(book.code)}</span>
@@ -2278,17 +2318,19 @@
           const hasCustomPdf = Boolean(mediaBlobStore[book.id + '_pdf']);
           const hasCustomAudio = Boolean(mediaBlobStore[book.id + '_audio']);
           const snippet = (book.ebookText || "Ushbu kitob uchun elektron mutolaa va audio tinglash imkoniyati mavjud.").slice(0, 120) + '...';
+          const safeDigitalPdf = shortenFileName(book.pdfName || 'Elektron matn', 22);
+          const safeDigitalAudio = shortenFileName(book.audioName || 'Audio', 16);
           return `
-            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition">
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition overflow-hidden min-w-0 break-words-safe">
               <div class="space-y-2">
                 <div class="flex items-center justify-between gap-2">
                   <span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-slate-100 text-slate-700">${escapeHtml(book.code)}</span>
                   <div class="flex items-center gap-1">
-                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${hasCustomPdf ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-50 text-indigo-700'}">
-                      ${hasCustomPdf ? '📄 PDF Yuklangan' : '📖 Elektron matn'}
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold max-w-[130px] truncate ${hasCustomPdf ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-50 text-indigo-700'}" title="${escapeHtml(book.pdfName || 'Elektron matn')}">
+                      ${hasCustomPdf ? '📄 ' + escapeHtml(safeDigitalPdf) : '📖 Elektron matn'}
                     </span>
-                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${hasCustomAudio ? 'bg-amber-100 text-amber-900' : 'bg-amber-50 text-amber-700'}">
-                      ${hasCustomAudio ? '🎵 MP3 Yuklangan' : '🎧 Audio'}
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold max-w-[110px] truncate ${hasCustomAudio ? 'bg-amber-100 text-amber-900' : 'bg-amber-50 text-amber-700'}" title="${escapeHtml(book.audioName || 'Audio')}">
+                      ${hasCustomAudio ? '🎵 ' + escapeHtml(safeDigitalAudio) : '🎧 Audio'}
                     </span>
                   </div>
                 </div>
@@ -2352,8 +2394,8 @@
         if (mode === 'pdf') {
           textView.classList.add('hidden');
           pdfView.classList.remove('hidden');
-          btnPdf.className = 'px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white';
-          btnText.className = 'px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300';
+          btnPdf.className = 'px-3 py-1.5 rounded-lg font-bold bg-cyan-400 text-slate-950 transition shadow-xs';
+          btnText.className = 'px-3 py-1.5 rounded-lg font-medium text-slate-200 hover:text-white transition';
           if (pdfUrl) {
             iframe.src = pdfUrl;
             iframe.classList.remove('hidden');
@@ -2366,8 +2408,8 @@
         } else {
           pdfView.classList.add('hidden');
           textView.classList.remove('hidden');
-          btnText.className = 'px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white';
-          btnPdf.className = 'px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300';
+          btnText.className = 'px-3 py-1.5 rounded-lg font-bold bg-cyan-400 text-slate-950 transition shadow-xs';
+          btnPdf.className = 'px-3 py-1.5 rounded-lg font-medium text-slate-200 hover:text-white transition';
         }
       }
 
@@ -2449,7 +2491,8 @@
         if (btn) btn.textContent = '⏸ Pauza';
 
         const speed = parseFloat(document.getElementById('audioSpeedSelect')?.value) || 1.0;
-        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=uz&client=tw-ob`;
+        const langCode = state.currentLang === 'ru' ? 'ru' : 'uz';
+        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=${langCode}&client=tw-ob`;
 
         if (!googleAudioInstance) {
           googleAudioInstance = new Audio();
@@ -2690,36 +2733,37 @@
           const hasCustomAudio = Boolean(mediaBlobStore['journal_' + item.id + '_audio']);
           const qName = item.quarter ? `${item.quarter}-chorak` : "Maxsus son";
 
+          const safePdfDisplay = shortenFileName(item.pdfName || 'Elektron PDF', 26);
           return `
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-cyan-500/50 hover:shadow-md transition">
-              <div class="space-y-3">
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex items-center gap-1.5 flex-wrap">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-cyan-500/50 hover:shadow-md transition overflow-hidden min-w-0 break-words-safe">
+              <div class="space-y-3 min-w-0">
+                <div class="flex items-start justify-between gap-2 min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap min-w-0">
                     <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#0b253c] text-cyan-300 font-mono tracking-wide">
                       ${escapeHtml(item.year)}-yil &bull; ${escapeHtml(item.issueNumber)}
                     </span>
-                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-50 text-[#00668c] border border-cyan-200">
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-50 text-[#00668c] border border-cyan-200 whitespace-nowrap">
                       ${qName}
                     </span>
                   </div>
-                  <span class="text-[11px] font-medium text-slate-400 whitespace-nowrap">
+                  <span class="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">
                     ${escapeHtml(item.datePublished || item.year)}
                   </span>
                 </div>
 
-                <div>
-                  <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(item.title)}</h3>
-                  <p class="text-xs text-slate-600 mt-1.5 line-clamp-3 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <div class="min-w-0">
+                  <h3 class="text-base font-bold text-slate-900 leading-snug break-words-safe">${escapeHtml(item.title)}</h3>
+                  <p class="text-xs text-slate-600 mt-1.5 line-clamp-3 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100 break-words-safe">
                     ${escapeHtml(item.summary || (item.content ? item.content.slice(0, 140) + '...' : "Avtomobil yo'llari sohaviy nashri"))}
                   </p>
                 </div>
 
-                <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-500">
-                  <span class="inline-flex items-center gap-1 ${hasCustomPdf ? 'text-emerald-700 font-semibold' : 'text-slate-600'}">
-                    📄 ${escapeHtml(item.pdfName || 'Elektron PDF')}
+                <div class="flex items-center justify-between gap-2 pt-1 text-[11px] text-slate-500 min-w-0 overflow-hidden">
+                  <span class="inline-flex items-center gap-1.5 min-w-0 flex-1 truncate ${hasCustomPdf ? 'text-emerald-700 font-semibold' : 'text-slate-600'}" title="${escapeHtml(item.pdfName || 'Elektron PDF')}">
+                    <span class="shrink-0">📄</span>
+                    <span class="truncate">${escapeHtml(safePdfDisplay)}</span>
                   </span>
-                  <span>&bull;</span>
-                  <span class="inline-flex items-center gap-1 text-cyan-700 font-semibold">
+                  <span class="shrink-0 inline-flex items-center gap-1 text-cyan-700 font-semibold whitespace-nowrap">
                     🎙️ Google Diktor
                   </span>
                 </div>
@@ -3340,20 +3384,7 @@ function renderAll() {
           }
         });
 
-        document.getElementById('readerInlinePdfInput').addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (!file || !currentReaderBookId) return;
-          mediaBlobStore[currentReaderBookId + '_pdf'] = URL.createObjectURL(file);
-          const book = getBookById(currentReaderBookId);
-          book.pdfName = file.name;
-          book.hasEbook = true;
-          saveState();
-          document.getElementById('readerPdfBadgeStatus').textContent = `Biriktirilgan PDF: ${file.name}`;
-          setReaderViewMode('pdf');
-          renderAll();
-          showToast(`"${file.name}" PDF fayli o'qish oynasiga yuklandi!`, 'success');
-        });
-
+        
         document.getElementById('btnReaderListenAudio').addEventListener('click', () => {
           if (currentReaderBookId) {
             startAudioPlayerForBook(currentReaderBookId);
@@ -3619,6 +3650,7 @@ function renderAll() {
 window.addEventListener('DOMContentLoaded', () => {
         loadState();
         initEvents();
+        applyLanguage(state.currentLang || 'uz');
         switchTab(state.activeTab || 'dashboard');
       });
     })();
