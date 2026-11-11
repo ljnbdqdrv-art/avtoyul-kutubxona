@@ -1988,8 +1988,20 @@ function diffDaysFromToday(dueDateStr) {
           targetPanel.classList.remove('hidden');
         }
 
+        const isAdmin = state.currentUserRole === 'admin';
+        const adminTabs = ['dashboard', 'circulation', 'overdue', 'readers'];
+
         document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-          const isMatch = btn.getAttribute('data-tab') === tabName;
+          const tab = btn.getAttribute('data-tab');
+          const isMatch = tab === tabName;
+          const isTabAdmin = adminTabs.includes(tab);
+
+          if (isTabAdmin && !isAdmin) {
+            btn.classList.add('hidden');
+            return;
+          }
+          btn.classList.remove('hidden');
+
           const icon = btn.querySelector('svg');
           const badge = btn.querySelector('[id^="navBadge"]');
           if (isMatch) {
@@ -1999,10 +2011,10 @@ function diffDaysFromToday(dueDateStr) {
           } else {
             btn.className = 'nav-tab-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition';
             if (icon) {
-              icon.className = btn.getAttribute('data-tab') === 'overdue' ? 'w-4 h-4 text-rose-400 shrink-0' : 'w-4 h-4 text-cyan-300 shrink-0';
+              icon.className = tab === 'overdue' ? 'w-4 h-4 text-rose-400 shrink-0' : 'w-4 h-4 text-cyan-300 shrink-0';
             }
             if (badge) {
-              badge.className = btn.getAttribute('data-tab') === 'overdue'
+              badge.className = tab === 'overdue'
                 ? 'px-1.5 py-0.5 text-[11px] rounded-full bg-rose-500 text-white font-black shadow-sm'
                 : 'px-1.5 py-0.5 text-[11px] rounded-full bg-slate-900/80 text-cyan-300 font-bold border border-cyan-400/30';
             }
@@ -2346,6 +2358,7 @@ function diffDaysFromToday(dueDateStr) {
         const catFilter = document.getElementById('bookCategoryFilter').value || 'all';
         const availFilter = document.getElementById('bookAvailabilityFilter').value || 'all';
 
+        const isAdmin = state.currentUserRole === 'admin';
         const filtered = state.books.filter(book => {
           if (catFilter !== 'all' && book.category !== catFilter) return false;
           const avail = getBookAvailableCopies(book);
@@ -2399,19 +2412,20 @@ function diffDaysFromToday(dueDateStr) {
                 </button>
               </div>
 
+              ${isAdmin ? `
               <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
                 <div class="flex items-center gap-1">
-                  <button type="button" class="admin-card-action hidden" data-action="edit-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+                  <button type="button" data-action="edit-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
                     Tahrirlash
                   </button>
-                  <button type="button" class="admin-card-action hidden" data-action="delete-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition">
+                  <button type="button" data-action="delete-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition">
                     O'chirish
                   </button>
                 </div>
-                <button type="button" class="admin-card-action hidden" data-action="issue-this-book" data-book-id="${escapeHtml(book.id)}" ${!isAvail ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${isAvail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'} transition">
+                <button type="button" data-action="issue-this-book" data-book-id="${escapeHtml(book.id)}" ${!isAvail ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${isAvail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'} transition">
                   Kitobxonga berish
                 </button>
-              </div>
+              </div>` : ''}
             </div>
           `;
         }).join('');
@@ -2944,6 +2958,7 @@ function diffDaysFromToday(dueDateStr) {
         const yearFilter = state.journalYearFilter || 'all';
         const quarterFilter = state.journalQuarterFilter || 'all';
 
+        const isAdmin = state.currentUserRole === 'admin';
         const list = state.journals || [];
         const filtered = list.filter(item => {
           if (yearFilter !== 'all' && String(item.year) !== String(yearFilter)) return false;
@@ -3016,14 +3031,15 @@ function diffDaysFromToday(dueDateStr) {
                   </button>
                 </div>
 
-                <div class="flex items-center justify-between gap-2 pt-1 text-xs">
-                  <button type="button" class="admin-card-action hidden text-slate-500 hover:text-slate-800 font-medium transition" data-action="edit-journal" data-journal-id="${escapeHtml(item.id)}" class="text-slate-500 hover:text-slate-800 font-medium transition">
+                ${isAdmin ? `
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                  <button type="button" data-action="edit-journal" data-journal-id="${escapeHtml(item.id)}" class="text-slate-500 hover:text-slate-800 font-semibold transition">
                     ✏️ Tahrirlash
                   </button>
-                  <button type="button" class="admin-card-action hidden text-rose-500 hover:text-rose-700 font-medium transition" data-action="delete-journal" data-journal-id="${escapeHtml(item.id)}" class="text-rose-500 hover:text-rose-700 font-medium transition">
+                  <button type="button" data-action="delete-journal" data-journal-id="${escapeHtml(item.id)}" class="text-rose-600 hover:text-rose-800 font-semibold transition">
                     🗑️ O'chirish
                   </button>
-                </div>
+                </div>` : ''}
               </div>
             </div>
           `;
@@ -3073,7 +3089,6 @@ function diffDaysFromToday(dueDateStr) {
             logoutBadge.classList.add('flex');
           }
           document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-          document.querySelectorAll('.admin-card-action').forEach(el => el.classList.remove('hidden'));
         } else {
           if (loginBtn) loginBtn.classList.remove('hidden');
           if (logoutBadge) {
@@ -3081,14 +3096,15 @@ function diffDaysFromToday(dueDateStr) {
             logoutBadge.classList.remove('flex');
           }
           document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-          document.querySelectorAll('.admin-card-action').forEach(el => el.classList.add('hidden'));
 
           // If currently on an admin-only tab, redirect reader to mycabinet
           const adminTabs = ['dashboard', 'circulation', 'overdue', 'readers'];
           if (adminTabs.includes(state.activeTab)) {
-            switchTab('mycabinet');
+            state.activeTab = 'mycabinet';
           }
         }
+
+        renderAll();
       }
 
       function renderMyCabinet() {
