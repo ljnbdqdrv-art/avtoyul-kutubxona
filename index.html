@@ -477,6 +477,8 @@
             <label class="block text-xs font-medium text-slate-500 mb-1">Bo'lim / Janr</label>
             <select id="bookCategoryFilter" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
               <option value="all">Barcha yo'l xo'jaligi yo'nalishlari</option>
+              <option value="Sohaviy nashrlar va jurnallar">Sohaviy nashrlar va jurnallar</option>
+              <option value="Sohaviy nashrlar va jurnallar">Sohaviy nashrlar va jurnallar</option>
               <option value="Yo'l loyihalash va qurilish">Yo'l loyihalash va qurilish</option>
               <option value="Yo'l to'shamalari va materiallari">Yo'l to'shamalari va materiallari</option>
               <option value="Ko'priklar va sun'iy inshootlar">Ko'priklar va sun'iy inshootlar</option>
@@ -1080,7 +1082,7 @@
 
   <script>
     (function() {
-      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v4';
+      const STORAGE_KEY = 'avtoyul_yol_xojaligi_v5_jurnal';
 
       // Helper for date offsets relative to today
       function getOffsetDateStr(daysOffset) {
@@ -1114,6 +1116,20 @@
           overdueFilter: 'all_alerts',
           digitalFilter: 'all',
           books: [
+            {
+              id: 'ay_jurnal',
+              code: 'AY-JURNAL-01',
+              title: "Yangi O'zbekistonda yillar va yo'llar",
+              author: "O'zbekiston Respublikasi Avtomobil yo'llari qo'mitasi tahririyati",
+              category: "Sohaviy nashrlar va jurnallar",
+              shelf: "J-1 javon (Davriy nashrlar zali)",
+              totalCopies: 20,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yangi_ozbekistonda_yillar_va_yollar.pdf",
+              audioName: "Google O'zbekcha Diktor (Jurnal sharhi)",
+              ebookText: "BOSH MAQOLA: YANGI O'ZBEKISTONNING ZAMONAVIY VA RAVON YO'LLARI.\n\nYo'l — obodlik, taraqqiyot va yuksak madaniyat ko'zgusidir. 'Yangi O'zbekistonda yillar va yo'llar' ilmiy-ommabop va tahliliy jurnali mamlakatimiz avtomobil yo'llari tarmog'ining bosqichma-bosqich rivojlanish tarixi, zamonaviy xalqaro tranzit magistrallari, dovon yo'llari va ulug'vor ko'priklarning barpo etilishiga bag'ishlanadi.\n\n1-BOB. XALQARO MAGISTRALLAR VA TRANZIT POTENSIAL.\nQamchiq dovoni magistrali, 'Toshkent-O'sh', 'Toshkent-Samarqand-Buxoro' hamda xalqaro M-39 va A-380 yo'llarining rekonstruksiya qilinishi O'zbekistonning mintaqaviy logistika markazi sifatidagi mavqeini mustahkamladi.\n\n2-BOB. YO'LSOZ MUHANDISLAR VA INNOVATSIYALAR.\nSohada sement-beton qoplamali avtomobil yo'llarini qurish, ilg'or xorijiy laboratoriya sinovlarini tatbiq etish hamda yo'lsozlik kasbining mashaqqatli va sharafli mehnati ushbu nashrda keng yoritilgan."
+            },
             {
               id: 'ay1',
               code: 'AY-101',
