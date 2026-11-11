@@ -1,0 +1,3025 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avtoyul Kutubxona — Raqamli Kutubxona, PDF O'qish va Audio Kitob Tizimi</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+    .uzedu-hero-bg {
+      background: radial-gradient(circle at 18% 35%, #15456b 0%, #0b253c 52%, #061523 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .uzedu-book-stack {
+      background:
+        linear-gradient(90deg, rgba(11,37,60,0.95) 0%, rgba(11,37,60,0.55) 45%, rgba(11,37,60,0.25) 100%),
+        repeating-linear-gradient(
+          -4deg,
+          #1e6091 0px,
+          #1e6091 28px,
+          #e2e8f0 28px,
+          #f8fafc 54px,
+          #0284c7 54px,
+          #0284c7 82px,
+          #f1f5f9 82px,
+          #e2e8f0 112px,
+          #1d4ed8 112px,
+          #1d4ed8 140px,
+          #f8fafc 140px,
+          #cbd5e1 168px,
+          #dc2626 168px,
+          #b91c1c 194px,
+          #f1f5f9 194px,
+          #cbd5e1 224px
+        );
+    }
+    body.dark-theme {
+      background-color: #071624;
+      color: #e2e8f0;
+    }
+    body.dark-theme .bg-white {
+      background-color: #0f253a !important;
+      color: #f1f5f9 !important;
+      border-color: #1e3a5f !important;
+    }
+    body.dark-theme .bg-slate-50 {
+      background-color: #091b2c !important;
+      color: #cbd5e1 !important;
+      border-color: #1e3a5f !important;
+    }
+    body.dark-theme .text-slate-900,
+    body.dark-theme .text-slate-800 {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .text-slate-600,
+    body.dark-theme .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+
+  <!-- Top Header (lib.uzedu.uz Deep Navy & Teal Style) -->
+  <header class="bg-[#0b253c] text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between py-3 gap-3">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#00668c] border border-cyan-400/30 flex items-center justify-center text-cyan-300 shadow-sm">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-bold tracking-tight text-white">Avtoyul Kutubxona</h1>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                Raqamli Kutubxona
+              </span>
+            </div>
+            <p class="text-xs text-slate-300" id="currentDateDisplay">Elektron darsliklar va oldi-berdi tizimi</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions + Google AI TTS + Language/Sign-In Switcher -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btnOpenGeminiTtsModal" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition shadow-sm">
+            🎙️ Google AI Ovoz (Gemini TTS)
+          </button>
+          <button id="btnQuickIssue" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            Kitob berish
+          </button>
+          <button id="btnQuickAddBook" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Kitob qo'shish
+          </button>
+          <button id="btnQuickAddReader" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            Kitobxon+
+          </button>
+          <button id="btnExportCSV" type="button" title="Jurnalni Excel (CSV) formatida yuklab olish" class="inline-flex items-center gap-1 px-2.5 py-2 rounded-lg text-xs font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 transition">
+            <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span class="hidden md:inline">CSV Eksport</span>
+          </button>
+          <div class="inline-flex items-center gap-1 bg-slate-900/80 border border-white/15 rounded-full px-1.5 py-1">
+            <button type="button" id="btnHeaderThemeToggle" title="Tungi / Kunduzgi rejim" class="px-1.5 py-0.5 text-xs text-slate-300 hover:text-white">🌙</button>
+            <button type="button" data-lang-switch="uz" class="lang-switch-btn px-2 py-0.5 rounded-full text-[11px] font-bold bg-white text-slate-900">O'z</button>
+            <button type="button" data-lang-switch="cyrl" class="lang-switch-btn px-2 py-0.5 rounded-full text-[11px] text-slate-300 hover:text-white">Ўз</button>
+            <button type="button" data-lang-switch="ru" class="lang-switch-btn px-2 py-0.5 rounded-full text-[11px] text-slate-300 hover:text-white">Ру</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Navigation Bar with Crystal-Clear High-Contrast Labels and Badges -->
+      <nav class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pt-2 -mb-px" aria-label="Asosiy menyu">
+        <button type="button" data-tab="dashboard" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-bold whitespace-nowrap transition border-cyan-400 text-cyan-300 bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span class="tracking-wide text-cyan-300 font-bold">Bosh sahifa</span>
+        </button>
+        <button type="button" data-tab="circulation" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          <span class="tracking-wide text-slate-100">Oldi-berdi jurnali</span>
+          <span id="navBadgeActiveLoans" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-cyan-300 font-bold border border-cyan-400/40">0</span>
+        </button>
+        <button type="button" data-tab="overdue" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="tracking-wide text-slate-100">Muddati o'tganlar</span>
+          <span id="navBadgeOverdue" class="px-2 py-0.5 text-xs rounded-full bg-rose-500 text-white font-black shadow-sm">0</span>
+        </button>
+        <button type="button" data-tab="books" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="tracking-wide text-slate-100">Kitoblar bazasi</span>
+          <span id="navBadgeBooks" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-600">0</span>
+        </button>
+        <button type="button" data-tab="digital" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <span class="tracking-wide text-slate-100">Elektron O'qish &amp; Audio</span>
+          <span id="navBadgeDigital" class="px-2 py-0.5 text-xs rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">PDF/MP3</span>
+        </button>
+        <button type="button" data-tab="readers" class="nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg">
+          <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="tracking-wide text-slate-100">Kitobxonlar</span>
+          <span id="navBadgeReaders" class="px-2 py-0.5 text-xs rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-600">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Global Search Bar for quick lookup from anywhere -->
+    <div class="mb-6 bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div class="relative flex-1">
+        <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input id="globalSearchInput" type="text" placeholder="Tezkor qidiruv: kitob nomi, muallif, inventar raqami (INV-...), kitobxon ismi yoki telefoni..." class="w-full pl-11 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" />
+        <button id="btnClearGlobalSearch" type="button" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-slate-500 justify-between sm:justify-end">
+        <span id="searchStatusText" class="hidden text-indigo-600 font-medium"></span>
+        <button id="btnResetDemoData" type="button" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 transition whitespace-nowrap">
+          Namuna ma'lumotlarni tiklash
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <section id="tab-dashboard" class="tab-panel space-y-6 animate-fade-in">
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Kutubxona fondi</p>
+            <p class="text-2xl font-bold text-slate-900 mt-1" id="kpiTotalBooks">0</p>
+            <p class="text-xs text-slate-500 mt-1" id="kpiAvailableBooksSub">0 ta nusxa javonda mavjud</p>
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Qo'ldagi kitoblar</p>
+            <p class="text-2xl font-bold text-amber-600 mt-1" id="kpiActiveLoans">0</p>
+            <p class="text-xs text-slate-500 mt-1" id="kpiReturnedLoansSub">Jami 0 ta qaytarilgan</p>
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-rose-200 shadow-sm flex items-start justify-between relative overflow-hidden">
+          <div>
+            <p class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Muddati o'tganlar</p>
+            <p class="text-2xl font-bold text-rose-600 mt-1" id="kpiOverdueLoans">0</p>
+            <p class="text-xs text-rose-500 mt-1" id="kpiDueSoonSub">0 tasi yaqin 3 kunda tugaydi</p>
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Faol kitobxonlar</p>
+            <p class="text-2xl font-bold text-emerald-600 mt-1" id="kpiTotalReaders">0</p>
+            <p class="text-xs text-slate-500 mt-1" id="kpiReadersWithBooksSub">0 nafarida kitob bor</p>
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Urgent Overdue & Due Soon Table + Chart Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left 2 Cols: Urgent Attention List -->
+        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                Diqqat talab qiluvchi kitoblar (Muddati o'tgan va yaqinlashganlar)
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">Bir tugma bilan kitobni qaytarib oling yoki kitobxonga eslatma yuboring</p>
+            </div>
+            <button type="button" data-goto-tab="overdue" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
+              Barchasini ko'rish &rarr;
+            </button>
+          </div>
+          <div class="overflow-x-auto custom-scrollbar flex-1">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50/80 text-slate-500 text-xs uppercase border-b border-slate-200">
+                  <th class="py-3 px-4 font-semibold">Kitob va Kod</th>
+                  <th class="py-3 px-4 font-semibold">Kitobxon</th>
+                  <th class="py-3 px-4 font-semibold">Muddat holati</th>
+                  <th class="py-3 px-4 font-semibold text-right">Tezkor amal</th>
+                </tr>
+              </thead>
+              <tbody id="dashboardUrgentTableBody" class="divide-y divide-slate-100 text-sm">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Category & Circulation Chart -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Janrlar bo'yicha fond va bandlik</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Kutubxonadagi jami va qo'ldagi kitoblar nisbati</p>
+          </div>
+          <div class="relative h-64 my-4">
+            <canvas id="categoryChartCanvas"></canvas>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 flex items-center justify-between text-xs text-slate-600">
+            <span>Qaytarish standarti: <strong>14 kun</strong></span>
+            <button type="button" data-goto-tab="circulation" class="font-semibold text-indigo-600 hover:underline">Jurnalga o'tish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Circulation Log Preview -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Oxirgi oldi-berdi qaydlar (Katta daftar yozuvlari)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Yaqinda berilgan va qaytarib olingan kitoblar tarixi</p>
+          </div>
+          <button type="button" data-goto-tab="circulation" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            To'liq jurnalni ochish
+          </button>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50/80 text-slate-500 text-xs uppercase border-b border-slate-200">
+                <th class="py-3 px-4 font-semibold">Jurnal №</th>
+                <th class="py-3 px-4 font-semibold">Kitob</th>
+                <th class="py-3 px-4 font-semibold">Kitobxon</th>
+                <th class="py-3 px-4 font-semibold">Berilgan sana</th>
+                <th class="py-3 px-4 font-semibold">Qaytarish muddati</th>
+                <th class="py-3 px-4 font-semibold">Holati</th>
+                <th class="py-3 px-4 font-semibold text-right">Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardRecentLoansBody" class="divide-y divide-slate-100 text-sm">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: CIRCULATION (OLDI-BERDI JURNALI) ================= -->
+    <section id="tab-circulation" class="tab-panel hidden space-y-5 animate-fade-in">
+      <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Elektron Oldi-Berdi Jurnali (Katta Daftar)</h2>
+            <p class="text-xs text-slate-500">Barcha berilgan va qaytarilgan kitoblar ro'yxati, filtrlash va qaytarib olish oynasi</p>
+          </div>
+          <button type="button" id="btnCirculationIssue" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Yangi kitob berish
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center gap-1.5" id="loanStatusFilterGroup">
+            <button type="button" data-loan-filter="all" class="loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
+              Barchasi
+            </button>
+            <button type="button" data-loan-filter="active" class="loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+              Qo'lda (Faol)
+            </button>
+            <button type="button" data-loan-filter="overdue" class="loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 hover:bg-rose-100 transition">
+              Muddati o'tgan
+            </button>
+            <button type="button" data-loan-filter="returned" class="loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition">
+              Qaytarilgan
+            </button>
+          </div>
+
+          <div class="relative w-full md:w-80">
+            <input id="loanSearchInput" type="text" placeholder="Jurnaldan qidirish (ism, kitob, №)..." class="w-full pl-3.5 pr-8 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Circulation Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                <th class="py-3.5 px-4 font-semibold">Jurnal №</th>
+                <th class="py-3.5 px-4 font-semibold">Kitob va Inventar kodi</th>
+                <th class="py-3.5 px-4 font-semibold">Kitobxon va Telefon</th>
+                <th class="py-3.5 px-4 font-semibold">Berilgan sana</th>
+                <th class="py-3.5 px-4 font-semibold">Qaytarish muddati</th>
+                <th class="py-3.5 px-4 font-semibold">Holati / Izoh</th>
+                <th class="py-3.5 px-4 font-semibold text-right">Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="circulationTableBody" class="divide-y divide-slate-100 text-sm">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: OVERDUE CONTROL (MUDDATI O'TGANLAR NAZORATI) ================= -->
+    <section id="tab-overdue" class="tab-panel hidden space-y-5 animate-fade-in">
+      <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-rose-950">Muddati o'tgan va qaytarilishi yaqin kitoblar nazorati</h2>
+            <p class="text-xs sm:text-sm text-rose-800 mt-0.5">
+              Kechikkan kitobxonlarga avtomatik Telegram/SMS eslatma matnini nusxalab yuboring, muddatni uzaytiring yoki qaytarib oling.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <select id="overdueFilterSelect" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium bg-white border border-rose-300 text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500">
+            <option value="all_alerts">Muddati o'tgan + Yaqin qolganlar (3 kun)</option>
+            <option value="strictly_overdue">Faqat muddati o'tganlar (Kechikkan)</option>
+            <option value="due_soon">Faqat muddati yaqinlashganlar (1–3 kun)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="overdueCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: BOOKS CATALOG (KITOBLAR BAZASI) ================= -->
+    <section id="tab-books" class="tab-panel hidden space-y-5 animate-fade-in">
+      <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Kitoblar bazasi va Elektron katalog</h2>
+            <p class="text-xs text-slate-500">Kitob qo'shish, javon manzilini ko'rish va mavjud nusxani kitobxonga berish</p>
+          </div>
+          <button type="button" id="btnCatalogAddBook" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Yangi kitob qo'shish
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1">Qidiruv (Nomi, muallif, inventar kodi)</label>
+            <input id="bookSearchInput" type="text" placeholder="Masalan: O'tkan kunlar yoki INV-101..." class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1">Bo'lim / Janr</label>
+            <select id="bookCategoryFilter" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">Barcha janrlar</option>
+              <option value="O'zbek adabiyoti">O'zbek adabiyoti</option>
+              <option value="Jahon adabiyoti">Jahon adabiyoti</option>
+              <option value="Tarixiy">Tarixiy</option>
+              <option value="Ilmiy va IT">Ilmiy va IT</option>
+              <option value="Bolalar adabiyoti">Bolalar adabiyoti</option>
+              <option value="Avtoyo'l va transport">Avtoyo'l va transport</option>
+              <option value="Darslik va qo'llanma">Darslik va qo'llanma</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1">Javonda mavjudligi</label>
+            <select id="bookAvailabilityFilter" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">Barcha kitoblar</option>
+              <option value="available">Faqat javonda bor kitoblar</option>
+              <option value="out">Barcha nusxasi qo'lda (Tugagan)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Books Grid -->
+      <div id="booksGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: READERS (KITOBXONLAR) ================= -->
+    <section id="tab-readers" class="tab-panel hidden space-y-5 animate-fade-in">
+      <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Kitobxonlar bazasi (A'zolar kartotekasi)</h2>
+          <p class="text-xs text-slate-500">Kitobxonlar ro'yxati, telefon raqamlari va ularning qo'lidagi kitoblar soni</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="readerSearchInput" type="text" placeholder="Ism, telefon yoki guruh bo'yicha..." class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <button type="button" id="btnDirectoryAddReader" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition">
+            + Kitobxon qo'shish
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                <th class="py-3.5 px-4 font-semibold">ID / Guvohnoma</th>
+                <th class="py-3.5 px-4 font-semibold">F.I.Sh</th>
+                <th class="py-3.5 px-4 font-semibold">Bo'lim / Sinf / Guruh</th>
+                <th class="py-3.5 px-4 font-semibold">Telefon raqami</th>
+                <th class="py-3.5 px-4 font-semibold">Qo'ldagi kitoblar</th>
+                <th class="py-3.5 px-4 font-semibold text-right">Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="readersTableBody" class="divide-y divide-slate-100 text-sm">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 6: DIGITAL LIBRARY (ELEKTRON PDF VA AUDIO KITOBLAR) ================= -->
+    <section id="tab-digital" class="tab-panel hidden space-y-5 animate-fade-in">
+      <div class="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-5 sm:p-6 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white">
+            Avtoyul Kutubxona &bull; Raqamli Media Markazi
+          </div>
+          <h2 class="text-xl font-bold">Elektron PDF Kitoblar va Audio Tinglash Zali</h2>
+          <p class="text-xs sm:text-sm text-indigo-100 max-w-2xl">
+            Har bir kitob uchun kompyuter yoki telefondan <strong>PDF fayl</strong> hamda <strong>MP3 audio fayl</strong> yuklashingiz, brauzerning o'zida mutolaa qilishingiz yoki ovozli sintezator/pleer orqali tinglashingiz mumkin.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button type="button" id="btnDigitalUploadQuick" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-white text-indigo-700 hover:bg-indigo-50 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Yangi PDF / Audio kitob yuklash
+          </button>
+        </div>
+      </div>
+
+      <!-- Digital filter bar -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-1.5" id="digitalFilterGroup">
+          <button type="button" data-digital-filter="all" class="digital-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
+            Barcha elektron kitoblar
+          </button>
+          <button type="button" data-digital-filter="pdf" class="digital-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            PDF / Elektron matnli
+          </button>
+          <button type="button" data-digital-filter="audio" class="digital-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            Audio kitoblar
+          </button>
+        </div>
+        <div class="text-xs text-slate-500">
+          Kitob kartochkasidagi <strong>O'qish</strong> yoki <strong>Tinglash</strong> tugmasini bosing
+        </div>
+      </div>
+
+      <!-- Digital Books Grid -->
+      <div id="digitalBooksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL 1: ISSUE BOOK (KITOB BERISH) ================= -->
+  <div id="modalIssueBook" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
+      <div class="px-5 py-4 bg-indigo-600 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+          <h3 class="text-base font-bold">Kitobxonga kitob berish</h3>
+        </div>
+        <button type="button" data-close-modal="modalIssueBook" class="text-indigo-100 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="formIssueBook" class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">1. Kitobni tanlang (Faqat mavjud kitoblar) *</label>
+          <select id="issueBookSelect" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-slate-700 uppercase">2. Kitobxonni tanlang *</label>
+            <button type="button" id="btnToggleInlineNewReader" class="text-xs font-semibold text-indigo-600 hover:underline">
+              + Yangi kitobxon kiritish
+            </button>
+          </div>
+          <select id="issueReaderSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <!-- Inline Quick Reader Creation inside Issue Modal -->
+        <div id="inlineNewReaderFields" class="hidden p-3.5 bg-indigo-50/70 rounded-xl border border-indigo-200 space-y-3">
+          <p class="text-xs font-semibold text-indigo-900">Yangi kitobxon ma'lumotlari:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <input id="inlineReaderName" type="text" placeholder="F.I.Sh (Masalan: Aliyev Vali)" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" />
+            <input id="inlineReaderPhone" type="text" placeholder="Tel: +998 90 123 45 67" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" />
+          </div>
+          <input id="inlineReaderGroup" type="text" placeholder="Guruh / Sinf / Bo'lim (Masalan: 10-A sinf yoki Talaba)" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Berilgan sana *</label>
+            <input id="issueDateInput" type="date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Qaytarish muddati *</label>
+            <input id="issueDueDateInput" type="date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+        </div>
+
+        <!-- Quick duration pills -->
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-500">Muddatni tez belgilash:</span>
+          <button type="button" data-Quick-days="7" class="quick-days-btn px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">7 kun</button>
+          <button type="button" data-Quick-days="14" class="quick-days-btn px-2.5 py-1 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold border border-indigo-200">14 kun (Standart)</button>
+          <button type="button" data-Quick-days="30" class="quick-days-btn px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium">30 kun</button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Qo'shimcha izoh (ixtiyoriy)</label>
+          <input id="issueNotesInput" type="text" placeholder="Masalan: O'quv zalida emas, uyga berildi..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalIssueBook" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm">
+            Jurnalga yozish va berish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: ADD / EDIT BOOK (KITOB QO'SHISH) ================= -->
+  <div id="modalBookForm" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
+      <div class="px-5 py-4 bg-emerald-600 text-white flex items-center justify-between">
+        <h3 id="modalBookFormTitle" class="text-base font-bold">Kutubxonaga yangi kitob qo'shish</h3>
+        <button type="button" data-close-modal="modalBookForm" class="text-emerald-100 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="formBook" class="p-5 space-y-4">
+        <input type="hidden" id="bookFormId" value="" />
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Kitob nomi *</label>
+          <input id="bookTitleInput" type="text" required placeholder="Masalan: O'tkan kunlar" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Muallif *</label>
+            <input id="bookAuthorInput" type="text" required placeholder="Masalan: Abdulla Qodiriy" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Bo'lim / Janr *</label>
+            <select id="bookCategoryInput" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="O'zbek adabiyoti">O'zbek adabiyoti</option>
+              <option value="Jahon adabiyoti">Jahon adabiyoti</option>
+              <option value="Tarixiy">Tarixiy</option>
+              <option value="Ilmiy va IT">Ilmiy va IT</option>
+              <option value="Bolalar adabiyoti">Bolalar adabiyoti</option>
+              <option value="Avtoyo'l va transport">Avtoyo'l va transport</option>
+              <option value="Darslik va qo'llanma">Darslik va qo'llanma</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-semibold text-slate-700 uppercase">Inventar № / ISBN *</label>
+              <button type="button" id="btnGenerateInvCode" class="text-[11px] font-semibold text-emerald-600 hover:underline">Avto</button>
+            </div>
+            <input id="bookCodeInput" type="text" required placeholder="INV-109" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Javon va qator *</label>
+            <input id="bookShelfInput" type="text" required placeholder="A-1 javon" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Jami nusxasi *</label>
+            <input id="bookCopiesInput" type="number" min="1" max="500" value="3" required class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            Elektron PDF va Audio fayllar (Ixtiyoriy)
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">PDF fayl yuklash (.pdf)</label>
+              <input id="bookPdfFileInput" type="file" accept=".pdf,application/pdf" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+              <p id="bookPdfCurrentStatus" class="text-[11px] text-slate-400 mt-1">PDF biriktirilmagan (matnli rejim faol)</p>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Audio fayl yuklash (.mp3, .wav)</label>
+              <input id="bookAudioFileInput" type="file" accept="audio/*" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100" />
+              <p id="bookAudioCurrentStatus" class="text-[11px] text-slate-400 mt-1">MP3 biriktirilmagan (ovozli o'qish faol)</p>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Elektron mutolaa va audio o'qish uchun kitob matni / annotatsiya</label>
+            <textarea id="bookEbookTextInput" rows="3" placeholder="Kitobdan parcha yoki mundarijani kiriting — o'quvchilar uni elektron o'qishi va ovozli tinglashi mumkin..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalBookForm" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm">
+            Saqlash
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: ADD READER (KITOBXON QO'SHISH) ================= -->
+  <div id="modalReaderForm" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
+      <div class="px-5 py-4 bg-slate-800 text-white flex items-center justify-between">
+        <h3 class="text-base font-bold">Yangi kitobxon ro'yxatga olish</h3>
+        <button type="button" data-close-modal="modalReaderForm" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="formReader" class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">F.I.Sh (Ism va familiya) *</label>
+          <input id="readerNameInput" type="text" required placeholder="Masalan: Karimova Dilnoza" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Guruh / Sinf / Bo'lim *</label>
+          <input id="readerGroupInput" type="text" required placeholder="Masalan: 11-B sinf yoki Iqtisodiyot fak." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Telefon raqami *</label>
+          <input id="readerPhoneInput" type="text" required placeholder="+998 90 123 45 67" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalReaderForm" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm">
+            Qo'shish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 4: RETURN BOOK CONFIRMATION (KITOBNI QAYTARIB OLISH) ================= -->
+  <div id="modalReturnBook" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden animate-fade-in">
+      <div class="px-5 py-4 bg-emerald-600 text-white flex items-center justify-between">
+        <h3 class="text-base font-bold">Kitobni qaytarib olish</h3>
+        <button type="button" data-close-modal="modalReturnBook" class="text-emerald-100 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="formReturnBook" class="p-5 space-y-4">
+        <input type="hidden" id="returnLoanIdInput" value="" />
+        <div id="returnBookSummaryBox" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-sm space-y-1">
+          <!-- Populated by JS -->
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Kitobning holati</label>
+          <select id="returnConditionSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="Yaxshi (Soz holatda)">Yaxshi (Soz holatda)</option>
+            <option value="Muqovasi biroz eskirgan">Muqovasi biroz eskirgan</option>
+            <option value="Ta'mirtalab / Shikastlangan">Ta'mirtalab / Shikastlangan</option>
+          </select>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalReturnBook" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Bekor qilish
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm">
+            Qabul qilish va javonga qaytarish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 5: RESET CONFIRMATION ================= -->
+  <div id="modalResetConfirm" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-xl border border-slate-200 p-5 space-y-4 animate-fade-in">
+      <h3 class="text-base font-bold text-slate-900">Boshlang'ich ma'lumotlarni tiklash</h3>
+      <p class="text-sm text-slate-600">
+        Barcha o'zgarishlarni tozalab, dastlabki namuna kitoblar va oldi-berdi ro'yxatini qayta tiklashni xohlaysizmi?
+      </p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button type="button" data-close-modal="modalResetConfirm" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+          Yo'q
+        </button>
+        <button type="button" id="btnConfirmResetYes" class="px-4 py-1.5 rounded-lg text-sm font-semibold bg-rose-600 text-white hover:bg-rose-700">
+          Ha, tiklash
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 6: E-BOOK & PDF READER (KITOB O'QISH OYNASI) ================= -->
+  <div id="modalEbookReader" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-fade-in">
+      <!-- Reader Top Bar -->
+      <div class="px-4 sm:px-6 py-3.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-xs font-bold">PDF</div>
+          <div>
+            <h3 id="readerModalBookTitle" class="text-sm sm:text-base font-bold leading-tight">Kitob nomi</h3>
+            <p id="readerModalBookMeta" class="text-xs text-slate-300">Muallif • Inventar kodi</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Upload PDF directly inside reader -->
+          <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span>PDF fayl biriktirish</span>
+            <input id="readerInlinePdfInput" type="file" accept=".pdf,application/pdf" class="hidden" />
+          </label>
+          <button type="button" id="btnReaderListenAudio" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 transition">
+            🎧 Audio tinglash
+          </button>
+          <div class="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
+            <button type="button" id="btnFontDecrease" title="Shriftni kichraytirish" class="px-2 py-1 text-xs font-bold text-slate-300 hover:text-white">A-</button>
+            <button type="button" id="btnFontIncrease" title="Shriftni kattalashtirish" class="px-2 py-1 text-xs font-bold text-slate-300 hover:text-white">A+</button>
+            <button type="button" id="btnToggleReaderTheme" title="Tungi / Kunduzgi rejim" class="px-2 py-1 text-xs text-slate-300 hover:text-white">🌓</button>
+          </div>
+          <button type="button" data-close-modal="modalEbookReader" class="text-slate-300 hover:text-white p-1.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode Switcher (PDF View vs Elektron Matn View) -->
+      <div class="px-4 sm:px-6 py-2 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2">
+          <button type="button" id="btnShowReaderTextMode" class="px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white">
+            📖 Elektron matn (Mutolaa)
+          </button>
+          <button type="button" id="btnShowReaderPdfMode" class="px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300">
+            📄 Asl PDF fayl ko'rinishi
+          </button>
+        </div>
+        <span id="readerPdfBadgeStatus" class="text-slate-500"></span>
+      </div>
+
+      <!-- Reader Body -->
+      <div id="readerBodyContainer" class="flex-1 overflow-y-auto p-5 sm:p-8 bg-amber-50/30 text-slate-800 space-y-4">
+        <!-- Text View -->
+        <div id="readerTextView" class="max-w-2xl mx-auto leading-relaxed text-base space-y-4">
+          <!-- Populated by JS -->
+        </div>
+        <!-- PDF View -->
+        <div id="readerPdfView" class="hidden h-[62vh] w-full flex flex-col items-center justify-center">
+          <iframe id="readerPdfIframe" class="w-full h-full rounded-xl border border-slate-300 bg-white" title="PDF Viewer"></iframe>
+          <div id="readerNoPdfPlaceholder" class="hidden text-center p-8 space-y-3">
+            <p class="text-sm text-slate-600">Ushbu kitobga hali tashqi <strong>.pdf</strong> fayl yuklanmagan.</p>
+            <p class="text-xs text-slate-500">Yuqoridagi <strong>"PDF fayl biriktirish"</strong> tugmasi orqali kompyuter yoki telefoningizdan istalgan PDF kitobni tanlang — u shu oynada ochiladi!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING AUDIO BOOK PLAYER BAR ================= -->
+  <div id="floatingAudioPlayer" class="fixed bottom-0 inset-x-0 z-40 hidden bg-[#0b253c] text-white border-t border-cyan-500/40 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <div class="w-10 h-10 rounded-xl bg-cyan-400 text-slate-950 flex items-center justify-center font-black text-lg shrink-0 shadow-md">
+          🎙️
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <p id="audioPlayerBookTitle" class="text-sm font-bold text-white truncate">Kitob nomi</p>
+            <span id="audioPlayerModeBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">Google O'zbekcha Diktor</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-300">
+            <span id="audioPlayerBookAuthor" class="truncate font-medium text-slate-200">Muallif</span>
+            <span class="text-slate-500">&bull;</span>
+            <span id="audioPlayerStatusText" class="text-cyan-200 font-semibold truncate">Ravon va tushunarli mutolaa</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+        <audio id="html5AudioElement" class="hidden" controls></audio>
+
+        <!-- Google Uzbek Diktor Controls -->
+        <div id="ttsControlsGroup" class="flex items-center gap-1.5 sm:gap-2">
+          <button type="button" id="btnAudioPrevSentence" title="Oldingi jumla" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border border-slate-700">
+            ⏮
+          </button>
+          <button type="button" id="btnAudioPlayPause" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-extrabold bg-cyan-400 hover:bg-cyan-300 text-slate-950 transition shadow-sm">
+            ▶ Tinglash
+          </button>
+          <button type="button" id="btnAudioNextSentence" title="Keyingi jumla" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition border border-slate-700">
+            ⏭
+          </button>
+          <button type="button" id="btnAudioStop" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition border border-slate-700">
+            ⏹ To'xtatish
+          </button>
+          <select id="audioSpeedSelect" class="px-2 py-1.5 rounded-lg text-xs bg-slate-800 border border-slate-700 text-slate-200 focus:outline-none">
+            <option value="0.85">0.85x (Vazmin)</option>
+            <option value="1" selected>1.0x (Diktor me'yori)</option>
+            <option value="1.15">1.15x (Tezroq)</option>
+            <option value="1.3">1.3x (Tez)</option>
+          </select>
+        </div>
+
+        <!-- Upload MP3 directly in player -->
+        <label class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <span>+ MP3 fayl</span>
+          <input id="playerInlineAudioInput" type="file" accept="audio/*" class="hidden" />
+        </label>
+
+        <button type="button" id="btnCloseAudioPlayer" class="text-slate-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 7: GOOGLE AI STUDIO (GEMINI 3.1 FLASH TTS) SPEECH GENERATOR ================= -->
+  <div id="modalGeminiTts" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-in text-slate-900">
+      <div class="px-5 py-4 bg-[#0b253c] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-cyan-500 text-slate-950 font-black flex items-center justify-center text-xs">AI</span>
+          <div>
+            <h3 class="text-base font-bold">Google AI Studio — Gemini 3.1 Flash TTS</h3>
+            <p class="text-[11px] text-cyan-300">Model: gemini-3.1-flash-tts-preview • Tabiiy neyron ovoz sintezatori</p>
+          </div>
+        </div>
+        <button type="button" data-close-modal="modalGeminiTts" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-slate-800">Google AI Studio integratsiyasi</span>
+            <a href="https://aistudio.google.com/generate-speech?model=gemini-3.1-flash-tts-preview" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#00668c] hover:underline">
+              AI Studio'da ochish &nearr;
+            </a>
+          </div>
+          <p class="text-slate-600">
+            Gemini API kalitingizni kiritsangiz, kitob matnlari bevosita Google <strong>gemini-3.1-flash-tts-preview</strong> modeli orqali 24kHz WAV audio formatida generatsiya qilinadi. Kalit bo'lmasa ham ichki neyron sintezator avtomatik ishlaydi.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Gemini API Key (Ixtiyoriy)</label>
+            <input id="geminiApiKeyInput" type="password" placeholder="AIzaSy..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Gemini TTS Model</label>
+            <select id="geminiTtsModelSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+              <option value="gemini-3.1-flash-tts-preview" selected>gemini-3.1-flash-tts-preview</option>
+              <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Google AI Ovoz (Prebuilt Voice)</label>
+            <select id="geminiVoiceSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+              <option value="Kore" selected>Kore (Tiniq, diktor ovozi)</option>
+              <option value="Zephyr">Zephyr (Yumshoq, tabiiy ovoz)</option>
+              <option value="Aoede">Aoede (Ifodali audiokitob ovozi)</option>
+              <option value="Puck">Puck (Jonli va ravon)</option>
+              <option value="Charon">Charon (Chuqur akademik ovoz)</option>
+              <option value="Fenrir">Fenrir (Salobatli ma'ruzachi)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Qaysi kitob uchun?</label>
+            <select id="geminiBookTargetSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">O'qish uslubi (Style Prompt)</label>
+          <input id="geminiStylePromptInput" type="text" value="O'zbekiston Milliy Teleradiokompaniyasi oliy toifali diktori uslubida, sof va ravon o'zbek adabiy tilida, tinglovchiga juda tushunarli, dona-dona va ifodali qilib o'qib ber:" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Ovozga aylantiriladigan kitob matni</label>
+          <textarea id="geminiTtsTextInput" rows="4" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs sm:text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]"></textarea>
+        </div>
+
+        <div id="geminiTtsResultBox" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between gap-2">
+          <span id="geminiTtsStatusText">Audio tayyor!</span>
+          <button type="button" id="geminiDownloadWavLink" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700">
+            ⬇ WAV yuklab olish
+          </button>
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
+          <button type="button" data-close-modal="modalGeminiTts" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100">
+            Yopish
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btnGenerateGeminiSpeech" class="px-5 py-2 rounded-lg text-sm font-semibold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm transition">
+              ✨ Google AI Ovoz Yaratish va Tinglash
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+  <script>
+    (function() {
+      const STORAGE_KEY = 'avtoyul_kutubxona_state_v3';
+
+      // Helper for date offsets relative to today
+      function getOffsetDateStr(daysOffset) {
+        const d = new Date();
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() + daysOffset);
+        return d.toISOString().split('T')[0];
+      }
+
+      function formatDateUz(dateStr) {
+        if (!dateStr) return '—';
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const months = ['yan', 'fev', 'mar', 'apr', 'may', 'iyn', 'iyl', 'avg', 'sen', 'okt', 'noy', 'dek'];
+        const mIdx = parseInt(parts[1], 10) - 1;
+        return `${parseInt(parts[2], 10)}-${months[mIdx] || parts[1]}, ${parts[0]}`;
+      }
+
+      function diffDaysFromToday(dueDateStr) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const due = new Date(dueDateStr + 'T00:00:00');
+        const diffMs = due.getTime() - today.getTime();
+        return Math.round(diffMs / (1000 * 60 * 60 * 24));
+      }
+
+      function buildInitialState() {
+        return {
+          activeTab: 'dashboard',
+          loanFilter: 'all',
+          overdueFilter: 'all_alerts',
+          digitalFilter: 'all',
+          books: [
+            {
+              id: 'b9',
+              code: 'INV-109',
+              title: "Avtomobil yo'llarini loyihalash va qurish",
+              author: "Q. H. Azizov, M. O. O'roqov",
+              category: "Avtoyo'l va transport",
+              shelf: 'D-1 javon',
+              totalCopies: 6,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "avtoyol_loyihalash_darslik.pdf (Ichki elektron matn)",
+              audioName: "Ovozli ma'ruza (Sintezator)",
+              ebookText: "1-BOB. AVTOMOBIL YO'LLARINING XALQ XO'JALIGIDAGI AHAMIYATI.\n\nAvtomobil yo'llari mamlakat transport tizimining asosiy bo'g'inlaridan biri hisoblanadi. Zamonaviy magistral yo'llarni loyihalashda harakat xavfsizligi, yo'l to'shamalarining mustahkamligi, drenaj tizimi va iqlim sharoitlari hisobga olinadi.\n\n2-BOB. YO'L POYI VA TO'SHAMASI KONSTRUKSIYASI.\n\nYo'l poyi tuproq qatlamlarining zichligi va suv-issiq rejimiga bog'liq holda barpo etiladi. Asfalt-beton va sement-beton qoplamalar transport oqimi yuklamasini teng taqsimlashga xizmat qiladi."
+            },
+            {
+              id: 'b10',
+              code: 'INV-110',
+              title: "Yo'l harakati qoidalari va xavfsizlik asoslari",
+              author: "O. Q. Qudratov",
+              category: "Avtoyo'l va transport",
+              shelf: 'D-2 javon',
+              totalCopies: 5,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yhq_xavfsizlik_qollanma.pdf (Ichki elektron matn)",
+              audioName: "Audio qo'llanma",
+              ebookText: "KIRISH. YO'L HARAKATI XAVFSIZLIGI TIZIMI.\n\nTransport vositalari sonining ortib borishi yo'l harakati ishtirokchilaridan yuqori intizom va muhandislik yechimlarini talab etadi. Chorrahalarni to'g'ri tashkil etish, yo'l belgilari va chiziqlarini standart bo'yicha o'rnatish tirbandlik hamda yo'l-transport hodisalarining oldini oladi."
+            },
+            {
+              id: 'b1',
+              code: 'INV-101',
+              title: "O'tkan kunlar",
+              author: 'Abdulla Qodiriy',
+              category: "O'zbek adabiyoti",
+              shelf: 'A-1 javon',
+              totalCopies: 5,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "otkan_kunlar_roman.pdf (Ichki elektron matn)",
+              audioName: "Audio roman",
+              ebookText: "I BOB. O'TKAN KUNLARDAN.\n\n1264-inchi hijriy, dalv oyining o'n ettinchi kuni, qishki kunlarning biri, quyosh botqan, tevarakdan shom azoni eshitiladir... Marg'ilonning yangi karvonsaroylaridan birida Otabek va Hasanali suhbati davom etardi. Bu asar o'zbek romanchiligining ilk durdonasi bo'lib, sadoqat, muhabbat va tarixiy davr ruhini aks ettiradi."
+            },
+            {
+              id: 'b2',
+              code: 'INV-102',
+              title: 'Yulduzli tunlar',
+              author: 'Pirimqul Qodirov',
+              category: 'Tarixiy',
+              shelf: 'A-2 javon',
+              totalCopies: 4,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "yulduzli_tunlar.pdf (Ichki elektron matn)",
+              audioName: "Audio asar",
+              ebookText: "Zahiriddin Muhammad Bobur hayoti va faoliyatiga bag'ishlangan tarixiy roman. Andijon, Samarqand va Hirot sarhadlaridan tortib Hindiston zaminigacha bo'lgan murakkab tarixiy jarayonlar hamda 'Boburnoma' yaratilishi hikoya qilinadi."
+            },
+            {
+              id: 'b3',
+              code: 'INV-103',
+              title: 'Dunyoning ishlari',
+              author: "O'tkir Hoshimov",
+              category: "O'zbek adabiyoti",
+              shelf: 'A-1 javon',
+              totalCopies: 4,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "dunyoning_ishlari.pdf (Ichki elektron matn)",
+              audioName: "Audio qissa",
+              ebookText: "Gilam paypoq. Har yili qish kirishi bilan xuddi bir narsadan quruq qolayotgandek bezovtalanaman... Onaning farzandga bo'lgan cheksiz mehri, bolalik xotiralari va insoniy mehr-oqibat haqidagi eng ta'sirli hikoyalar to'plami."
+            },
+            {
+              id: 'b4',
+              code: 'INV-104',
+              title: 'Kecha va kunduz',
+              author: "Abdulhamid Cho'lpon",
+              category: "O'zbek adabiyoti",
+              shelf: 'A-3 javon',
+              totalCopies: 3,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "kecha_va_kunduz.pdf (Ichki elektron matn)",
+              audioName: "Audio roman",
+              ebookText: "Hamal keldi — amal keldi. Har yilgi odaticha bahor bu yil ham qishning bo'ynini sindirib kirib keldi. Zebi, Razzoq so'fi va Akbarali mingboshi obrazlari orqali XX asr boshidagi Turkiston hayoti tasvirlanadi."
+            },
+            {
+              id: 'b5',
+              code: 'INV-105',
+              title: 'Sariq devni minib',
+              author: "Xudoyberdi To'xtaboyev",
+              category: 'Bolalar adabiyoti',
+              shelf: 'B-1 javon',
+              totalCopies: 5,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "sariq_devni_minib.pdf (Ichki elektron matn)",
+              audioName: "Audio ertak-qissa",
+              ebookText: "Hoshimjon Ro'ziyevning sehrli qalpoqcha bilan bog'liq sarguzashtlari. Bilim olmasdan turib sehrli qalpoqcha yordamida turli kasblarni egallamoqchi bo'lgan bolaning quvnoq va ibratli boshdan kechirganlari."
+            },
+            {
+              id: 'b6',
+              code: 'INV-106',
+              title: 'Atom odatlar (Atomic Habits)',
+              author: 'Jeyms Klir',
+              category: 'Ilmiy va IT',
+              shelf: 'C-2 javon',
+              totalCopies: 3,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "atom_odatlar.pdf (Ichki elektron matn)",
+              audioName: "Audio xulosa",
+              ebookText: "Har kuni 1 foizga yaxshilanish qoidasi. Katta muvaffaqiyatlar bir martalik keskin o'zgarishlardan emas, balki har kungi kichik va davomiy odatlarning jamlanmasidan hosil bo'ladi."
+            },
+            {
+              id: 'b7',
+              code: 'INV-107',
+              title: 'Alkimyogar',
+              author: 'Paulo Koelo',
+              category: 'Jahon adabiyoti',
+              shelf: 'B-3 javon',
+              totalCopies: 2,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "alkimyogar.pdf (Ichki elektron matn)",
+              audioName: "Audio asar",
+              ebookText: "Cho'pon yigit Santyagoning Misr ehromlari tomon qilgan sayohati va o'z taqdiri yo'lini izlash falsafasi haqida jahon adabiyoti durdonasi."
+            },
+            {
+              id: 'b8',
+              code: 'INV-108',
+              title: 'Python dasturlash asoslari',
+              author: 'Anvar Narzullayev',
+              category: "Darslik va qo'llanma",
+              shelf: 'C-1 javon',
+              totalCopies: 4,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: "python_darslik.pdf (Ichki elektron matn)",
+              audioName: "Audio darslik",
+              ebookText: "Python tilida o'zgaruvchilar, ro'yxatlar, lug'atlar, sikllar va funksiyalar bilan ishlash bo'yicha amaliy qo'llanma. Algoritmlash va dasturlashni o'rganuvchilar uchun dastlabki qadamlar."
+            }
+          ],
+          readers: [
+            { id: 'r1', cardNo: 'K-001', name: 'Azizbek Rahimov', group: '10-A sinf', phone: '+998 90 345 12 89' },
+            { id: 'r2', cardNo: 'K-002', name: 'Madina Islomova', group: '2-kurs Talaba', phone: '+998 93 512 88 40' },
+            { id: 'r3', cardNo: 'K-003', name: 'Sardorbek Tursunov', group: '11-B sinf', phone: '+998 99 801 44 21' },
+            { id: 'r4', cardNo: 'K-004', name: 'Nilufar Qosimova', group: "O'qituvchi (Tarix)", phone: '+998 97 720 19 05' },
+            { id: 'r5', cardNo: 'K-005', name: 'Javohir Abdullayev', group: '9-V sinf', phone: '+998 91 190 65 32' }
+          ],
+          loans: [
+            {
+              id: 'L-1001',
+              bookId: 'b1',
+              readerId: 'r1',
+              issueDate: getOffsetDateStr(-19),
+              dueDate: getOffsetDateStr(-5),
+              returnDate: null,
+              status: 'active',
+              condition: '',
+              notes: 'Uyga o`qish uchun berildi'
+            },
+            {
+              id: 'L-1002',
+              bookId: 'b6',
+              readerId: 'r3',
+              issueDate: getOffsetDateStr(-16),
+              dueDate: getOffsetDateStr(-2),
+              returnDate: null,
+              status: 'active',
+              condition: '',
+              notes: 'Imtihonga tayyorgarlik'
+            },
+            {
+              id: 'L-1003',
+              bookId: 'b2',
+              readerId: 'r2',
+              issueDate: getOffsetDateStr(-12),
+              dueDate: getOffsetDateStr(2),
+              returnDate: null,
+              status: 'active',
+              condition: '',
+              notes: '2 kun ichida qaytarishi kerak'
+            },
+            {
+              id: 'L-1004',
+              bookId: 'b8',
+              readerId: 'r5',
+              issueDate: getOffsetDateStr(-4),
+              dueDate: getOffsetDateStr(10),
+              returnDate: null,
+              status: 'active',
+              condition: '',
+              notes: 'Informatika to`garagi uchun'
+            },
+            {
+              id: 'L-1005',
+              bookId: 'b7',
+              readerId: 'r4',
+              issueDate: getOffsetDateStr(-6),
+              dueDate: getOffsetDateStr(8),
+              returnDate: null,
+              status: 'active',
+              condition: '',
+              notes: ''
+            },
+            {
+              id: 'L-1000',
+              bookId: 'b3',
+              readerId: 'r2',
+              issueDate: getOffsetDateStr(-25),
+              dueDate: getOffsetDateStr(-11),
+              returnDate: getOffsetDateStr(-13),
+              status: 'returned',
+              condition: 'Yaxshi (Soz holatda)',
+              notes: 'Vaqtida qaytarildi'
+            }
+          ]
+        };
+      }
+
+      let state = buildInitialState();
+      let categoryChartInstance = null;
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.books) && Array.isArray(parsed.loans) && Array.isArray(parsed.readers)) {
+              state = Object.assign(buildInitialState(), parsed);
+            }
+          }
+        } catch (e) {
+          // Ignore storage errors in sandboxed context
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          // Ignore storage errors in sandboxed context
+        }
+      }
+
+      function showToast(message, type) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const colors = {
+          success: 'bg-emerald-600 text-white border-emerald-700',
+          warning: 'bg-amber-500 text-white border-amber-600',
+          error: 'bg-rose-600 text-white border-rose-700',
+          info: 'bg-slate-800 text-white border-slate-900'
+        };
+        const toast = document.createElement('div');
+        toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg border text-sm font-medium flex items-center justify-between gap-3 animate-fade-in ${colors[type] || colors.info}`;
+        toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.remove();
+        }, 3200);
+      }
+
+      function escapeHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function copyTextToClipboard(text, successMsg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast(successMsg || 'Matn nusxalandi!', 'success');
+          }).catch(() => fallbackCopy(text, successMsg));
+        } else {
+          fallbackCopy(text, successMsg);
+        }
+      }
+
+      function fallbackCopy(text, successMsg) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast(successMsg || 'Matn nusxalandi!', 'success');
+        } catch (err) {
+          showToast('Nusxalashda xatolik', 'error');
+        }
+        document.body.removeChild(ta);
+      }
+
+      // Compute book availability
+      function getBookActiveLoanCount(bookId) {
+        return state.loans.filter(l => l.bookId === bookId && l.status === 'active').length;
+      }
+
+      function getBookAvailableCopies(book) {
+        const active = getBookActiveLoanCount(book.id);
+        return Math.max(0, (book.totalCopies || 0) - active);
+      }
+
+      function getBookById(bookId) {
+        return state.books.find(b => b.id === bookId) || { id: bookId, code: 'INV-?', title: "Noma'lum kitob", author: '—', category: '—', shelf: '—', totalCopies: 1 };
+      }
+
+      function getReaderById(readerId) {
+        return state.readers.find(r => r.id === readerId) || { id: readerId, cardNo: 'K-?', name: "Noma'lum kitobxon", group: '—', phone: '—' };
+      }
+
+      function isLoanOverdue(loan) {
+        if (loan.status !== 'active') return false;
+        return diffDaysFromToday(loan.dueDate) < 0;
+      }
+
+      function getLoanDueStatusBadge(loan) {
+        if (loan.status === 'returned') {
+          return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Qaytarilgan (${formatDateUz(loan.returnDate)})</span>`;
+        }
+        const days = diffDaysFromToday(loan.dueDate);
+        if (days < 0) {
+          return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200">${Math.abs(days)} kun kechikdi!</span>`;
+        }
+        if (days === 0) {
+          return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">Bugun oxirgi kun</span>`;
+        }
+        if (days <= 3) {
+          return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">${days} kun qoldi</span>`;
+        }
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">${days} kun bor</span>`;
+      }
+
+      // Switch Tabs
+      function switchTab(tabName) {
+        state.activeTab = tabName;
+        saveState();
+
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        const targetPanel = document.getElementById(`tab-${tabName}`);
+        if (targetPanel) {
+          targetPanel.classList.remove('hidden');
+        }
+
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+          const isMatch = btn.getAttribute('data-tab') === tabName;
+          const labelSpan = btn.querySelector('span');
+          if (isMatch) {
+            btn.className = 'nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-bold whitespace-nowrap transition border-cyan-400 text-cyan-300 bg-white/10 rounded-t-lg';
+            if (labelSpan) {
+              labelSpan.className = 'tracking-wide text-cyan-300 font-bold';
+            }
+          } else {
+            btn.className = 'nav-tab-btn flex items-center gap-2 px-4 py-2.5 border-b-2 text-sm font-medium whitespace-nowrap transition border-transparent text-slate-100 hover:text-white hover:bg-white/10 rounded-t-lg';
+            if (labelSpan) {
+              labelSpan.className = 'tracking-wide text-slate-100';
+            }
+          }
+        });
+
+        renderAll();
+      }
+
+      // Render KPIs and Navigation Badges
+      function renderKPIs() {
+        const totalCopies = state.books.reduce((acc, b) => acc + (Number(b.totalCopies) || 0), 0);
+        const activeLoans = state.loans.filter(l => l.status === 'active');
+        const returnedLoans = state.loans.filter(l => l.status === 'returned');
+        const overdueLoans = activeLoans.filter(l => diffDaysFromToday(l.dueDate) < 0);
+        const dueSoonLoans = activeLoans.filter(l => {
+          const d = diffDaysFromToday(l.dueDate);
+          return d >= 0 && d <= 3;
+        });
+        const availableCopies = Math.max(0, totalCopies - activeLoans.length);
+        const readersWithBooks = new Set(activeLoans.map(l => l.readerId)).size;
+
+        document.getElementById('kpiTotalBooks').textContent = `${state.books.length} nomda (${totalCopies} nusxa)`;
+        document.getElementById('kpiAvailableBooksSub').textContent = `${availableCopies} ta nusxa hozir javonda mavjud`;
+
+        document.getElementById('kpiActiveLoans').textContent = `${activeLoans.length} ta kitob`;
+        document.getElementById('kpiReturnedLoansSub').textContent = `Jami ${returnedLoans.length} ta kitob qaytarilgan`;
+
+        document.getElementById('kpiOverdueLoans').textContent = `${overdueLoans.length} ta kitob`;
+        document.getElementById('kpiDueSoonSub').textContent = `${dueSoonLoans.length} tasi yaqin 3 kunda tugaydi`;
+
+        document.getElementById('kpiTotalReaders').textContent = `${state.readers.length} nafar`;
+        document.getElementById('kpiReadersWithBooksSub').textContent = `Hozirda ${readersWithBooks} nafarida kitob bor`;
+
+        document.getElementById('navBadgeActiveLoans').textContent = activeLoans.length;
+        document.getElementById('navBadgeOverdue').textContent = overdueLoans.length;
+        document.getElementById('navBadgeBooks').textContent = state.books.length;
+        document.getElementById('navBadgeReaders').textContent = state.readers.length;
+      }
+
+      // Render Dashboard Urgent Table & Recent Loans
+      function renderDashboard() {
+        const globalQuery = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+
+        // Urgent loans: overdue or due within 3 days
+        const urgentLoans = state.loans
+          .filter(l => l.status === 'active' && diffDaysFromToday(l.dueDate) <= 3)
+          .filter(l => matchesLoanSearch(l, globalQuery))
+          .sort((a, b) => diffDaysFromToday(a.dueDate) - diffDaysFromToday(b.dueDate));
+
+        const urgentTbody = document.getElementById('dashboardUrgentTableBody');
+        if (urgentLoans.length === 0) {
+          urgentTbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="py-8 px-4 text-center text-slate-500 text-sm">
+                🎉 Hozircha muddati o'tgan yoki shoshilinch kitoblar yo'q!
+              </td>
+            </tr>
+          `;
+        } else {
+          urgentTbody.innerHTML = urgentLoans.map(loan => {
+            const book = getBookById(loan.bookId);
+            const reader = getReaderById(loan.readerId);
+            return `
+              <tr class="hover:bg-slate-50/80 transition">
+                <td class="py-3 px-4">
+                  <div class="font-semibold text-slate-900">${escapeHtml(book.title)}</div>
+                  <div class="text-xs text-slate-500">${escapeHtml(book.code)} &bull; ${escapeHtml(book.author)}</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div class="font-medium text-slate-800">${escapeHtml(reader.name)}</div>
+                  <div class="text-xs text-slate-500">${escapeHtml(reader.phone)} (${escapeHtml(reader.group)})</div>
+                </td>
+                <td class="py-3 px-4">
+                  <div>${getLoanDueStatusBadge(loan)}</div>
+                  <div class="text-xs text-slate-400 mt-0.5">Muddat: ${formatDateUz(loan.dueDate)}</div>
+                </td>
+                <td class="py-3 px-4 text-right whitespace-nowrap">
+                  <div class="inline-flex items-center gap-1.5">
+                    <button type="button" data-action="return-loan" data-loan-id="${escapeHtml(loan.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">
+                      Qaytarib olish
+                    </button>
+                    <button type="button" data-action="copy-reminder" data-loan-id="${escapeHtml(loan.id)}" title="Kitobxonga eslatma xabarini nusxalash" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                      Xabar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // Recent loans table
+        const recentLoans = [...state.loans]
+          .filter(l => matchesLoanSearch(l, globalQuery))
+          .sort((a, b) => (b.issueDate || '').localeCompare(a.issueDate || ''))
+          .slice(0, 6);
+
+        const recentTbody = document.getElementById('dashboardRecentLoansBody');
+        if (recentLoans.length === 0) {
+          recentTbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500">Yozuvlar topilmadi</td></tr>`;
+        } else {
+          recentTbody.innerHTML = recentLoans.map(loan => renderLoanRowHtml(loan)).join('');
+        }
+
+        renderCategoryChart();
+      }
+
+      function renderCategoryChart() {
+        const canvas = document.getElementById('categoryChartCanvas');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        const categories = ["Avtoyo'l va transport", "O'zbek adabiyoti", 'Tarixiy', 'Ilmiy va IT', 'Bolalar adabiyoti', 'Jahon adabiyoti', "Darslik va qo'llanma"];
+        const totalData = [];
+        const borrowedData = [];
+
+        categories.forEach(cat => {
+          const catBooks = state.books.filter(b => b.category === cat);
+          const total = catBooks.reduce((s, b) => s + (Number(b.totalCopies) || 0), 0);
+          const borrowed = catBooks.reduce((s, b) => s + getBookActiveLoanCount(b.id), 0);
+          totalData.push(total);
+          borrowedData.push(borrowed);
+        });
+
+        if (categoryChartInstance) {
+          categoryChartInstance.data.datasets[0].data = totalData;
+          categoryChartInstance.data.datasets[1].data = borrowedData;
+          categoryChartInstance.update();
+          return;
+        }
+
+        categoryChartInstance = new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: categories.map(c => c.length > 15 ? c.slice(0, 14) + '…' : c),
+            datasets: [
+              {
+                label: 'Jami nusxa',
+                data: totalData,
+                backgroundColor: '#6366f1',
+                borderRadius: 6
+              },
+              {
+                label: "Qo'lda (Berilgan)",
+                data: borrowedData,
+                backgroundColor: '#f59e0b',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, font: { size: 11 } }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { precision: 0, font: { size: 11 } }
+              },
+              x: {
+                ticks: { font: { size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      function matchesLoanSearch(loan, q) {
+        if (!q) return true;
+        const book = getBookById(loan.bookId);
+        const reader = getReaderById(loan.readerId);
+        const haystack = `${loan.id} ${book.title} ${book.author} ${book.code} ${reader.name} ${reader.phone} ${reader.group} ${loan.notes || ''}`.toLowerCase();
+        return haystack.includes(q);
+      }
+
+      function renderLoanRowHtml(loan) {
+        const book = getBookById(loan.bookId);
+        const reader = getReaderById(loan.readerId);
+        const actionsHtml = loan.status === 'active'
+          ? `
+            <div class="inline-flex items-center gap-1.5">
+              <button type="button" data-action="return-loan" data-loan-id="${escapeHtml(loan.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">
+                Qaytarib olish
+              </button>
+              <button type="button" data-action="extend-loan" data-loan-id="${escapeHtml(loan.id)}" title="Muddatni 7 kunga uzaytirish" class="px-2 py-1.5 rounded-lg text-xs font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">
+                +7 kun
+              </button>
+              <button type="button" data-action="copy-reminder" data-loan-id="${escapeHtml(loan.id)}" title="Telegram/SMS eslatma nusxalash" class="px-2 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                Xabar
+              </button>
+            </div>
+          `
+          : `<span class="text-xs text-slate-400">${escapeHtml(loan.condition || 'Yopilgan')}</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3.5 px-4 font-mono text-xs font-semibold text-slate-600">${escapeHtml(loan.id)}</td>
+            <td class="py-3.5 px-4">
+              <div class="font-semibold text-slate-900">${escapeHtml(book.title)}</div>
+              <div class="text-xs text-slate-500">${escapeHtml(book.code)} &bull; ${escapeHtml(book.shelf)}</div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="font-medium text-slate-800">${escapeHtml(reader.name)}</div>
+              <div class="text-xs text-slate-500">${escapeHtml(reader.phone)} &bull; ${escapeHtml(reader.group)}</div>
+            </td>
+            <td class="py-3.5 px-4 text-xs text-slate-600 whitespace-nowrap">${formatDateUz(loan.issueDate)}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-600 whitespace-nowrap">${formatDateUz(loan.dueDate)}</td>
+            <td class="py-3.5 px-4">
+              <div>${getLoanDueStatusBadge(loan)}</div>
+              ${loan.notes ? `<div class="text-xs text-slate-500 mt-0.5">${escapeHtml(loan.notes)}</div>` : ''}
+            </td>
+            <td class="py-3.5 px-4 text-right whitespace-nowrap">${actionsHtml}</td>
+          </tr>
+        `;
+      }
+
+      // Render Tab 2: Circulation
+      function renderCirculation() {
+        const globalQ = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+        const localQ = (document.getElementById('loanSearchInput').value || '').trim().toLowerCase();
+        const combinedQ = localQ || globalQ;
+
+        const filtered = state.loans.filter(loan => {
+          if (state.loanFilter === 'active' && loan.status !== 'active') return false;
+          if (state.loanFilter === 'returned' && loan.status !== 'returned') return false;
+          if (state.loanFilter === 'overdue' && !isLoanOverdue(loan)) return false;
+          return matchesLoanSearch(loan, combinedQ);
+        });
+
+        const tbody = document.getElementById('circulationTableBody');
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-10 px-4 text-center text-slate-500">
+                Tanlangan filtr bo'yicha oldi-berdi qaydlari topilmadi.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = filtered.map(loan => renderLoanRowHtml(loan)).join('');
+        }
+      }
+
+      // Render Tab 3: Overdue Control
+      function renderOverdueControl() {
+        const filterMode = document.getElementById('overdueFilterSelect').value || 'all_alerts';
+        const globalQ = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+
+        const alerts = state.loans
+          .filter(l => l.status === 'active')
+          .filter(l => {
+            const d = diffDaysFromToday(l.dueDate);
+            if (filterMode === 'strictly_overdue') return d < 0;
+            if (filterMode === 'due_soon') return d >= 0 && d <= 3;
+            return d <= 3;
+          })
+          .filter(l => matchesLoanSearch(l, globalQ))
+          .sort((a, b) => diffDaysFromToday(a.dueDate) - diffDaysFromToday(b.dueDate));
+
+        const container = document.getElementById('overdueCardsContainer');
+        if (alerts.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500">
+              Tanlangan mezon bo'yicha muddati o'tgan yoki yaqinlashgan kitoblar yo'q.
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = alerts.map(loan => {
+          const book = getBookById(loan.bookId);
+          const reader = getReaderById(loan.readerId);
+          const days = diffDaysFromToday(loan.dueDate);
+          const isOver = days < 0;
+          const borderClass = isOver ? 'border-rose-300 bg-white' : 'border-amber-300 bg-white';
+          const reminderText = isOver
+            ? `Assalomu alaykum, ${reader.name}! Kutubxonadan olgan "${book.title}" (${book.code}) kitobingizni topshirish muddati ${Math.abs(days)} kun avval (${formatDateUz(loan.dueDate)}) tugagan. Iltimos, kitobni kutubxonaga qaytarishingizni yoki muddatni uzaytirishingizni so'raymiz.`
+            : `Assalomu alaykum, ${reader.name}! Kutubxonadan olgan "${book.title}" (${book.code}) kitobingizni topshirish muddati ${formatDateUz(loan.dueDate)} kuni tugaydi. Eslatma sifatida yozmoqdamiz.`;
+
+          return `
+            <div class="rounded-xl border ${borderClass} p-4 sm:p-5 shadow-xs flex flex-col justify-between gap-4">
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="text-xs font-mono text-slate-500">${escapeHtml(loan.id)} &bull; ${escapeHtml(book.code)}</span>
+                    <h3 class="text-base font-bold text-slate-900">${escapeHtml(book.title)}</h3>
+                    <p class="text-xs text-slate-500">${escapeHtml(book.author)} &bull; ${escapeHtml(book.shelf)}</p>
+                  </div>
+                  ${getLoanDueStatusBadge(loan)}
+                </div>
+
+                <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80 text-xs space-y-1">
+                  <div class="flex justify-between">
+                    <span class="text-slate-500">Kitobxon:</span>
+                    <span class="font-semibold text-slate-800">${escapeHtml(reader.name)} (${escapeHtml(reader.group)})</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-500">Telefon:</span>
+                    <span class="font-semibold text-indigo-600">${escapeHtml(reader.phone)}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-500">Berilgan / Muddat:</span>
+                    <span class="text-slate-700">${formatDateUz(loan.issueDate)} &rarr; <strong>${formatDateUz(loan.dueDate)}</strong></span>
+                  </div>
+                </div>
+
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 border border-indigo-100 text-xs text-slate-700">
+                  <div class="font-semibold text-indigo-900 mb-0.5">Tayyor Telegram / SMS xabar matni:</div>
+                  <p class="italic text-slate-600">"${escapeHtml(reminderText)}"</p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <button type="button" data-action="copy-reminder" data-loan-id="${escapeHtml(loan.id)}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">
+                  Eslatma matnini nusxalash
+                </button>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" data-action="extend-loan" data-loan-id="${escapeHtml(loan.id)}" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                    +7 kun uzaytirish
+                  </button>
+                  <button type="button" data-action="return-loan" data-loan-id="${escapeHtml(loan.id)}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">
+                    Qaytarib olish
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Tab 4: Books Catalog
+      function renderBooksCatalog() {
+        const globalQ = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+        const localQ = (document.getElementById('bookSearchInput').value || '').trim().toLowerCase();
+        const q = localQ || globalQ;
+        const catFilter = document.getElementById('bookCategoryFilter').value || 'all';
+        const availFilter = document.getElementById('bookAvailabilityFilter').value || 'all';
+
+        const filtered = state.books.filter(book => {
+          if (catFilter !== 'all' && book.category !== catFilter) return false;
+          const avail = getBookAvailableCopies(book);
+          if (availFilter === 'available' && avail <= 0) return false;
+          if (availFilter === 'out' && avail > 0) return false;
+          if (!q) return true;
+          const hay = `${book.title} ${book.author} ${book.code} ${book.category} ${book.shelf}`.toLowerCase();
+          return hay.includes(q);
+        });
+
+        const grid = document.getElementById('booksGridContainer');
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500">
+              Qidiruv bo'yicha kitoblar topilmadi. "Yangi kitob qo'shish" tugmasi orqali qo'shishingiz mumkin.
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(book => {
+          const avail = getBookAvailableCopies(book);
+          const borrowed = getBookActiveLoanCount(book.id);
+          const isAvail = avail > 0;
+          return `
+            <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition">
+              <div>
+                <div class="flex items-start justify-between gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-slate-100 text-slate-700">${escapeHtml(book.code)}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${isAvail ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}">
+                    ${isAvail ? `Javonda: ${avail} ta` : 'Barchasi qo`lda'}
+                  </span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mt-2">${escapeHtml(book.title)}</h3>
+                <p class="text-xs sm:text-sm text-slate-600">${escapeHtml(book.author)}</p>
+
+                <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-500">
+                  <div>Bo'lim: <strong class="text-slate-700">${escapeHtml(book.category)}</strong></div>
+                  <div>Manzil: <strong class="text-slate-700">${escapeHtml(book.shelf)}</strong></div>
+                  <div>Jami fond: <strong class="text-slate-700">${book.totalCopies} nusxa</strong></div>
+                  <div>Qo'lda: <strong class="text-amber-700">${borrowed} nusxa</strong></div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100">
+                <button type="button" data-action="read-ebook" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition">
+                  📖 O'qish (PDF)
+                </button>
+                <button type="button" data-action="listen-audio" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200 transition">
+                  🎧 Tinglash
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <div class="flex items-center gap-1">
+                  <button type="button" data-action="edit-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+                    Tahrirlash
+                  </button>
+                  <button type="button" data-action="delete-book" data-book-id="${escapeHtml(book.id)}" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition">
+                    O'chirish
+                  </button>
+                </div>
+                <button type="button" data-action="issue-this-book" data-book-id="${escapeHtml(book.id)}" ${!isAvail ? 'disabled' : ''} class="px-3.5 py-1.5 rounded-lg text-xs font-semibold ${isAvail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'} transition">
+                  Kitobxonga berish
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Tab 5: Readers
+      function renderReaders() {
+        const globalQ = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+        const localQ = (document.getElementById('readerSearchInput').value || '').trim().toLowerCase();
+        const q = localQ || globalQ;
+
+        const filtered = state.readers.filter(r => {
+          if (!q) return true;
+          return `${r.cardNo} ${r.name} ${r.group} ${r.phone}`.toLowerCase().includes(q);
+        });
+
+        const tbody = document.getElementById('readersTableBody');
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500">Kitobxon topilmadi</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(reader => {
+          const activeReaderLoans = state.loans.filter(l => l.readerId === reader.id && l.status === 'active');
+          const overdueCount = activeReaderLoans.filter(l => isLoanOverdue(l)).length;
+          return `
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-3.5 px-4 font-mono text-xs font-semibold text-slate-600">${escapeHtml(reader.cardNo)}</td>
+              <td class="py-3.5 px-4 font-semibold text-slate-900">${escapeHtml(reader.name)}</td>
+              <td class="py-3.5 px-4 text-slate-600">${escapeHtml(reader.group)}</td>
+              <td class="py-3.5 px-4 text-slate-600">${escapeHtml(reader.phone)}</td>
+              <td class="py-3.5 px-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${activeReaderLoans.length > 0 ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-600'}">
+                  ${activeReaderLoans.length} ta kitob
+                </span>
+                ${overdueCount > 0 ? `<span class="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">${overdueCount} kechikkan</span>` : ''}
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <button type="button" data-action="issue-to-reader" data-reader-id="${escapeHtml(reader.id)}" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">
+                  Kitob berish
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // In-memory runtime map for uploaded PDF & Audio Blob URLs (session-safe)
+      const mediaBlobStore = {};
+      let currentReaderBookId = null;
+      let currentReaderFontSize = 16;
+      let currentReaderDark = false;
+      let currentAudioBookId = null;
+      let isSpeechPlaying = false;
+
+      function renderDigitalLibrary() {
+        const grid = document.getElementById('digitalBooksGrid');
+        if (!grid) return;
+        const globalQ = (document.getElementById('globalSearchInput').value || '').trim().toLowerCase();
+        const filter = state.digitalFilter || 'all';
+
+        const filtered = state.books.filter(b => {
+          if (filter === 'pdf' && !b.hasEbook && !mediaBlobStore[b.id + '_pdf'] && !b.ebookText) return false;
+          if (filter === 'audio' && !b.hasAudio && !mediaBlobStore[b.id + '_audio'] && !b.ebookText) return false;
+          if (!globalQ) return true;
+          return `${b.title} ${b.author} ${b.code} ${b.category}`.toLowerCase().includes(globalQ);
+        });
+
+        const badgeEl = document.getElementById('navBadgeDigital');
+        if (badgeEl) badgeEl.textContent = `${state.books.length} ta`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div class="col-span-full bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500">Elektron kitoblar topilmadi.</div>`;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(book => {
+          const hasCustomPdf = Boolean(mediaBlobStore[book.id + '_pdf']);
+          const hasCustomAudio = Boolean(mediaBlobStore[book.id + '_audio']);
+          const snippet = (book.ebookText || "Ushbu kitob uchun elektron mutolaa va audio tinglash imkoniyati mavjud.").slice(0, 120) + '...';
+          return `
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 hover:border-indigo-300 transition">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-slate-100 text-slate-700">${escapeHtml(book.code)}</span>
+                  <div class="flex items-center gap-1">
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${hasCustomPdf ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-50 text-indigo-700'}">
+                      ${hasCustomPdf ? '📄 PDF Yuklangan' : '📖 Elektron matn'}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${hasCustomAudio ? 'bg-amber-100 text-amber-900' : 'bg-amber-50 text-amber-700'}">
+                      ${hasCustomAudio ? '🎵 MP3 Yuklangan' : '🎧 Audio'}
+                    </span>
+                  </div>
+                </div>
+                <h3 class="text-base font-bold text-slate-900">${escapeHtml(book.title)}</h3>
+                <p class="text-xs font-medium text-slate-500">${escapeHtml(book.author)} &bull; ${escapeHtml(book.category)}</p>
+                <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100 leading-relaxed">${escapeHtml(snippet)}</p>
+              </div>
+              <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <button type="button" data-action="read-ebook" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                  📖 O'qish (PDF / Matn)
+                </button>
+                <button type="button" data-action="listen-audio" data-book-id="${escapeHtml(book.id)}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
+                  🎧 Audio tinglash
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function openEbookReader(bookId) {
+        const book = getBookById(bookId);
+        currentReaderBookId = book.id;
+        document.getElementById('readerModalBookTitle').textContent = book.title;
+        document.getElementById('readerModalBookMeta').textContent = `${book.author} • ${book.code} • ${book.category}`;
+
+        const pdfUrl = mediaBlobStore[book.id + '_pdf'];
+        const badge = document.getElementById('readerPdfBadgeStatus');
+        badge.textContent = pdfUrl
+          ? `Biriktirilgan PDF: ${book.pdfName || 'Fayl yuklangan'}`
+          : (book.pdfName || 'Ichki elektron mutolaa rejimi');
+
+        const textContent = book.ebookText || `"${book.title}" (${book.author}) — Avtoyul Kutubxona elektron fondidagi kitob.\n\nUshbu oynada kitobning elektron matnini o'qishingiz yoki yuqoridagi "PDF fayl biriktirish" tugmasini bosib, to'liq PDF kitobni yuklab o'qishingiz mumkin.`;
+        const paragraphs = textContent.split(/\n+/).map(p => `<p class="mb-3">${escapeHtml(p)}</p>`).join('');
+        document.getElementById('readerTextView').innerHTML = `
+          <div class="border-b border-slate-200/80 pb-3 mb-4">
+            <span class="text-xs uppercase tracking-wider font-semibold text-indigo-600">${escapeHtml(book.category)}</span>
+            <h2 class="text-xl font-bold mt-0.5">${escapeHtml(book.title)}</h2>
+            <p class="text-sm opacity-75">Muallif: ${escapeHtml(book.author)}</p>
+          </div>
+          ${paragraphs}
+        `;
+
+        if (pdfUrl) {
+          setReaderViewMode('pdf');
+        } else {
+          setReaderViewMode('text');
+        }
+        openModal('modalEbookReader');
+      }
+
+      function setReaderViewMode(mode) {
+        const textView = document.getElementById('readerTextView');
+        const pdfView = document.getElementById('readerPdfView');
+        const iframe = document.getElementById('readerPdfIframe');
+        const noPdf = document.getElementById('readerNoPdfPlaceholder');
+        const btnText = document.getElementById('btnShowReaderTextMode');
+        const btnPdf = document.getElementById('btnShowReaderPdfMode');
+        const pdfUrl = currentReaderBookId ? mediaBlobStore[currentReaderBookId + '_pdf'] : null;
+
+        if (mode === 'pdf') {
+          textView.classList.add('hidden');
+          pdfView.classList.remove('hidden');
+          btnPdf.className = 'px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white';
+          btnText.className = 'px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300';
+          if (pdfUrl) {
+            iframe.src = pdfUrl;
+            iframe.classList.remove('hidden');
+            noPdf.classList.add('hidden');
+          } else {
+            iframe.src = 'about:blank';
+            iframe.classList.add('hidden');
+            noPdf.classList.remove('hidden');
+          }
+        } else {
+          pdfView.classList.add('hidden');
+          textView.classList.remove('hidden');
+          btnText.className = 'px-3 py-1 rounded-md font-semibold bg-indigo-600 text-white';
+          btnPdf.className = 'px-3 py-1 rounded-md font-medium bg-white text-slate-700 border border-slate-300';
+        }
+      }
+
+      // ================= GOOGLE O'ZBEKCHA DIKTOR AUDIO ENGINE =================
+      let googleAudioQueue = [];
+      let googleAudioIndex = 0;
+      let isGoogleSpeaking = false;
+      let googleAudioInstance = null;
+
+      function splitTextToUzbekSentences(text) {
+        if (!text) return [];
+        const clean = text
+          .replace(/[#*_`\[\]()]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        const raw = clean.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [clean];
+        const res = [];
+        for (let s of raw) {
+          let trimmed = s.trim();
+          if (!trimmed) continue;
+          if (trimmed.length > 150) {
+            const subparts = trimmed.match(/(.{1,140})(?:[,;]\s*|\s+|$)/g) || [trimmed];
+            for (let sub of subparts) {
+              const st = sub.trim();
+              if (st) res.push(st);
+            }
+          } else {
+            res.push(trimmed);
+          }
+        }
+        return res;
+      }
+
+      function findBestUzbekVoice() {
+        if (!('speechSynthesis' in window)) return null;
+        const voices = window.speechSynthesis.getVoices() || [];
+        let v = voices.find(x => x.lang && x.lang.toLowerCase().replace('_', '-').startsWith('uz'));
+        if (v) return v;
+        v = voices.find(x => x.name && (x.name.toLowerCase().includes('uzbek') || x.name.toLowerCase().includes("o'zbek")));
+        if (v) return v;
+        v = voices.find(x => x.name && x.name.includes('Google') && (x.lang.includes('uz') || x.lang.includes('tr')));
+        if (v) return v;
+        return null;
+      }
+
+      function stopAllAudio() {
+        isGoogleSpeaking = false;
+        if (googleAudioInstance) {
+          googleAudioInstance.pause();
+          googleAudioInstance.src = '';
+        }
+        if ('speechSynthesis' in window) {
+          try { window.speechSynthesis.cancel(); } catch (e) {}
+        }
+        const html5Audio = document.getElementById('html5AudioElement');
+        if (html5Audio) {
+          html5Audio.pause();
+        }
+        const btn = document.getElementById('btnAudioPlayPause');
+        if (btn) btn.textContent = '▶ Tinglash';
+      }
+
+      function playGoogleChunkAtIndex(idx) {
+        if (!isGoogleSpeaking || idx >= googleAudioQueue.length) {
+          isGoogleSpeaking = false;
+          const btn = document.getElementById('btnAudioPlayPause');
+          if (btn) btn.textContent = '▶ Qayta tinglash';
+          const stat = document.getElementById('audioPlayerStatusText');
+          if (stat) stat.textContent = 'Mutolaa yakunlandi';
+          return;
+        }
+
+        googleAudioIndex = idx;
+        const chunk = googleAudioQueue[idx];
+        const stat = document.getElementById('audioPlayerStatusText');
+        if (stat) stat.textContent = `Google Diktor o'qimoqda (${idx + 1}/${googleAudioQueue.length} jumla)...`;
+
+        const btn = document.getElementById('btnAudioPlayPause');
+        if (btn) btn.textContent = '⏸ Pauza';
+
+        const speed = parseFloat(document.getElementById('audioSpeedSelect')?.value) || 1.0;
+        const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=uz&client=tw-ob`;
+
+        if (!googleAudioInstance) {
+          googleAudioInstance = new Audio();
+        }
+
+        googleAudioInstance.src = googleUrl;
+        googleAudioInstance.playbackRate = speed;
+
+        googleAudioInstance.onended = () => {
+          if (!isGoogleSpeaking) return;
+          setTimeout(() => {
+            if (isGoogleSpeaking) {
+              playGoogleChunkAtIndex(googleAudioIndex + 1);
+            }
+          }, 240);
+        };
+
+        googleAudioInstance.onerror = () => {
+          playWebSpeechFallbackChunk(chunk, () => {
+            if (isGoogleSpeaking) {
+              playGoogleChunkAtIndex(googleAudioIndex + 1);
+            }
+          });
+        };
+
+        const playPromise = googleAudioInstance.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            playWebSpeechFallbackChunk(chunk, () => {
+              if (isGoogleSpeaking) {
+                playGoogleChunkAtIndex(googleAudioIndex + 1);
+              }
+            });
+          });
+        }
+      }
+
+      function playWebSpeechFallbackChunk(textChunk, onDone) {
+        if (!('speechSynthesis' in window)) {
+          if (onDone) onDone();
+          return;
+        }
+        try {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(textChunk);
+          const uzVoice = findBestUzbekVoice();
+          if (uzVoice) utter.voice = uzVoice;
+          utter.lang = 'uz-UZ';
+          utter.rate = parseFloat(document.getElementById('audioSpeedSelect')?.value) || 0.95;
+          utter.pitch = 1.0;
+          utter.onend = () => {
+            if (onDone) onDone();
+          };
+          utter.onerror = () => {
+            if (onDone) onDone();
+          };
+          window.speechSynthesis.speak(utter);
+        } catch (e) {
+          if (onDone) onDone();
+        }
+      }
+
+      function startAudioPlayerForBook(bookId) {
+        const book = getBookById(bookId);
+        currentAudioBookId = book.id;
+        const bar = document.getElementById('floatingAudioPlayer');
+        bar.classList.remove('hidden');
+
+        document.getElementById('audioPlayerBookTitle').textContent = book.title;
+        document.getElementById('audioPlayerBookAuthor').textContent = `${book.author} (${book.code})`;
+
+        const audioUrl = mediaBlobStore[book.id + '_audio'];
+        const html5Audio = document.getElementById('html5AudioElement');
+        const ttsGroup = document.getElementById('ttsControlsGroup');
+        const modeBadge = document.getElementById('audioPlayerModeBadge');
+
+        stopAllAudio();
+
+        if (audioUrl) {
+          modeBadge.textContent = book.audioName || 'MP3 Audio Fayl';
+          ttsGroup.classList.add('hidden');
+          html5Audio.classList.remove('hidden');
+          html5Audio.src = audioUrl;
+          html5Audio.play().catch(() => {});
+          showToast(`"${book.title}" audio fayli ijro etilmoqda`, 'info');
+        } else {
+          modeBadge.textContent = "🎙️ Google O'zbekcha Diktor";
+          html5Audio.pause();
+          html5Audio.classList.add('hidden');
+          ttsGroup.classList.remove('hidden');
+
+          const fullText = `${book.title}. Muallif: ${book.author}. ` + (book.ebookText || "Ushbu darslik va kitob Avtoyul Kutubxona elektron fondiga kiritilgan.");
+          googleAudioQueue = splitTextToUzbekSentences(fullText);
+          googleAudioIndex = 0;
+          isGoogleSpeaking = true;
+          playGoogleChunkAtIndex(0);
+          showToast(`"${book.title}" — Google O'zbekcha diktor o'qimoqda`, 'success');
+        }
+      }
+
+      function stopSpeechSynthesis() {
+        stopAllAudio();
+      }
+
+      // Convert raw PCM16 base64 (from gemini-3.1-flash-tts-preview) or WAV base64 into a playable WAV Blob URL
+      function pcmBase64ToWavUrl(base64Data, sampleRate) {
+        const binaryString = atob(base64Data);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        // Check if already RIFF WAV header
+        if (len > 12 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) {
+          const wavBlob = new Blob([bytes], { type: 'audio/wav' });
+          return URL.createObjectURL(wavBlob);
+        }
+        // Build 44-byte WAV header for 16-bit mono PCM
+        const rate = sampleRate || 24000;
+        const numChannels = 1;
+        const bitsPerSample = 16;
+        const byteRate = rate * numChannels * (bitsPerSample / 8);
+        const blockAlign = numChannels * (bitsPerSample / 8);
+        const buffer = new ArrayBuffer(44 + len);
+        const view = new DataView(buffer);
+        function writeStr(offset, str) {
+          for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+        }
+        writeStr(0, 'RIFF');
+        view.setUint32(4, 36 + len, true);
+        writeStr(8, 'WAVE');
+        writeStr(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, rate, true);
+        view.setUint32(28, byteRate, true);
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitsPerSample, true);
+        writeStr(36, 'data');
+        view.setUint32(40, len, true);
+        const outBytes = new Uint8Array(buffer, 44);
+        outBytes.set(bytes);
+        const wavBlob = new Blob([buffer], { type: 'audio/wav' });
+        return URL.createObjectURL(wavBlob);
+      }
+
+      async function generateGeminiTtsAudio(bookId, textToRead, voiceName, modelName, apiKey) {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const payload = {
+          contents: [{ parts: [{ text: textToRead }] }],
+          generationConfig: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName: voiceName || 'Kore'
+                }
+              }
+            }
+          }
+        };
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok) {
+          throw new Error('Gemini API status: ' + resp.status);
+        }
+        const data = await resp.json();
+        const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
+        const audioPart = parts.find(p => p.inlineData && p.inlineData.data);
+        if (!audioPart) {
+          throw new Error('Audio inlineData topilmadi');
+        }
+        const mime = audioPart.inlineData.mimeType || '';
+        const rateMatch = mime.match(/rate=(\d+)/i);
+        const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+        return pcmBase64ToWavUrl(audioPart.inlineData.data, sampleRate);
+      }
+
+      function openGeminiTtsModal(preselectedBookId) {
+        const sel = document.getElementById('geminiBookTargetSelect');
+        sel.innerHTML = state.books.map(b => `<option value="${escapeHtml(b.id)}">${escapeHtml(b.code)} — ${escapeHtml(b.title)}</option>`).join('');
+        const targetId = preselectedBookId || currentAudioBookId || currentReaderBookId || (state.books[0] && state.books[0].id);
+        if (targetId) sel.value = targetId;
+        const book = getBookById(sel.value);
+        document.getElementById('geminiTtsTextInput').value = book.ebookText || `${book.title}. Muallif: ${book.author}.`;
+        document.getElementById('geminiTtsResultBox').classList.add('hidden');
+        openModal('modalGeminiTts');
+      }
+
+      function playSpeechForCurrentBook() {
+        if (!currentAudioBookId) return;
+        const book = getBookById(currentAudioBookId);
+        const fullText = `${book.title}. Muallif: ${book.author}. ` + (book.ebookText || "Ushbu darslik va kitob Avtoyul Kutubxona elektron fondiga kiritilgan.");
+        googleAudioQueue = splitTextToUzbekSentences(fullText);
+        googleAudioIndex = 0;
+        isGoogleSpeaking = true;
+        playGoogleChunkAtIndex(0);
+      }
+
+      function renderAll() {
+        renderKPIs();
+        renderDashboard();
+        renderCirculation();
+        renderOverdueControl();
+        renderBooksCatalog();
+        renderReaders();
+        renderDigitalLibrary();
+      }
+
+      // Modal Helpers
+      function openModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('hidden');
+      }
+
+      function closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      }
+
+      function openIssueModal(preselectedBookId, preselectedReaderId) {
+        const bookSelect = document.getElementById('issueBookSelect');
+        const availableBooks = state.books.filter(b => getBookAvailableCopies(b) > 0);
+
+        if (availableBooks.length === 0) {
+          showToast('Hozircha javonda bo`sh kitoblar yo`q! Avval kitob qo`shing yoki qaytarib oling.', 'warning');
+          return;
+        }
+
+        bookSelect.innerHTML = availableBooks.map(b => {
+          const avail = getBookAvailableCopies(b);
+          return `<option value="${escapeHtml(b.id)}">${escapeHtml(b.code)} — ${escapeHtml(b.title)} (${escapeHtml(b.author)}) [Mavjud: ${avail}]</option>`;
+        }).join('');
+
+        if (preselectedBookId && availableBooks.some(b => b.id === preselectedBookId)) {
+          bookSelect.value = preselectedBookId;
+        }
+
+        const readerSelect = document.getElementById('issueReaderSelect');
+        readerSelect.innerHTML = state.readers.map(r => {
+          return `<option value="${escapeHtml(r.id)}">${escapeHtml(r.name)} (${escapeHtml(r.group)} &bull; ${escapeHtml(r.phone)})</option>`;
+        }).join('');
+
+        if (preselectedReaderId && state.readers.some(r => r.id === preselectedReaderId)) {
+          readerSelect.value = preselectedReaderId;
+        }
+
+        document.getElementById('inlineNewReaderFields').classList.add('hidden');
+        document.getElementById('inlineReaderName').value = '';
+        document.getElementById('inlineReaderPhone').value = '';
+        document.getElementById('inlineReaderGroup').value = '';
+
+        document.getElementById('issueDateInput').value = getOffsetDateStr(0);
+        document.getElementById('issueDueDateInput').value = getOffsetDateStr(14);
+        document.getElementById('issueNotesInput').value = '';
+
+        openModal('modalIssueBook');
+      }
+
+      function openBookModal(bookToEdit) {
+        const titleEl = document.getElementById('modalBookFormTitle');
+        document.getElementById('bookPdfFileInput').value = '';
+        document.getElementById('bookAudioFileInput').value = '';
+        if (bookToEdit) {
+          titleEl.textContent = 'Kitob va Elektron fayllarni tahrirlash';
+          document.getElementById('bookFormId').value = bookToEdit.id;
+          document.getElementById('bookTitleInput').value = bookToEdit.title;
+          document.getElementById('bookAuthorInput').value = bookToEdit.author;
+          document.getElementById('bookCategoryInput').value = bookToEdit.category;
+          document.getElementById('bookCodeInput').value = bookToEdit.code;
+          document.getElementById('bookShelfInput').value = bookToEdit.shelf;
+          document.getElementById('bookCopiesInput').value = bookToEdit.totalCopies;
+          document.getElementById('bookEbookTextInput').value = bookToEdit.ebookText || '';
+          document.getElementById('bookPdfCurrentStatus').textContent = bookToEdit.pdfName || 'PDF biriktirilmagan (matnli rejim faol)';
+          document.getElementById('bookAudioCurrentStatus').textContent = bookToEdit.audioName || "MP3 biriktirilmagan (ovozli o'qish faol)";
+        } else {
+          titleEl.textContent = 'Kutubxonaga yangi kitob (va PDF/Audio) qo`shish';
+          document.getElementById('bookFormId').value = '';
+          document.getElementById('bookTitleInput').value = '';
+          document.getElementById('bookAuthorInput').value = '';
+          document.getElementById('bookCategoryInput').value = "Avtoyo'l va transport";
+          document.getElementById('bookCodeInput').value = `INV-${101 + state.books.length}`;
+          document.getElementById('bookShelfInput').value = 'D-1 javon';
+          document.getElementById('bookCopiesInput').value = 3;
+          document.getElementById('bookEbookTextInput').value = '';
+          document.getElementById('bookPdfCurrentStatus').textContent = 'PDF biriktirilmagan (matnli rejim faol)';
+          document.getElementById('bookAudioCurrentStatus').textContent = "MP3 biriktirilmagan (ovozli o'qish faol)";
+        }
+        openModal('modalBookForm');
+      }
+
+      function openReturnModal(loanId) {
+        const loan = state.loans.find(l => l.id === loanId);
+        if (!loan) return;
+        const book = getBookById(loan.bookId);
+        const reader = getReaderById(loan.readerId);
+        document.getElementById('returnLoanIdInput').value = loan.id;
+        document.getElementById('returnBookSummaryBox').innerHTML = `
+          <div class="font-bold text-slate-900">${escapeHtml(book.title)} (${escapeHtml(book.code)})</div>
+          <div class="text-slate-600">Kitobxon: <strong>${escapeHtml(reader.name)}</strong></div>
+          <div class="text-xs text-slate-500">Berilgan sana: ${formatDateUz(loan.issueDate)} | Muddat: ${formatDateUz(loan.dueDate)}</div>
+        `;
+        document.getElementById('returnConditionSelect').value = 'Yaxshi (Soz holatda)';
+        openModal('modalReturnBook');
+      }
+
+      function exportCirculationCSV() {
+        const headers = ['Jurnal_ID', 'Kitob_Kodi', 'Kitob_Nomi', 'Muallif', 'Kitobxon', 'Guruh', 'Telefon', 'Berilgan_Sana', 'Qaytarish_Muddati', 'Qaytarilgan_Sana', 'Holati'];
+        const rows = state.loans.map(l => {
+          const b = getBookById(l.bookId);
+          const r = getReaderById(l.readerId);
+          const st = l.status === 'returned' ? 'Qaytarilgan' : (isLoanOverdue(l) ? 'Muddati otgan' : 'Qolda');
+          return [
+            l.id, b.code, b.title, b.author, r.name, r.group, r.phone, l.issueDate, l.dueDate, l.returnDate || '', st
+          ].map(val => `"${String(val || '').replace(/"/g, '""')}"`).join(',');
+        });
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kutubxona_jurnali_${getOffsetDateStr(0)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Elektron jurnal CSV (Excel) formatida yuklab olindi!', 'success');
+      }
+
+      // Setup Event Listeners
+      function initEvents() {
+        // Current date header
+        document.getElementById('currentDateDisplay').textContent = `Bugungi sana: ${formatDateUz(getOffsetDateStr(0))} • Raqamli nazorat tizimi`;
+
+        // Nav tab buttons
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchTab(btn.getAttribute('data-tab'));
+          });
+        });
+
+        // Goto tab links
+        document.querySelectorAll('[data-goto-tab]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchTab(btn.getAttribute('data-goto-tab'));
+          });
+        });
+
+        // Quick header & section buttons
+        document.getElementById('btnQuickIssue').addEventListener('click', () => openIssueModal());
+        document.getElementById('btnCirculationIssue').addEventListener('click', () => openIssueModal());
+        document.getElementById('btnQuickAddBook').addEventListener('click', () => openBookModal(null));
+        document.getElementById('btnCatalogAddBook').addEventListener('click', () => openBookModal(null));
+        document.getElementById('btnQuickAddReader').addEventListener('click', () => openModal('modalReaderForm'));
+        document.getElementById('btnDirectoryAddReader').addEventListener('click', () => openModal('modalReaderForm'));
+        document.getElementById('btnExportCSV').addEventListener('click', exportCirculationCSV);
+
+        // Close modals
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            closeModal(btn.getAttribute('data-close-modal'));
+          });
+        });
+
+        // Toggle inline new reader in Issue modal
+        document.getElementById('btnToggleInlineNewReader').addEventListener('click', () => {
+          const box = document.getElementById('inlineNewReaderFields');
+          box.classList.toggle('hidden');
+        });
+
+        // Quick duration pills in Issue modal
+        document.querySelectorAll('.quick-days-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const days = parseInt(btn.getAttribute('data-Quick-days'), 10) || 14;
+            const issueVal = document.getElementById('issueDateInput').value || getOffsetDateStr(0);
+            const baseDate = new Date(issueVal + 'T12:00:00');
+            baseDate.setDate(baseDate.getDate() + days);
+            document.getElementById('issueDueDateInput').value = baseDate.toISOString().split('T')[0];
+          });
+        });
+
+        // Generate inventory code
+        document.getElementById('btnGenerateInvCode').addEventListener('click', () => {
+          const rand = Math.floor(100 + Math.random() * 900);
+          document.getElementById('bookCodeInput').value = `INV-${rand}`;
+        });
+
+        // Form 1: Issue Book submit
+        document.getElementById('formIssueBook').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const bookId = document.getElementById('issueBookSelect').value;
+          let readerId = document.getElementById('issueReaderSelect').value;
+          const inlineBox = document.getElementById('inlineNewReaderFields');
+
+          if (!inlineBox.classList.contains('hidden')) {
+            const newName = document.getElementById('inlineReaderName').value.trim();
+            const newPhone = document.getElementById('inlineReaderPhone').value.trim() || '+998 90 000 00 00';
+            const newGroup = document.getElementById('inlineReaderGroup').value.trim() || 'Umumiy';
+            if (newName) {
+              const newReader = {
+                id: 'r' + Date.now(),
+                cardNo: `K-00${state.readers.length + 1}`,
+                name: newName,
+                group: newGroup,
+                phone: newPhone
+              };
+              state.readers.unshift(newReader);
+              readerId = newReader.id;
+            }
+          }
+
+          const issueDate = document.getElementById('issueDateInput').value || getOffsetDateStr(0);
+          const dueDate = document.getElementById('issueDueDateInput').value || getOffsetDateStr(14);
+          const notes = document.getElementById('issueNotesInput').value.trim();
+
+          const newLoan = {
+            id: `L-${1001 + state.loans.length}`,
+            bookId,
+            readerId,
+            issueDate,
+            dueDate,
+            returnDate: null,
+            status: 'active',
+            condition: '',
+            notes
+          };
+
+          state.loans.unshift(newLoan);
+          saveState();
+          closeModal('modalIssueBook');
+          renderAll();
+          const book = getBookById(bookId);
+          const reader = getReaderById(readerId);
+          showToast(`"${book.title}" kitobi ${reader.name} nomiga yozildi!`, 'success');
+        });
+
+        // Form 2: Add / Edit Book submit
+        document.getElementById('formBook').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('bookFormId').value;
+          const title = document.getElementById('bookTitleInput').value.trim();
+          const author = document.getElementById('bookAuthorInput').value.trim();
+          const category = document.getElementById('bookCategoryInput').value;
+          const code = document.getElementById('bookCodeInput').value.trim();
+          const shelf = document.getElementById('bookShelfInput').value.trim();
+          const totalCopies = Math.max(1, parseInt(document.getElementById('bookCopiesInput').value, 10) || 1);
+
+          const ebookText = document.getElementById('bookEbookTextInput').value.trim();
+          const pdfFile = document.getElementById('bookPdfFileInput').files[0];
+          const audioFile = document.getElementById('bookAudioFileInput').files[0];
+
+          if (editId) {
+            const existing = state.books.find(b => b.id === editId);
+            if (existing) {
+              existing.title = title;
+              existing.author = author;
+              existing.category = category;
+              existing.code = code;
+              existing.shelf = shelf;
+              existing.totalCopies = totalCopies;
+              if (ebookText) existing.ebookText = ebookText;
+              if (pdfFile) {
+                mediaBlobStore[existing.id + '_pdf'] = URL.createObjectURL(pdfFile);
+                existing.pdfName = pdfFile.name;
+                existing.hasEbook = true;
+              }
+              if (audioFile) {
+                mediaBlobStore[existing.id + '_audio'] = URL.createObjectURL(audioFile);
+                existing.audioName = audioFile.name;
+                existing.hasAudio = true;
+              }
+              showToast(`"${title}" kitobi va elektron fayllari yangilandi!`, 'success');
+            }
+          } else {
+            const newBookObj = {
+              id: 'b' + Date.now(),
+              code,
+              title,
+              author,
+              category,
+              shelf,
+              totalCopies,
+              hasEbook: true,
+              hasAudio: true,
+              pdfName: pdfFile ? pdfFile.name : 'Ichki elektron matn',
+              audioName: audioFile ? audioFile.name : "Ovozli o'qish",
+              ebookText: ebookText || `"${title}" (${author}) — Avtoyul Kutubxona elektron fondiga kiritilgan kitob.`
+            };
+            if (pdfFile) mediaBlobStore[newBookObj.id + '_pdf'] = URL.createObjectURL(pdfFile);
+            if (audioFile) mediaBlobStore[newBookObj.id + '_audio'] = URL.createObjectURL(audioFile);
+            state.books.unshift(newBookObj);
+            showToast(`"${title}" kutubxona va elektron bazaga qo'shildi!`, 'success');
+          }
+
+          saveState();
+          closeModal('modalBookForm');
+          renderAll();
+        });
+
+        // Form 3: Add Reader submit
+        document.getElementById('formReader').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('readerNameInput').value.trim();
+          const group = document.getElementById('readerGroupInput').value.trim();
+          const phone = document.getElementById('readerPhoneInput').value.trim();
+
+          state.readers.unshift({
+            id: 'r' + Date.now(),
+            cardNo: `K-00${state.readers.length + 1}`,
+            name,
+            group,
+            phone
+          });
+
+          saveState();
+          document.getElementById('formReader').reset();
+          closeModal('modalReaderForm');
+          renderAll();
+          showToast(`Kitobxon ${name} ro'yxatga olindi!`, 'success');
+        });
+
+        // Form 4: Return Book submit
+        document.getElementById('formReturnBook').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const loanId = document.getElementById('returnLoanIdInput').value;
+          const condition = document.getElementById('returnConditionSelect').value;
+          const loan = state.loans.find(l => l.id === loanId);
+          if (loan) {
+            loan.status = 'returned';
+            loan.returnDate = getOffsetDateStr(0);
+            loan.condition = condition;
+            saveState();
+            closeModal('modalReturnBook');
+            renderAll();
+            const book = getBookById(loan.bookId);
+            showToast(`"${book.title}" kitobi qaytarib olindi va javonga qo'shildi!`, 'success');
+          }
+        });
+
+        // Reset Demo Data
+        document.getElementById('btnResetDemoData').addEventListener('click', () => {
+          openModal('modalResetConfirm');
+        });
+        document.getElementById('btnConfirmResetYes').addEventListener('click', () => {
+          state = buildInitialState();
+          saveState();
+          closeModal('modalResetConfirm');
+          renderAll();
+          showToast("Namuna ma'lumotlar tiklandi!", 'info');
+        });
+
+        // Search & Filter Inputs
+        const globalSearch = document.getElementById('globalSearchInput');
+        const btnClearGlobal = document.getElementById('btnClearGlobalSearch');
+        const searchStatus = document.getElementById('searchStatusText');
+
+        globalSearch.addEventListener('input', () => {
+          const val = globalSearch.value.trim();
+          btnClearGlobal.classList.toggle('hidden', !val);
+          if (val) {
+            searchStatus.classList.remove('hidden');
+            searchStatus.textContent = `"${val}" bo'yicha filtrланmoqda`;
+          } else {
+            searchStatus.classList.add('hidden');
+          }
+          renderAll();
+        });
+
+        btnClearGlobal.addEventListener('click', () => {
+          globalSearch.value = '';
+          btnClearGlobal.classList.add('hidden');
+          searchStatus.classList.add('hidden');
+          renderAll();
+        });
+
+        document.getElementById('loanSearchInput').addEventListener('input', renderCirculation);
+        document.getElementById('overdueFilterSelect').addEventListener('change', renderOverdueControl);
+        document.getElementById('bookSearchInput').addEventListener('input', renderBooksCatalog);
+        document.getElementById('bookCategoryFilter').addEventListener('change', renderBooksCatalog);
+        document.getElementById('bookAvailabilityFilter').addEventListener('change', renderBooksCatalog);
+        document.getElementById('readerSearchInput').addEventListener('input', renderReaders);
+
+        // Loan Status filter buttons
+        document.querySelectorAll('.loan-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.loanFilter = btn.getAttribute('data-loan-filter');
+            document.querySelectorAll('.loan-filter-btn').forEach(b => {
+              const active = b.getAttribute('data-loan-filter') === state.loanFilter;
+              b.className = active
+                ? 'loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition'
+                : 'loan-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+            });
+            renderCirculation();
+          });
+        });
+
+        // Delegated Action Buttons inside tables and cards
+        document.body.addEventListener('click', (e) => {
+          const actionBtn = e.target.closest('[data-action]');
+          if (!actionBtn) return;
+          const action = actionBtn.getAttribute('data-action');
+
+          if (action === 'return-loan') {
+            const loanId = actionBtn.getAttribute('data-loan-id');
+            openReturnModal(loanId);
+          } else if (action === 'extend-loan') {
+            const loanId = actionBtn.getAttribute('data-loan-id');
+            const loan = state.loans.find(l => l.id === loanId);
+            if (loan && loan.status === 'active') {
+              const curDue = new Date(loan.dueDate + 'T12:00:00');
+              curDue.setDate(curDue.getDate() + 7);
+              loan.dueDate = curDue.toISOString().split('T')[0];
+              saveState();
+              renderAll();
+              showToast(`Topshirish muddati 7 kunga (${formatDateUz(loan.dueDate)} gacha) uzaytirildi!`, 'success');
+            }
+          } else if (action === 'copy-reminder') {
+            const loanId = actionBtn.getAttribute('data-loan-id');
+            const loan = state.loans.find(l => l.id === loanId);
+            if (loan) {
+              const book = getBookById(loan.bookId);
+              const reader = getReaderById(loan.readerId);
+              const days = diffDaysFromToday(loan.dueDate);
+              const msg = days < 0
+                ? `Assalomu alaykum, ${reader.name}! Kutubxonadan olgan "${book.title}" (${book.code}) kitobingizni topshirish muddati ${Math.abs(days)} kun avval (${formatDateUz(loan.dueDate)}) tugagan. Iltimos, kitobni kutubxonaga qaytarishingizni so'raymiz.`
+                : `Assalomu alaykum, ${reader.name}! Kutubxonadan olgan "${book.title}" (${book.code}) kitobingizni topshirish muddati ${formatDateUz(loan.dueDate)} kuni tugaydi.`;
+              copyTextToClipboard(msg, `${reader.name} uchun eslatma xabari nusxalandi!`);
+            }
+          } else if (action === 'issue-this-book') {
+            const bookId = actionBtn.getAttribute('data-book-id');
+            openIssueModal(bookId, null);
+          } else if (action === 'edit-book') {
+            const bookId = actionBtn.getAttribute('data-book-id');
+            const book = state.books.find(b => b.id === bookId);
+            if (book) openBookModal(book);
+          } else if (action === 'delete-book') {
+            const bookId = actionBtn.getAttribute('data-book-id');
+            const activeCount = getBookActiveLoanCount(bookId);
+            if (activeCount > 0) {
+              showToast("Bu kitobning nusxalari hozir kitobxonlar qo'lida! Avval qaytarib oling.", 'error');
+              return;
+            }
+            const book = getBookById(bookId);
+            state.books = state.books.filter(b => b.id !== bookId);
+            saveState();
+            renderAll();
+            showToast(`"${book.title}" katalogdan o'chirildi.`, 'info');
+          } else if (action === 'issue-to-reader') {
+            const readerId = actionBtn.getAttribute('data-reader-id');
+            openIssueModal(null, readerId);
+          } else if (action === 'read-ebook') {
+            const bookId = actionBtn.getAttribute('data-book-id');
+            openEbookReader(bookId);
+          } else if (action === 'listen-audio') {
+            const bookId = actionBtn.getAttribute('data-book-id');
+            startAudioPlayerForBook(bookId);
+          }
+        });
+        // Digital Library & Reader / Audio Controls
+        document.getElementById('btnDigitalUploadQuick').addEventListener('click', () => openBookModal(null));
+        document.getElementById('btnShowReaderTextMode').addEventListener('click', () => setReaderViewMode('text'));
+        document.getElementById('btnShowReaderPdfMode').addEventListener('click', () => setReaderViewMode('pdf'));
+
+        document.getElementById('btnFontDecrease').addEventListener('click', () => {
+          currentReaderFontSize = Math.max(12, currentReaderFontSize - 2);
+          document.getElementById('readerTextView').style.fontSize = currentReaderFontSize + 'px';
+        });
+        document.getElementById('btnFontIncrease').addEventListener('click', () => {
+          currentReaderFontSize = Math.min(26, currentReaderFontSize + 2);
+          document.getElementById('readerTextView').style.fontSize = currentReaderFontSize + 'px';
+        });
+        document.getElementById('btnToggleReaderTheme').addEventListener('click', () => {
+          currentReaderDark = !currentReaderDark;
+          const body = document.getElementById('readerBodyContainer');
+          if (currentReaderDark) {
+            body.className = 'flex-1 overflow-y-auto p-5 sm:p-8 bg-slate-900 text-slate-100 space-y-4';
+          } else {
+            body.className = 'flex-1 overflow-y-auto p-5 sm:p-8 bg-amber-50/30 text-slate-800 space-y-4';
+          }
+        });
+
+        document.getElementById('readerInlinePdfInput').addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file || !currentReaderBookId) return;
+          mediaBlobStore[currentReaderBookId + '_pdf'] = URL.createObjectURL(file);
+          const book = getBookById(currentReaderBookId);
+          book.pdfName = file.name;
+          book.hasEbook = true;
+          saveState();
+          document.getElementById('readerPdfBadgeStatus').textContent = `Biriktirilgan PDF: ${file.name}`;
+          setReaderViewMode('pdf');
+          renderAll();
+          showToast(`"${file.name}" PDF fayli o'qish oynasiga yuklandi!`, 'success');
+        });
+
+        document.getElementById('btnReaderListenAudio').addEventListener('click', () => {
+          if (currentReaderBookId) {
+            startAudioPlayerForBook(currentReaderBookId);
+          }
+        });
+
+        document.getElementById('btnAudioPlayPause').addEventListener('click', () => {
+          if (!currentAudioBookId) return;
+          if (isGoogleSpeaking) {
+            isGoogleSpeaking = false;
+            if (googleAudioInstance) googleAudioInstance.pause();
+            if ('speechSynthesis' in window) {
+              try { window.speechSynthesis.pause(); } catch (e) {}
+            }
+            document.getElementById('btnAudioPlayPause').textContent = '▶ Davom etish';
+            const stat = document.getElementById('audioPlayerStatusText');
+            if (stat) stat.textContent = 'Pauza qilindi';
+          } else {
+            isGoogleSpeaking = true;
+            if (googleAudioQueue.length === 0) {
+              const book = getBookById(currentAudioBookId);
+              const fullText = `${book.title}. Muallif: ${book.author}. ` + (book.ebookText || "Ushbu darslik va kitob Avtoyul Kutubxona elektron fondiga kiritilgan.");
+              googleAudioQueue = splitTextToUzbekSentences(fullText);
+              googleAudioIndex = 0;
+            }
+            playGoogleChunkAtIndex(googleAudioIndex);
+          }
+        });
+
+        document.getElementById('btnAudioPrevSentence').addEventListener('click', () => {
+          if (googleAudioQueue.length > 0) {
+            googleAudioIndex = Math.max(0, googleAudioIndex - 1);
+            isGoogleSpeaking = true;
+            playGoogleChunkAtIndex(googleAudioIndex);
+          }
+        });
+
+        document.getElementById('btnAudioNextSentence').addEventListener('click', () => {
+          if (googleAudioQueue.length > 0) {
+            googleAudioIndex = Math.min(googleAudioQueue.length - 1, googleAudioIndex + 1);
+            isGoogleSpeaking = true;
+            playGoogleChunkAtIndex(googleAudioIndex);
+          }
+        });
+
+        document.getElementById('btnAudioStop').addEventListener('click', () => {
+          stopAllAudio();
+          const stat = document.getElementById('audioPlayerStatusText');
+          if (stat) stat.textContent = 'To`xtatildi';
+        });
+
+        document.getElementById('audioSpeedSelect').addEventListener('change', () => {
+          const spd = parseFloat(document.getElementById('audioSpeedSelect').value) || 1.0;
+          if (googleAudioInstance) googleAudioInstance.playbackRate = spd;
+          if (isGoogleSpeaking) {
+            playGoogleChunkAtIndex(googleAudioIndex);
+          }
+        });
+
+        document.getElementById('playerInlineAudioInput').addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file || !currentAudioBookId) return;
+          mediaBlobStore[currentAudioBookId + '_audio'] = URL.createObjectURL(file);
+          const book = getBookById(currentAudioBookId);
+          book.audioName = file.name;
+          book.hasAudio = true;
+          saveState();
+          startAudioPlayerForBook(currentAudioBookId);
+          renderAll();
+          showToast(`"${file.name}" audio kitobi yuklandi va ijro etilmoqda!`, 'success');
+        });
+
+        document.getElementById('btnCloseAudioPlayer').addEventListener('click', () => {
+          stopAllAudio();
+          document.getElementById('floatingAudioPlayer').classList.add('hidden');
+        });
+
+        document.querySelectorAll('.digital-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.digitalFilter = btn.getAttribute('data-digital-filter');
+            document.querySelectorAll('.digital-filter-btn').forEach(b => {
+              const active = b.getAttribute('data-digital-filter') === state.digitalFilter;
+              b.className = active
+                ? 'digital-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition'
+                : 'digital-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+            });
+            renderDigitalLibrary();
+          });
+        });
+        // Theme toggle (Header)
+        function toggleAppDarkTheme() {
+          document.body.classList.toggle('dark-theme');
+          const isDark = document.body.classList.contains('dark-theme');
+          showToast(isDark ? 'Tungi rejim yoqildi' : 'Kunduzgi rejim yoqildi', 'info');
+        }
+        const btnHeaderTheme = document.getElementById('btnHeaderThemeToggle');
+        if (btnHeaderTheme) btnHeaderTheme.addEventListener('click', toggleAppDarkTheme);
+
+        // Language switcher (O'z / Ўз / Ру)
+        document.querySelectorAll('.lang-switch-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const lang = btn.getAttribute('data-lang-switch') || 'uz';
+            document.querySelectorAll('.lang-switch-btn').forEach(b => {
+              const active = b.getAttribute('data-lang-switch') === lang;
+              if (active) {
+                b.className = 'lang-switch-btn px-2 py-0.5 rounded-full text-[11px] font-bold bg-white text-slate-900';
+              } else {
+                b.className = 'lang-switch-btn px-2 py-0.5 rounded-full text-[11px] text-slate-300 hover:text-white';
+              }
+            });
+            showToast(lang === 'uz' ? "O'zbek tili tanlandi" : (lang === 'cyrl' ? "Ўзбек тили танланди" : "Русский язык выбран"), 'info');
+          });
+        });
+
+        // Google AI Studio (Gemini 3.1 Flash TTS) Modal Events
+        document.getElementById('btnOpenGeminiTtsModal').addEventListener('click', () => openGeminiTtsModal(null));
+        document.getElementById('geminiBookTargetSelect').addEventListener('change', (e) => {
+          const b = getBookById(e.target.value);
+          document.getElementById('geminiTtsTextInput').value = b.ebookText || `${b.title}. Muallif: ${b.author}.`;
+        });
+
+        document.getElementById('btnGenerateGeminiSpeech').addEventListener('click', async () => {
+          const btn = document.getElementById('btnGenerateGeminiSpeech');
+          const bookId = document.getElementById('geminiBookTargetSelect').value;
+          const voiceName = document.getElementById('geminiVoiceSelect').value || 'Kore';
+          const modelName = document.getElementById('geminiTtsModelSelect').value || 'gemini-3.1-flash-tts-preview';
+          const apiKey = document.getElementById('geminiApiKeyInput').value.trim();
+          const stylePrompt = document.getElementById('geminiStylePromptInput').value.trim();
+          const rawText = document.getElementById('geminiTtsTextInput').value.trim();
+          const book = getBookById(bookId);
+
+          if (!rawText) {
+            showToast('Iltimos, o`qish uchun matn kiriting!', 'warning');
+            return;
+          }
+
+          book.ebookText = rawText;
+          const fullPrompt = stylePrompt ? `${stylePrompt}\n\n${rawText}` : rawText;
+
+          if (apiKey) {
+            btn.disabled = true;
+            const origText = btn.textContent;
+            btn.textContent = '⏳ Gemini 3.1 TTS generatsiya qilmoqda...';
+            try {
+              const wavUrl = await generateGeminiTtsAudio(bookId, fullPrompt, voiceName, modelName, apiKey);
+              mediaBlobStore[book.id + '_audio'] = wavUrl;
+              book.audioName = `Gemini AI (${voiceName} • ${modelName})`;
+              book.hasAudio = true;
+              saveState();
+
+              const resBox = document.getElementById('geminiTtsResultBox');
+              resBox.classList.remove('hidden');
+              document.getElementById('geminiTtsStatusText').textContent = `"${book.title}" uchun Gemini AI (${voiceName}) WAV audio tayyor!`;
+              const dl = document.getElementById('geminiDownloadWavLink');
+              dl.onclick = () => {
+                const tempA = document.createElement('a');
+                tempA.href = wavUrl;
+                tempA.download = `${book.code}_gemini_${voiceName}.wav`;
+                document.body.appendChild(tempA);
+                tempA.click();
+                document.body.removeChild(tempA);
+              };
+
+              renderAll();
+              startAudioPlayerForBook(book.id);
+              showToast(`Google AI (${modelName} • ${voiceName}) ovozi muvaffaqiyatli yaratildi!`, 'success');
+            } catch (err) {
+              showToast('API kalit xatosi yoki tarmoq cheklovi — Google O`zbekcha diktor ishga tushirildi.', 'warning');
+              closeModal('modalGeminiTts');
+              startAudioPlayerForBook(book.id);
+            } finally {
+              btn.disabled = false;
+              btn.textContent = origText;
+            }
+          } else {
+            closeModal('modalGeminiTts');
+            startAudioPlayerForBook(book.id);
+            showToast(`"${book.title}" — Google O'zbekcha diktor o'qimoqda`, 'info');
+          }
+        });
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        loadState();
+        initEvents();
+        switchTab(state.activeTab || 'dashboard');
+      });
+    })();
+  </script>
+</body>
+</html>
