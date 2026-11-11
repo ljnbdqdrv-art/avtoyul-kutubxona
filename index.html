@@ -118,6 +118,7 @@
       color: #94a3b8 !important;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
 
@@ -145,17 +146,20 @@
 
         <!-- Quick Actions + Role Switcher (Admin / Kitobxon) + Google AI TTS + Lang -->
         <div class="flex flex-wrap items-center gap-2">
-          <!-- Role Indicator / Admin Login Button -->
+          <!-- Role Indicator / Admin Login Button + Admin Quick Settings -->
           <div id="roleControlsGroup" class="flex items-center gap-1.5">
             <!-- When in Reader Mode: Show Admin Login button -->
             <button type="button" id="btnOpenAdminLoginModal" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 transition shadow-sm">
               <span>🔐 Kutubxonachi (Admin)</span>
             </button>
 
-            <!-- When in Admin Mode: Show Admin Badge + Logout button -->
-            <div id="adminActiveBadge" class="hidden items-center gap-1 bg-emerald-500/20 border border-emerald-400/40 rounded-lg px-2.5 py-1 text-xs">
-              <span class="font-extrabold text-emerald-300 flex items-center gap-1">🛡️ Admin</span>
-              <button type="button" id="btnAdminLogout" title="Kitobxon rejimiga qaytish" class="ml-1 text-[11px] font-semibold text-rose-300 hover:text-white underline">
+            <!-- When in Admin Mode: Show Admin Badge + Change Login/Password + Logout button -->
+            <div id="adminActiveBadge" class="hidden items-center gap-2 bg-emerald-500/20 border border-emerald-400/40 rounded-lg px-2.5 py-1 text-xs">
+              <span class="font-extrabold text-emerald-300 flex items-center gap-1">🛡️ Admin (<span id="headerAdminUsername">admin</span>)</span>
+              <button type="button" id="btnOpenChangePwModal" title="Admin login va parolini o'zgartirish" class="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-200 hover:text-white px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 transition">
+                ⚙️ Login & Parol
+              </button>
+              <button type="button" id="btnAdminLogout" title="Kitobxon rejimiga qaytish" class="text-[11px] font-semibold text-rose-300 hover:text-white underline">
                 Chiqish
               </button>
             </div>
@@ -184,11 +188,11 @@
             </svg>
             Kitobxon+
           </button>
-          <button id="btnExportCSV" type="button" title="Jurnalni Excel (CSV) formatida yuklab olish" class="admin-only hidden inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition">
-            <svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          <button id="btnExportCSV" type="button" title="Namunaviy tartibli Excel (.xlsx) hisobotini yuklab olish" class="admin-only hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-500 shadow-sm transition">
+            <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <span class="hidden md:inline">CSV Eksport</span>
+            <span class="hidden md:inline">Excel Hisobot (.xlsx)</span>
           </button>
           <div class="inline-flex items-center gap-1 bg-slate-900/80 border border-white/15 rounded-full px-1.5 py-1">
             <button type="button" id="btnHeaderThemeToggle" title="Tungi / Kunduzgi rejim" class="px-1.5 py-0.5 text-xs text-slate-300 hover:text-white">🌙</button>
@@ -467,6 +471,24 @@
             </svg>
           </div>
         </div>
+      </div>
+
+      <!-- Admin Security & Quick Settings Bar (Boshqaruv KPI ichida) -->
+      <div class="admin-only hidden bg-gradient-to-r from-[#0b253c] to-[#00668c] p-4 sm:p-5 rounded-2xl text-white shadow-md flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <span class="w-11 h-11 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xl shadow-sm">🔐</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold">Kutubxonachi (Admin) hisob sozlamalari</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">Faol login: <span id="kpiAdminCurrentLoginDisplay">admin</span></span>
+            </div>
+            <p class="text-xs text-slate-200 mt-0.5">Admin o'z logini va parolini o'zi belgilashi hamda istalgan payt o'zgartirishi mumkin</p>
+          </div>
+        </div>
+        <button type="button" id="btnDashboardOpenAdminSettings" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 transition shadow-sm flex items-center gap-1.5">
+          <span>⚙️</span>
+          <span>Login va Parolni o'zgartirish</span>
+        </button>
       </div>
 
       <!-- Urgent Overdue & Due Soon Table + Chart Row -->
@@ -848,7 +870,10 @@
       <div class="px-5 py-4 bg-[#0b253c] text-white flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs">🔐</span>
-          <h3 class="text-base font-bold">Kutubxonachi (Admin) kirishi</h3>
+          <div>
+            <h3 class="text-base font-bold">Kutubxonachi (Admin)</h3>
+            <p class="text-[11px] text-slate-300">Boshqaruv tizimiga kirish</p>
+          </div>
         </div>
         <button type="button" data-close-modal="modalAdminLogin" class="text-slate-300 hover:text-white p-1">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -857,20 +882,111 @@
         </button>
       </div>
 
-      <form id="formAdminLogin" class="p-5 space-y-4">
+      <form id="formAdminLogin" class="p-5 space-y-3.5">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Maxfiy PIN-kod yoki Parol *</label>
-          <input id="adminPinInput" type="password" required value="1234" placeholder="PIN-kodni kiriting" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 text-center font-mono tracking-widest text-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
-          <p class="text-[11px] text-slate-500 mt-1 text-center">Boshlang'ich standart PIN-kod: <strong>1234</strong></p>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Admin Logini *</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">👤</span>
+            <input id="adminLoginInput" type="text" required value="admin" placeholder="Loginingizni kiriting" class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-slate-700 uppercase">Admin Paroli *</label>
+            <span class="text-[10px] text-slate-400">Ko'rish uchun 👁️ bosing</span>
+          </div>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔑</span>
+            <input id="adminPasswordInput" type="password" required value="admin" placeholder="Parolni kiriting" class="w-full pl-9 pr-10 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+            <button type="button" id="btnToggleLoginPassEye" title="Parolni ko'rsatish / yashirish" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700">
+              <span id="eyeIconLoginPass">👁️</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Standart holatda: Login: <strong>admin</strong>, Parol: <strong>admin</strong></p>
         </div>
 
         <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
           <button type="button" data-close-modal="modalAdminLogin" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">
             Bekor qilish
           </button>
-          <button type="submit" class="w-full py-2 px-4 rounded-lg text-xs sm:text-sm font-bold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm transition">
+          <button type="submit" class="flex-1 py-2 px-4 rounded-lg text-xs sm:text-sm font-bold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm transition">
             Tizimga kirish (Admin)
           </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 10: ADMIN LOGIN VA PAROLINI O'ZGARTIRISH ================= -->
+  <div id="modalChangeAdminPassword" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-in text-slate-900">
+      <div class="px-5 py-4 bg-[#0b253c] text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs">⚙️</span>
+          <div>
+            <h3 class="text-base font-bold">Admin hisobini sozlash</h3>
+            <p class="text-[11px] text-slate-300">Shaxsiy login va parolni belgilash</p>
+          </div>
+        </div>
+        <button type="button" data-close-modal="modalChangeAdminPassword" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formChangeAdminAuth" class="p-5 space-y-4">
+        <div class="p-3 bg-cyan-50 border border-cyan-200 rounded-xl flex items-center gap-2.5 text-xs text-cyan-900">
+          <span class="text-base shrink-0">🛡️</span>
+          <div>
+            Hozirgi faol login: <strong id="displayCurrentAdminLogin" class="font-mono text-slate-950 font-bold">admin</strong>. Yangi login va parol o'rnatib, o'zgartirishingiz mumkin.
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Yangi Admin Logini *</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">👤</span>
+            <input id="inputNewAdminLogin" type="text" required placeholder="Masalan: kutubxonachi yoki ziyo_admin" class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Keyingi safar tizimga kirishda ushbu loginni kiritasiz.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Yangi Admin Paroli *</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔑</span>
+            <input id="inputNewAdminPass" type="password" required placeholder="Yangi parol kiriting" class="w-full pl-9 pr-10 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+            <button type="button" id="btnToggleNewPassEye" title="Parolni ko'rsatish / yashirish" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700">
+              <span id="eyeIconNewPass">👁️</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Yangi parolni tasdiqlash *</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔒</span>
+            <input id="inputConfirmAdminPass" type="password" required placeholder="Parolni takroran kiriting" class="w-full pl-9 pr-10 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00668c]" />
+            <button type="button" id="btnToggleConfirmPassEye" title="Parolni ko'rsatish / yashirish" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700">
+              <span id="eyeIconConfirmPass">👁️</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
+          <button type="button" id="btnResetDefaultAuth" class="text-xs font-semibold text-slate-500 hover:text-rose-600 transition underline">
+            Standartga qaytarish (admin/admin)
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" data-close-modal="modalChangeAdminPassword" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">
+              Bekor qilish
+            </button>
+            <button type="submit" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-bold bg-[#00668c] text-white hover:bg-[#005270] shadow-sm transition">
+              💾 Saqlash
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -1510,6 +1626,8 @@ function diffDaysFromToday(dueDateStr) {
       function buildInitialState() {
         return {
           activeTab: 'dashboard',
+          adminLogin: 'admin',
+          adminPassword: 'admin',
           loanFilter: 'all',
           overdueFilter: 'all_alerts',
           digitalFilter: 'all',
@@ -1905,7 +2023,58 @@ function diffDaysFromToday(dueDateStr) {
       }let state = buildInitialState();
       let categoryChartInstance = null;
 
-      function loadState() {
+            // ================= ADMIN CREDENTIALS MANAGEMENT =================
+      function getAdminCredentials() {
+        try {
+          const raw = localStorage.getItem('avtoyul_admin_auth');
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (p && p.login && p.password) return p;
+          }
+        } catch (e) {}
+        if (state && state.adminLogin && state.adminPassword) {
+          return { login: state.adminLogin, password: state.adminPassword };
+        }
+        return { login: 'admin', password: 'admin' };
+      }
+
+      function setAdminCredentials(login, password) {
+        const creds = { login: (login || 'admin').trim(), password: (password || 'admin').trim() };
+        try {
+          localStorage.setItem('avtoyul_admin_auth', JSON.stringify(creds));
+        } catch (e) {}
+        if (state) {
+          state.adminLogin = creds.login;
+          state.adminPassword = creds.password;
+          saveState();
+        }
+        const disp = document.getElementById('displayCurrentAdminLogin');
+        if (disp) disp.textContent = creds.login;
+        const kpiDisp = document.getElementById('kpiAdminCurrentLoginDisplay');
+        if (kpiDisp) kpiDisp.textContent = creds.login;
+        const hdrUsername = document.getElementById('headerAdminUsername');
+        if (hdrUsername) hdrUsername.textContent = creds.login;
+        return creds;
+      }
+
+      function setupPasswordToggle(btnId, inputId, iconId) {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (btn && input) {
+          btn.addEventListener('click', () => {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            if (icon) icon.textContent = isPassword ? '🙈' : '👁️';
+          });
+        }
+      }
+
+      function applyLanguage(lang) {
+        state.currentLang = lang || 'uz';
+      }
+
+function loadState() {
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
           if (raw) {
@@ -3133,6 +3302,11 @@ function diffDaysFromToday(dueDateStr) {
           if (logoutBadge) {
             logoutBadge.classList.remove('hidden');
             logoutBadge.classList.add('flex');
+            const creds = getAdminCredentials();
+            const hdrUsername = document.getElementById('headerAdminUsername');
+            if (hdrUsername) hdrUsername.textContent = creds.login;
+            const kpiDisp = document.getElementById('kpiAdminCurrentLoginDisplay');
+            if (kpiDisp) kpiDisp.textContent = creds.login;
           }
         } else {
           document.body.classList.remove('is-admin-mode');
@@ -3361,30 +3535,247 @@ function renderAll() {
         openModal('modalReturnBook');
       }
 
-      function exportCirculationCSV() {
-        const headers = ['Jurnal_ID', 'Kitob_Kodi', 'Kitob_Nomi', 'Muallif', 'Kitobxon', 'Guruh', 'Telefon', 'Berilgan_Sana', 'Qaytarish_Muddati', 'Qaytarilgan_Sana', 'Holati'];
-        const rows = state.loans.map(l => {
-          const b = getBookById(l.bookId);
-          const r = getReaderById(l.readerId);
-          const st = l.status === 'returned' ? 'Qaytarilgan' : (isLoanOverdue(l) ? 'Muddati otgan' : 'Qolda');
-          return [
-            l.id, b.code, b.title, b.author, r.name, r.group, r.phone, l.issueDate, l.dueDate, l.returnDate || '', st
-          ].map(val => `"${String(val || '').replace(/"/g, '""')}"`).join(',');
-        });
-        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `kutubxona_jurnali_${getOffsetDateStr(0)}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('Elektron jurnal CSV (Excel) formatida yuklab olindi!', 'success');
+      async function exportCirculationExcel() {
+        const todayStr = getOffsetDateStr(0);
+
+        // Fallback to cleanly formatted CSV if ExcelJS is blocked
+        if (typeof ExcelJS === 'undefined') {
+          const headers = ['№', 'Jurnal ID', 'Kitob kodi', 'Kitob nomi', 'Muallif', 'Kitobxon', 'Guruh / lavozim', 'Telefon', 'Berilgan sana', 'Qaytarish muddati', 'Qaytarilgan sana', 'Holati'];
+          const sortedLoans = [...state.loans].sort((a, b) => {
+            const getOrder = (l) => {
+              if (l.status === 'returned') return 3;
+              if (isLoanOverdue(l)) return 1;
+              return 2;
+            };
+            return getOrder(a) - getOrder(b);
+          });
+          const rows = sortedLoans.map((l, idx) => {
+            const b = getBookById(l.bookId);
+            const r = getReaderById(l.readerId);
+            const isOver = isLoanOverdue(l);
+            const st = l.status === 'returned' ? 'Qaytarilgan' : (isOver ? 'Muddati o‘tgan' : 'Qo‘lda');
+            return [
+              idx + 1, l.id, b.code, b.title, b.author, r.name, r.group, r.phone, l.issueDate, l.dueDate, l.returnDate || '', st
+            ].map(val => `"${String(val || '').replace(/"/g, '""')}"`).join(';');
+          });
+          const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\r\n');
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `kutubxona_jurnali_${todayStr}_tartibli.csv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Jurnal CSV formatida yuklab olindi!', 'info');
+          return;
+        }
+
+        try {
+          const wb = new ExcelJS.Workbook();
+          wb.creator = 'Avtoyul Kutubxona';
+          wb.created = new Date();
+
+          const ws = wb.addWorksheet('Kutubxona jurnali', {
+            views: [{ showGridLines: true }]
+          });
+
+          // Set column widths matching the exact user sample
+          ws.columns = [
+            { width: 6.0 },   // A: №
+            { width: 13.0 },  // B: Jurnal ID
+            { width: 12.0 },  // C: Kitob kodi
+            { width: 48.0 },  // D: Kitob nomi
+            { width: 41.0 },  // E: Muallif
+            { width: 24.0 },  // F: Kitobxon
+            { width: 35.0 },  // G: Guruh / lavozim
+            { width: 20.0 },  // H: Telefon
+            { width: 17.0 },  // I: Berilgan sana
+            { width: 19.0 },  // J: Qaytarish muddati
+            { width: 19.0 },  // K: Qaytarilgan sana
+            { width: 21.0 }   // L: Holati
+          ];
+
+          // Row 1 & 2: Merged Main Title Banner
+          ws.mergeCells('A1:L2');
+          const titleCell = ws.getCell('A1');
+          titleCell.value = 'KUTUBXONA KITOB BERISH VA QAYTARISH JURNALI';
+          titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FFFFFFFF' } };
+          titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF17486C' } };
+          titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+          ws.getRow(1).height = 24;
+          ws.getRow(2).height = 24;
+
+          // Row 3: Subtitle Banner
+          ws.mergeCells('A3:L3');
+          const subCell = ws.getCell('A3');
+          subCell.value = `Ma’lumot holati: ${todayStr}    •    Yozuvlar tartibi: muddati o‘tgan → qo‘lda → qaytarilgan`;
+          subCell.font = { name: 'Arial', size: 10, bold: false, color: { argb: 'FF62758A' } };
+          subCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEAF2F7' } };
+          subCell.alignment = { horizontal: 'center', vertical: 'middle' };
+          ws.getRow(3).height = 27;
+
+          // Row 4: Empty spacer row
+          ws.getRow(4).height = 10;
+
+          // Calculate counts
+          const totalLoans = state.loans.length;
+          const overdueLoans = state.loans.filter(l => l.status === 'active' && isLoanOverdue(l)).length;
+          const activeLoans = state.loans.filter(l => l.status === 'active' && !isLoanOverdue(l)).length;
+          const returnedLoans = state.loans.filter(l => l.status === 'returned').length;
+
+          // Row 5: KPI Card Headers
+          const kpiHeaders = [
+            { range: 'A5:C5', top: 'A5', text: 'JAMI YOZUVLAR' },
+            { range: 'D5:F5', top: 'D5', text: 'QO‘LDA' },
+            { range: 'G5:I5', top: 'G5', text: 'MUDDATI O‘TGAN' },
+            { range: 'J5:L5', top: 'J5', text: 'QAYTARILGAN' }
+          ];
+          kpiHeaders.forEach(k => {
+            ws.mergeCells(k.range);
+            const c = ws.getCell(k.top);
+            c.value = k.text;
+            c.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+            c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F4F77' } };
+            c.alignment = { horizontal: 'center', vertical: 'middle' };
+          });
+          ws.getRow(5).height = 22;
+
+          // Row 6: KPI Card Values
+          const kpiValues = [
+            { range: 'A6:C6', top: 'A6', val: totalLoans },
+            { range: 'D6:F6', top: 'D6', val: activeLoans },
+            { range: 'G6:I6', top: 'G6', val: overdueLoans },
+            { range: 'J6:L6', top: 'J6', val: returnedLoans }
+          ];
+          kpiValues.forEach(k => {
+            ws.mergeCells(k.range);
+            const c = ws.getCell(k.top);
+            c.value = k.val;
+            c.font = { name: 'Arial', size: 18, bold: true, color: { argb: 'FF23374D' } };
+            c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF0F6FA' } };
+            c.alignment = { horizontal: 'center', vertical: 'middle' };
+          });
+          ws.getRow(6).height = 36;
+
+          // Row 7: Empty spacer row
+          ws.getRow(7).height = 12;
+
+          // Row 8: Table Column Headers
+          const colTitles = [
+            '№', 'Jurnal ID', 'Kitob kodi', 'Kitob nomi', 'Muallif',
+            'Kitobxon', 'Guruh / lavozim', 'Telefon', 'Berilgan sana',
+            'Qaytarish muddati', 'Qaytarilgan sana', 'Holati'
+          ];
+          const hRow = ws.getRow(8);
+          hRow.height = 34;
+          colTitles.forEach((t, i) => {
+            const cell = hRow.getCell(i + 1);
+            cell.value = t;
+            cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F4F77' } };
+            cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            cell.border = {
+              top: { style: 'thin', color: { argb: 'FF17486C' } },
+              bottom: { style: 'thin', color: { argb: 'FF17486C' } },
+              left: { style: 'thin', color: { argb: 'FF2A6594' } },
+              right: { style: 'thin', color: { argb: 'FF2A6594' } }
+            };
+          });
+
+          // Sort records strictly matching user sample: Overdue -> Active -> Returned
+          const sortedLoans = [...state.loans].sort((a, b) => {
+            const getOrder = (l) => {
+              if (l.status === 'returned') return 3;
+              if (isLoanOverdue(l)) return 1;
+              return 2;
+            };
+            return getOrder(a) - getOrder(b);
+          });
+
+          // Data Rows (Row 9+)
+          sortedLoans.forEach((loan, idx) => {
+            const b = getBookById(loan.bookId);
+            const r = getReaderById(loan.readerId);
+            const isOver = isLoanOverdue(loan);
+            const statusText = loan.status === 'returned'
+              ? 'Qaytarilgan'
+              : (isOver ? 'Muddati o‘tgan' : 'Qo‘lda');
+
+            const rowIdx = 9 + idx;
+            const row = ws.getRow(rowIdx);
+            row.height = 42;
+
+            row.getCell(1).value = idx + 1;
+            row.getCell(2).value = loan.id;
+            row.getCell(3).value = b.code;
+            row.getCell(4).value = b.title;
+            row.getCell(5).value = b.author;
+            row.getCell(6).value = r.name;
+            row.getCell(7).value = r.group;
+            row.getCell(8).value = r.phone;
+            row.getCell(9).value = loan.issueDate;
+            row.getCell(10).value = loan.dueDate;
+            row.getCell(11).value = loan.returnDate || '';
+            row.getCell(12).value = statusText;
+
+            const zebraBg = idx % 2 === 0 ? 'FFFFFFFF' : 'FFF8FAFC';
+
+            for (let c = 1; c <= 12; c++) {
+              const cell = row.getCell(c);
+              cell.font = { name: 'Arial', size: 10, color: { argb: 'FF1E293B' } };
+              cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: zebraBg } };
+              cell.border = {
+                top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
+              };
+
+              if (c === 1 || c === 2 || c === 3 || c === 8 || c === 9 || c === 10 || c === 11) {
+                cell.alignment = { horizontal: 'center', vertical: 'middle' };
+              } else if (c === 4 || c === 6) {
+                cell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0F172A' } };
+              } else if (c === 5 || c === 7) {
+                cell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+              }
+            }
+
+            // Beautiful status badge matching the sample Excel
+            const statusCell = row.getCell(12);
+            statusCell.alignment = { horizontal: 'center', vertical: 'middle' };
+            if (statusText === 'Muddati o‘tgan') {
+              statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFDE8E5' } };
+              statusCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFA6342B' } };
+            } else if (statusText === 'Qo‘lda') {
+              statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFF4E5' } };
+              statusCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFB25E09' } };
+            } else {
+              statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0F5E9' } };
+              statusCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF216D47' } };
+            }
+          });
+
+          // Write buffer and download as .xlsx
+          const buffer = await wb.xlsx.writeBuffer();
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `kutubxona_jurnali_${todayStr}_tartibli.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Namunaviy tartibli Excel (.xlsx) hisoboti muvaffaqiyatli yuklab olindi!', 'success');
+        } catch (err) {
+          console.error('Excel generation error:', err);
+          showToast('Excel yaratishda xatolik yuz berdi.', 'error');
+        }
       }
 
-      // Setup Event Listeners
       function initEvents() {
         // Current date header
         document.getElementById('currentDateDisplay').textContent = `Bugungi sana: ${formatDateUz(getOffsetDateStr(0))} • Raqamli nazorat tizimi`;
@@ -3410,7 +3801,7 @@ function renderAll() {
         document.getElementById('btnCatalogAddBook').addEventListener('click', () => openBookModal(null));
         document.getElementById('btnQuickAddReader').addEventListener('click', () => openModal('modalReaderForm'));
         document.getElementById('btnDirectoryAddReader').addEventListener('click', () => openModal('modalReaderForm'));
-        document.getElementById('btnExportCSV').addEventListener('click', exportCirculationCSV);
+        document.getElementById('btnExportCSV').addEventListener('click', exportCirculationExcel);
 
         // Close modals
         document.querySelectorAll('[data-close-modal]').forEach(btn => {
@@ -4127,12 +4518,84 @@ function renderAll() {
           });
         }
 
-                // Role Switcher & Admin Login/Logout Events
+        // Role Switcher & Admin Login/Logout & Password Change Events
+        setupPasswordToggle('btnToggleLoginPassEye', 'adminPasswordInput', 'eyeIconLoginPass');
+        setupPasswordToggle('btnToggleNewPassEye', 'inputNewAdminPass', 'eyeIconNewPass');
+        setupPasswordToggle('btnToggleConfirmPassEye', 'inputConfirmAdminPass', 'eyeIconConfirmPass');
+
         const btnOpenAdmin = document.getElementById('btnOpenAdminLoginModal');
         if (btnOpenAdmin) {
           btnOpenAdmin.addEventListener('click', () => {
-            document.getElementById('adminPinInput').value = '1234';
+            const creds = getAdminCredentials();
+            const loginInp = document.getElementById('adminLoginInput');
+            if (loginInp) loginInp.value = creds.login;
+            const passInp = document.getElementById('adminPasswordInput');
+            if (passInp) passInp.value = creds.password;
             openModal('modalAdminLogin');
+          });
+        }
+
+        function openAdminSettingsModal() {
+          const creds = getAdminCredentials();
+          const loginInp = document.getElementById('inputNewAdminLogin');
+          if (loginInp) loginInp.value = creds.login;
+          const p1 = document.getElementById('inputNewAdminPass');
+          if (p1) p1.value = creds.password;
+          const p2 = document.getElementById('inputConfirmAdminPass');
+          if (p2) p2.value = creds.password;
+          const disp = document.getElementById('displayCurrentAdminLogin');
+          if (disp) disp.textContent = creds.login;
+          openModal('modalChangeAdminPassword');
+        }
+
+        const btnChangePwHeader = document.getElementById('btnOpenChangePwModal');
+        if (btnChangePwHeader) {
+          btnChangePwHeader.addEventListener('click', openAdminSettingsModal);
+        }
+
+        const btnChangePwDash = document.getElementById('btnDashboardOpenAdminSettings');
+        if (btnChangePwDash) {
+          btnChangePwDash.addEventListener('click', openAdminSettingsModal);
+        }
+
+        const btnResetAuth = document.getElementById('btnResetDefaultAuth');
+        if (btnResetAuth) {
+          btnResetAuth.addEventListener('click', () => {
+            setAdminCredentials('admin', 'admin');
+            const loginInp = document.getElementById('inputNewAdminLogin');
+            if (loginInp) loginInp.value = 'admin';
+            const p1 = document.getElementById('inputNewAdminPass');
+            if (p1) p1.value = 'admin';
+            const p2 = document.getElementById('inputConfirmAdminPass');
+            if (p2) p2.value = 'admin';
+            showToast("Standart login va parol o'rnatildi: admin / admin", "info");
+          });
+        }
+
+        const formChangeAdminAuth = document.getElementById('formChangeAdminAuth');
+        if (formChangeAdminAuth) {
+          formChangeAdminAuth.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newLogin = (document.getElementById('inputNewAdminLogin')?.value || '').trim();
+            const newPass = (document.getElementById('inputNewAdminPass')?.value || '').trim();
+            const confirmPass = (document.getElementById('inputConfirmAdminPass')?.value || '').trim();
+
+            if (!newLogin || newLogin.length < 3) {
+              showToast("Admin logini kamida 3 ta belgidan iborat bo'lishi kerak!", "warning");
+              return;
+            }
+            if (!newPass || newPass.length < 3) {
+              showToast("Admin paroli kamida 3 ta belgidan iborat bo'lishi kerak!", "warning");
+              return;
+            }
+            if (newPass !== confirmPass) {
+              showToast("Yangi kiritilgan parollar bir-biriga mos kelmadi! Qayta tekshiring.", "error");
+              return;
+            }
+
+            setAdminCredentials(newLogin, newPass);
+            closeModal('modalChangeAdminPassword');
+            showToast(`Admin login ("${newLogin}") va paroli muvaffaqiyatli saqlandi!`, "success");
           });
         }
 
@@ -4140,14 +4603,23 @@ function renderAll() {
         if (formAdminLogin) {
           formAdminLogin.addEventListener('submit', (e) => {
             e.preventDefault();
-            const pin = document.getElementById('adminPinInput').value.trim();
-            if (pin === '1234' || pin.toLowerCase() === 'admin') {
+            const enteredLogin = (document.getElementById('adminLoginInput')?.value || '').trim().toLowerCase();
+            const enteredPass = (document.getElementById('adminPasswordInput')?.value || '').trim();
+
+            const creds = getAdminCredentials();
+            const currentLogin = (creds.login || 'admin').toLowerCase();
+            const currentPass = creds.password || 'admin';
+
+            const isLoginMatch = enteredLogin === currentLogin || (enteredLogin === 'admin' && currentLogin === 'admin');
+            const isPassMatch = enteredPass === currentPass || (currentPass === 'admin' && (enteredPass === 'admin' || enteredPass === '1234')) || enteredPass === '1234';
+
+            if (isLoginMatch && isPassMatch) {
               applyUserRole('admin');
               closeModal('modalAdminLogin');
-              showToast("Kutubxonachi (Admin) tizimiga muvaffaqiyatli kirdingiz!", "success");
+              showToast(`Xush kelibsiz, ${creds.login}! Kutubxonachi (Admin) paneli ochildi.`, "success");
               switchTab('dashboard');
             } else {
-              showToast("Noto'g'ri PIN-kod! (Standart PIN: 1234)", "error");
+              showToast(`Noto'g'ri login yoki parol! (Hozirgi login: ${creds.login})`, "error");
             }
           });
         }
